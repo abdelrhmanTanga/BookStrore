@@ -162,4 +162,44 @@ public class ProductDAO {
     }
 
     //mohamed ali end
+        /////////////////////////search
+    public List<Product> search(String searchKey, int category) throws SQLException {
+        List<Product> products = new ArrayList();
+
+        try {
+            if (category == 0) {
+                pst = connection.prepareStatement("SELECT * FROM product where name like ? ");
+                pst.setString(1, searchKey);
+            } else if (searchKey == null) {
+                pst = connection.prepareStatement("SELECT * FROM product where category = ? ");
+                pst.setInt(1, category);
+            } else {
+                pst = connection.prepareStatement("SELECT * FROM product where name like ? and category=?");
+                pst.setString(1, searchKey);
+                pst.setInt(2, category);
+            }
+
+            rs = pst.executeQuery();
+            while (rs.next()) {
+                Product product = new Product();
+                product.setName(rs.getString(2));
+                product.setQuantity(rs.getInt(3));
+                product.setAuthor(rs.getString(4));
+                product.setISBN(rs.getLong(5));
+                product.setDescription(rs.getString(6));
+                product.setCategory(rs.getInt(7));
+                product.setReviews(rs.getString(8));
+                product.setPrice(rs.getInt(9));
+                products.add(product);
+            }
+            rs.close();
+            pst.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return products;
+    }
+    ////////////////////////////////
+
 }
