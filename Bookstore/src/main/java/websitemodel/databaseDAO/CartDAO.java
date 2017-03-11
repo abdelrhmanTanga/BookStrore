@@ -20,16 +20,17 @@ import websitemodel.databaseDTO.Cart;
  * @author abdelrhman galal
  */
 public class CartDAO {
-    
-     private static final String SQL_READ = "SELECT * FROM CART WHERE EMAIL=?  ";
+
+    private static final String SQL_READ = "SELECT * FROM CART WHERE EMAIL=?  ";
     private static final String SQL_INSERT = "INSERT INTO CART(ID,EMAIL,QUANTITY) VALUES(?,?,?)";
     private static final String SQL_DELETE = "DELETE FROM CART WHERE EMAIL=? and ID=?"; //bookID in database ??
     private static final String SQL_DELETE_USER_CART = "DELETE FROM CART WHERE  EMAIL=? ";
     Connection connection;
-     PreparedStatement statement = null;
+    PreparedStatement statement = null;
     ResultSet resultSet = null;
+
     public CartDAO(Connection connection) {
-            this.connection = connection;
+        this.connection = connection;
     }
 
     public boolean addToCart(Cart cart) {
@@ -45,8 +46,7 @@ public class CartDAO {
             return false;
         }
     }
-    
-    
+
     public boolean add(Cart cartObj) throws SQLException {
         try {
 
@@ -66,7 +66,6 @@ public class CartDAO {
         return false;
     }
 
-    
     public boolean delete(Cart cartItem) throws SQLException {
 
         try {
@@ -80,7 +79,7 @@ public class CartDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-           connection.close();
+            connection.close();
         }
         return false;
     }
@@ -88,10 +87,10 @@ public class CartDAO {
     public List<Cart> readAll(String Email) throws SQLException {
         List<Cart> cartList = null;
         try {
-         
+
             Cart cart = null;
-            statement = connection.prepareStatement(SQL_READ );
-            statement.setString(1,Email );
+            statement = connection.prepareStatement(SQL_READ);
+            statement.setString(1, Email);
             resultSet = statement.executeQuery();
             cartList = getCart(resultSet);
         } catch (SQLException e) {
@@ -104,11 +103,11 @@ public class CartDAO {
 
     private List<Cart> getCart(ResultSet result) {
 
-        List<Cart> list =null;
+        List<Cart> list = null;
         Cart cartItem;
         try {
             while (result.next()) {
-                if(list == null){
+                if (list == null) {
                     list = new ArrayList<>();
                 }
                 cartItem = new Cart();
@@ -116,19 +115,19 @@ public class CartDAO {
                 list.add(cartItem);
             }
         } catch (SQLException ex) {
-           ex.printStackTrace();
+            ex.printStackTrace();
         }
         return list;
     }
 
     public boolean freeCartOfClient(String Email) throws SQLException {
-       boolean isDeleted = false;
+        boolean isDeleted = false;
         try {
-            
+
             statement = connection.prepareStatement(SQL_DELETE_USER_CART);
             statement.setString(1, Email);
             if (statement.executeUpdate() > 0) {
-                isDeleted= true;
+                isDeleted = true;
             }
             connection.commit();
         } catch (SQLException e) {
@@ -138,31 +137,24 @@ public class CartDAO {
         }
         return isDeleted;
     }
-    
+
     //////////////////////// abdelrhman 
     
-    //////////////////////////abdelrhman
+//////////////////////////abdelrhman
     
-    ////////////////////////omnia
+////////////////////////omnia
     
-    ///////////////////////omnia
+///////////////////////omnia
     
-    ////////////////////////mohamed
+////////////////////////mohamed
     
-    ///////////////////////mohamed
+///////////////////////mohamed
     
-    /////////////////////////yasmin
+/////////////////////////yasmin
     
-    /////////////////////////yasmin
+/////////////////////////yasmin
     
-    ////////////////////////heba
+////////////////////////heba
     
-    ///////////////////////heba
-    
+///////////////////////heba
 }
-
-
-   
-
-   
-

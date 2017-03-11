@@ -18,6 +18,7 @@ import websitemodel.databaseDTO.Product;
 import websiteview.model.HeaderCategories;
 import websiteview.model.ProductModel;
 import websiteview.model.ProductPageDTO;
+import websiteview.model.SearchDTO;
 import websiteview.services.ProductViewer;
 
 /**
@@ -99,5 +100,19 @@ public class ProductHandler {
         }
 
     }
+    ////////////////////yasmeen
+     public void search(SearchDTO search) {
+        try {
+
+            Connection conn = ConnectionPool.getInstance().getConnection();
+            ProductDAO productDAO = new ProductDAO(conn);
+            //productDAO.search(search.getSearchKey(), search.getCategory())
+
+            
+            conn.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }}
+    //////////////////
 
 }
