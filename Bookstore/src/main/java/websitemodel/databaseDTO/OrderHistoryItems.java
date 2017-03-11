@@ -9,7 +9,7 @@ package websitemodel.databaseDTO;
  *
  * @author abdelrhman galal
  */
-public class OrderHistroryItems {
+public class OrderHistoryItems {
     private int id;
     private int bookID;
     private int quantity;

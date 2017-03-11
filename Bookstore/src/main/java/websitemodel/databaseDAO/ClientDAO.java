@@ -53,8 +53,8 @@ public class ClientDAO {
         }
 
     }
-	
-	public int getUsersCount() {
+
+    public int getUsersCount() {
         int number = 0;
         try {
             PreparedStatement pst = connection.prepareStatement("SELECT count(email) FROM client");
@@ -69,21 +69,20 @@ public class ClientDAO {
         }
         return number;
     }
-    
-    public List<Client> getAllClients(int pageNumber)
-    {
+
+    public List<Client> getAllClients(int pageNumber) {
         List<Client> clients = new ArrayList<>();
-        
+
         try {
             PreparedStatement pst = connection.prepareStatement("SELECT * FROM (select c.*, rownum r from client c) where r > ? and r <= ?");
             pst.setInt(1, (pageNumber * 10) - 10);
-            pst.setInt(2, ( pageNumber * 10 ) );
+            pst.setInt(2, (pageNumber * 10));
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 Client client;
-                client = new Client(rs.getString(1),rs.getString(2),rs.getLong(3),rs.getString(4),
-                rs.getLong(5),rs.getString(6),rs.getString(7),rs.getString(8),
-                rs.getString(9),rs.getString(10));
+                client = new Client(rs.getString(1), rs.getString(2), rs.getLong(3), rs.getString(4),
+                        rs.getLong(5), rs.getString(6), rs.getString(7), rs.getString(8),
+                        rs.getString(9), rs.getString(10));
                 clients.add(client);
             }
             pst.close();
@@ -93,7 +92,7 @@ public class ClientDAO {
         }
         return clients;
     }
-    
+
 ////////////////////
     public boolean addClient(Client client) {
         PreparedStatement pps;
@@ -104,20 +103,21 @@ public class ClientDAO {
             pps.setLong(3, client.getCredit());
             pps.setString(4, client.getPassword());
             pps.setLong(5, client.getPhone());
-            pps.setString(6,client.getAddress());
+            pps.setString(6, client.getAddress());
             pps.setString(7, client.getCountry());
             pps.setString(8, client.getGender());
             pps.setString(9, client.getBirthday());
             pps.setString(10, client.getJob());
-             int rs = pps.executeUpdate();
-            
+            int rs = pps.executeUpdate();
+
             pps.close();
-            
-            if( rs == 0 )
+
+            if (rs == 0) {
                 return false;
-            else
+            } else {
                 return true;
-            
+            }
+
         } catch (SQLException ex) {
             Logger.getLogger(ClientDAO.class.getName()).log(Level.SEVERE, null, ex);
             return false;
@@ -148,4 +148,70 @@ public class ClientDAO {
 
     }
     /////////////////////////////
+
+    public boolean validateCredit(String email, int totalPrice) {
+        try {
+            PreparedStatement pst = connection.prepareStatement("select credit from client where email = ?");
+            pst.setString(1, email);
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                int userCredit = rs.getInt(1);
+                if (userCredit > totalPrice) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
+
+    public void deductCredit(String email, int totalPrice) {
+        Client client = getClientInfo(email);
+        if (client != null) {
+            try {
+                PreparedStatement pst = connection.prepareStatement("update client set credit = ? where email = ?");
+                pst.setLong(1,client.getCredit() - totalPrice);
+                pst.setString(2, email);
+                pst.executeUpdate();
+            } catch (SQLException ex) {
+                Logger.getLogger(ClientDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        } else {
+
+        }
+    }
+
+    public Client getClientInfo(String email) {
+        try {
+            PreparedStatement pst = connection.prepareStatement("select * from client where email = ?");
+            pst.setString(1, email);
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                Client client = new Client();
+                client.setEmail(rs.getString(1));
+                client.setName(rs.getString(2));
+                client.setCredit(rs.getInt(3));
+                client.setPassword(rs.getString(4));
+                client.setPhone(rs.getLong(5));
+                client.setAddress(rs.getString(6));
+                client.setCountry(rs.getString(7));
+                client.setGender(rs.getString(8));
+                client.setBirthday(rs.getString(9));
+                client.setJob(rs.getString(10));
+                return client;
+            } else {
+                return null;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+
+    }
 }

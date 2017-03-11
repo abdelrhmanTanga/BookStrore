@@ -288,6 +288,8 @@ public class ProductDAO {
                 product.setReviews(rs.getString("reviews")); product.setPrice(rs.getInt("price"));
                 product.setCategory(rs.getInt("category"));  product.setImage(rs.getString("image"));
             }    
+            pst.close();
+            rs.close();
         } catch (SQLException ex) {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -334,5 +336,17 @@ public class ProductDAO {
         return products;
     }
     ////////////////////////////////
+
+    public void updateQuantity(int bookID, int quantity) {
+        Product product = getProductData(bookID);
+        try {
+            PreparedStatement pst = connection.prepareStatement("update product set quantity = ? where id = ?");
+            pst.setInt(1,product.getQuantity() - quantity);
+            pst.setInt(2, bookID);
+            pst.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
 }

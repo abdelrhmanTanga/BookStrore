@@ -50,6 +50,10 @@ public class OrderHistoryDAO {
      }
      
      //mohamed ali end
+//////////////////////// abdelrhman start
+    public OrderHistory addOrder(OrderHistory orderHistory) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
      
-    
+    //////////////////////////////////////abdelrhman end
 }

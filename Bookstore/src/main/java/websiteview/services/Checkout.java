@@ -5,32 +5,23 @@
  */
 package websiteview.services;
 
-import Facade.Session;
+import Facade.CartHandler;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
+import java.util.Vector;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.sql.DataSource;
-import websiteview.model.SignInDTO;
+import websiteview.model.CheckoutDTO;
 
 /**
  *
  * @author abdelrhman galal
  */
-public class SignIn extends HttpServlet {
+public class Checkout extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,35 +32,23 @@ public class SignIn extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    Session session;
+    CartHandler cartHandler;
 
     @Override
     public void init(ServletConfig config)
             throws ServletException {
         super.init(config); //To change body of generated methods, choose Tools | Templates.
-        session = new Session();
-
+        cartHandler = new CartHandler();
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //////////////// ABDELRHman
-        PrintWriter out = response.getWriter();
-        SignInDTO signInDTO = new SignInDTO();
-        signInDTO.setEmail(request.getParameter("email"));
-        signInDTO.setPassword(request.getParameter("password"));
-        if (session.verifyUser(signInDTO)) {
-            HttpSession session = request.getSession(true);
-            session.setAttribute("loggedIn", signInDTO.getEmail());
-            ///////////// where ever the fuck u redirect when its true
-            out.println("true");
-        } else {
-            HttpSession session = request.getSession(true);
-            session.setAttribute("loggedIn", "abdo zeft");
-            //////////////// what evet the fuck u do when its false
-            out.println("false abdo");
-
+        HttpSession session = request.getSession(false);
+        if (session != null){
+            String email = (String) session.getAttribute("LoggedIn");
+            CheckoutDTO orderInfo = cartHandler.doCheckout(email);
+        }else{
+            ////////////////////// logic for not signed in (redirect to sign in page)
         }
-        /////////////////// abdelrhman
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -43,6 +43,10 @@
         <servlet-name>CartViewer</servlet-name>
         <servlet-class>websiteview.services.CartViewer</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Checkout</servlet-name>
+        <servlet-class>websiteview.services.Checkout</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SignIn</servlet-name>
         <url-pattern>/SignIn</url-pattern>
@@ -78,6 +82,10 @@
     <servlet-mapping>
         <servlet-name>CartViewer</servlet-name>
         <url-pattern>/cart</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Checkout</servlet-name>
+        <url-pattern>/checkout</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
