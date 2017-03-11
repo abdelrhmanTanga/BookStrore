@@ -13,9 +13,9 @@ public class Client {
 
     private String email;
     private String name;
-    private int credit;
+    private long credit;
     private String password;
-    private int phone;
+    private long phone;
     private String address;
     private String country;
     private String gender;
@@ -38,11 +38,11 @@ public class Client {
         this.name = name;
     }
 
-    public int getCredit() {
+    public long getCredit() {
         return credit;
     }
 
-    public void setCredit(int credit) {
+    public void setCredit(long credit) {
         this.credit = credit;
     }
 
@@ -54,11 +54,11 @@ public class Client {
         this.password = password;
     }
 
-    public int getPhone() {
+    public long getPhone() {
         return phone;
     }
 
-    public void setPhone(int phone) {
+    public void setPhone(long phone) {
         this.phone = phone;
     }
 
@@ -99,6 +99,24 @@ public class Client {
     }
 
     public void setJob(String job) {
+        this.job = job;
+    }
+	
+	
+	public Client()
+    {
+    }
+    
+    public Client(String email, String name, long credit, String password, long phone, String address, String country, String gender, String birthday, String job) {
+        this.email = email;
+        this.name = name;
+        this.credit = credit;
+        this.password = password;
+        this.phone = phone;
+        this.address = address;
+        this.country = country;
+        this.gender = gender;
+        this.birthday = birthday;
         this.job = job;
     }
 }
