@@ -1,11 +1,11 @@
 <html>
     <head>
     
-    <link href="css/navbar.css" type="text/css" rel="stylesheet"/>
+    <link href="${pageContext.request.contextPath}/pages/css/navbar.css" type="text/css" rel="stylesheet"/>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
-        <script src="js/navbar.js"></script>
+        <script src="${pageContext.request.contextPath}/pages/js/navbar.js"></script>
         
     <script>
     $(document).ready(function(){

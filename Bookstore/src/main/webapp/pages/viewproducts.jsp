@@ -32,7 +32,7 @@
     </head>
     <body>
         <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-        
+
         <div class="container">
             <div class="col-sm-12 padding-left">
                 <div class="features_items"><!--features_items-->
@@ -43,7 +43,7 @@
                             <div class="product-image-wrapper">
                                 <div class="single-products">
                                     <div class="productinfo text-center">
-                                        <img src="${'/OnlineBookstore/imageloader?path='.concat(product.image)}" alt="" />
+                                        <img src="${pageContext.request.contextPath}/pages/images/${product.image}" alt="" />
                                         <h2>${product.price}</h2>
                                         <p>${product.name}</p>
                                         <button id="${product.id}" onclick="addToCart(this.id)" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
@@ -60,24 +60,23 @@
                         </div>
                     </c:forEach>
                 </div>
-
             </div>
         </div>
     </div>
     <script>
-            function addToCart(clicked_id) {
-                console.log("here");
-                console.log(clicked_id);
-                var xhttp = new XMLHttpRequest();
-                xhttp.onreadystatechange = function () {
-                    if (this.readyState == 4 && this.status == 200) {
-                        document.write("true");
-                        console.log(clicked_id);
-                    }
-                };
-                xhttp.open("GET", "/OnlineBookstore/addtocart?productid=" + clicked_id, true);
-                xhttp.send();
-            }
-        </script>
+        function addToCart(clicked_id) {
+            console.log("here");
+            console.log(clicked_id);
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.write("true");
+                    console.log(clicked_id);
+                }
+            };
+            xhttp.open("GET", "/OnlineBookstore/addtocart?productid=" + clicked_id, true);
+            xhttp.send();
+        }
+    </script>
 </body>
 </html>
