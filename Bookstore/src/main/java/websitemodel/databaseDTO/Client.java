@@ -101,4 +101,22 @@ public class Client {
     public void setJob(String job) {
         this.job = job;
     }
+	
+	
+	public Client()
+    {
+    }
+    
+    public Client(String email, String name, long credit, String password, long phone, String address, String country, String gender, String birthday, String job) {
+        this.email = email;
+        this.name = name;
+        this.credit = credit;
+        this.password = password;
+        this.phone = phone;
+        this.address = address;
+        this.country = country;
+        this.gender = gender;
+        this.birthday = birthday;
+        this.job = job;
+    }
 }

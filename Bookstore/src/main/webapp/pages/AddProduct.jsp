@@ -22,20 +22,18 @@
         <link href="${pageContext.request.contextPath}/pages/css/style.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/pages/css/style-responsive.css" rel="stylesheet" />
         <link href="${pageContext.request.contextPath}/pages/css/jquery-ui-1.10.4.min.css" rel="stylesheet">
-
+        <script src="${pageContext.request.contextPath}/pages/js/mali/addproduct.js" ></script>
         <!-- =======================================================
             Author: Forth Team
         ======================================================= -->
     </head>
 
     <body>
+        
+       <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
         <!--navbar start-->
 
         <section id='container'>
-
-
-
-
 
             <!--header start-->
             <header class="header dark-bg">
@@ -68,7 +66,7 @@
                         <li class="dropdown">
                             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                                 <span class="profile-ava">
-                                    <img alt="" width='40' height='40' src="${(pageContext.request.contextPath).concat('/pages/img/admin1.png')}">
+                                    <img src="${(pageContext.request.contextPath).concat('/pages/img/admin1.png')}" alt="admin"  width='40' height='40'   />
                                 </span>
                                 <span class="username">Admin</span>
                                 <b class="caret"></b>
@@ -93,22 +91,23 @@
                     <!-- sidebar menu start-->
                     <ul class="sidebar-menu">                
                         <li class="active">
-                            <a class="" href="#">
+                            <a class="" href="Home.jsp">
                                 <i class="icon_house_alt"></i>
                                 <span>Home</span>
                             </a>
                         </li>
                         <li>                     
-                            <a class="" href="AddProduct.html">
+                            <a class="" href="#">
                                 <i class="icon_book_alt"></i>
                                 <span>Add Product</span>
                             </a>                                  
                         </li>
                         <li>                     
-                            <a class="" href="ViewUsers.html">
+                            <a class="" href="ViewUsers.jsp">
                                 <i class="icon_group"></i>
                                 <span>View Customers</span>
                             </a>
+
                         </li>
                     </ul>
                     <!-- sidebar menu end-->
@@ -120,9 +119,9 @@
                     <!--overview start-->
                     <div class="row">
                         <div class="col-lg-12">
-                            <h3 class="page-header"><i class="fa fa-laptop"></i>Home Page</h3>
+                            <h3 class="page-header"><i class="fa fa-laptop"></i>Add Product Page</h3>
                             <ol class="breadcrumb">
-                                <li><i class="fa fa-home"></i><a href="test.html">Home</a></li>
+                                <li><i class="fa fa-home"></i><a href="Home.jsp">Home</a> <a href="#"> / Add Product </a> </li>
                                 <!--	<li><i class="fa fa-laptop"></i><a href="test.html"></a></li>		-->				  	
                             </ol>
                         </div>
@@ -134,7 +133,7 @@
                             <a href='#' >
                                 <div class="info-box blue-bg">
                                     <i class="fa fa-home"></i>
-                                    <div class="count">6000 </div>
+                                    <div class="count"> ${requestScope.productsCount} </div>
                                     <div class="title">Home </div>						
                                 </div><!--/.info-box-->			
                             </a>
@@ -144,7 +143,7 @@
                             <a href='#' >
                                 <div class="info-box blue-bg">
                                     <i class="fa fa-book"></i>
-                                    <div class="count">6000 </div>
+                                    <div class="count"> ${requestScope.productsCount} </div>
                                     <div class="title">Add Product</div>						
                                 </div><!--/.info-box-->			
                             </a>
@@ -154,63 +153,116 @@
                             <a href='#' >
                                 <div class="info-box blue-bg">
                                     <i class="fa fa-group"></i>
-                                    <div class="count">6000 </div>
+                                    <div class="count"> ${requestScope.usersCount} </div>
                                     <div class="title">View Customers</div>						
                                 </div><!--/.info-box-->		
                             </a>
                         </div><!--/.col-->
 
 
+
+
                     </div><!--/.row-->
 
+                    <!-- Form validations -->              
                     <div class="row">
-
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-sm-12 col-md-10 col-md-offset-1">
-                                    <table class="table table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>Product</th>
-                                                <th>Quantity</th>
-                                                <th class="text-center">Price</th>
-                                                <th> totalÂ </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td class="col-sm-8 col-md-6">
-                                                    <div class="media">
-                                                        <img class="media-object" src="http://icons.iconarchive.com/icons/custom-icon-design/flatastic-2/72/product-icon.png" style="width: 72px; height: 72px;">
-                                                        <div class="media-body">
-                                                            <h4 class="media-heading"><a href="#">Product name</a></h4>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="col-sm-1 col-md-1" style="text-align: center">
-                                                    <input type="number" class="form-control" id="quantity" value="3" disabled >
-                                                </td>
-                                                <td class="col-sm-1 col-md-1 text-center"><strong>$4.87</strong></td>
-                                                <td class="col-sm-1 col-md-1 text-center"><strong>$14.61</strong></td>
-                                                
-                                            </tr>
-                                           
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <td>   </td>
-                                                <td>   </td>
-                                                <td><h3>Total</h3></td>
-                                                <td class="text-right"><h3>$31.53</h3></td>
-                                            </tr>
-                                            
-                                        </tfoot>
-                                    </table>
+                       
+                        
+                                
+                        <div class="col-lg-12">
+                        
+                            <c:if test="${requestScope.check == true}" >   
+                                <!-- success message  -->
+                                <div class="alert alert-success">
+                                    <strong>Success!</strong> The Book Added Successfully.
                                 </div>
-                            </div>
+                            </c:if>
+                        
+                            <c:if test="${requestScope.check == false}" >
+                                <!-- failed message  -->
+                                <div class="alert alert-danger">
+                                    <strong>Failed!</strong> The ISBN Already Exist.
+                                </div>
+                            </c:if>
+                        
+                            <section class="panel">  
+                                <header class="panel-heading">
+                                    Add Product
+                                </header>
+                                <div class="panel-body">
+                                    <div class="form">
+                                        <form class="form-validate form-horizontal" id="feedback_form" method="post" action="/OnlineBookstore/adminadd" enctype="multipart/form-data">
+                                            <div class="form-group ">
+                                                <label for="pname" class="control-label col-lg-2">Product Name <span class="required">*</span></label>
+                                                <div class="col-lg-10">
+                                                    <input class="form-control " id="pname" name="pname" minlength="5" maxlength="30"  type="text" required />
+                                                </div>
+                                            </div>
+                                            <div class="form-group ">
+                                                <label for="quantity" class="control-label col-lg-2">Quantity <span class="required">*</span></label>
+                                                <div class="col-lg-10">
+                                                    <input class="form-control" id="quantity" type="number" min="1" max="9999" name="quantity" required />
+                                                </div>
+                                            </div>
+                                            <div class="form-group ">
+                                                <label for="author" class="control-label col-lg-2">Author <span class="required">*</span></label>
+                                                <div class="col-lg-10">
+                                                    <input class="form-control " id="author" type="text" minlength="5" maxlength="30" name="author" required />
+                                                </div>
+                                            </div>
+                                            <div class="form-group ">
+                                                <label for="isbn" class="control-label col-lg-2">ISBN <span class="required">*</span></label>
+                                                <div class="col-lg-10">
+                                                    <input class="form-control" id="isbn" name="isbn" type="number" min="1" max="9999999999999"  required />
+                                                </div>
+                                            </div>                                      
+                                            <div class="form-group ">
+                                                <label for="description" class="control-label col-lg-2">Description <span class="required">*</span></label>
+                                                <div class="col-lg-10">
+                                                    <textarea class="form-control " id="description" name="description" minlength="20" maxlength="150" required></textarea>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="form-group ">
+                                                <label for="price" class="control-label col-lg-2">Price <span class="required">*</span></label>
+                                                <div class="col-lg-10">
+                                                    <input class="form-control" id="price" name="price" min="10" max="9999" type="number" required />
+                                                </div>
+                                            </div>   
+                                            
+                                            <div class="form-group ">
+                                                <label for="category" class="control-label col-lg-2">Category <span class="required">*</span></label>
+                                                <div class="col-lg-10">
+                                                    <select class="form-control selectpicker" id="category" name="category" required >
+                                                        
+                                                        <c:forEach var="row" items="${ requestScope.categories }">
+                                                               <option> ${ row.getName() } </option>
+                                                        </c:forEach>
+                                                    </select>
+                                                </div>
+                                            </div>   
+                                            
+                                            <div class="form-group ">
+                                                <label for="pimage" class="control-label col-lg-2">Image <span class="required">*</span></label>
+                                                <div class="col-lg-10">
+                                                    <input class="form-control" id="pimage" name="pimage"  type="file" required />
+                                                </div>
+                                            </div>   
+                                            
+                                            <div class="form-group">
+                                                <div class="col-lg-offset-2 col-lg-10">
+                                                    <center>
+                                                        <button class="btn btn-primary" type="submit">Save</button>
+                                                        <button class="btn btn-primary" type="reset">Clear</button>
+                                                    </center>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                </div>
+                            </section>
                         </div>
-
-
                     </div>
 
                 </section>
@@ -260,5 +312,11 @@
         <script src="${pageContext.request.contextPath}/pages/js/jquery.slimscroll.min.js"></script>
 
         <!-- javascripts -->
+        
+        <c:if test="${requestScope.check == false}" >
+            <!-- failed message  -->
+            <script> setData("${requestScope.name}",${requestScope.quantity},"${requestScope.author}","${requestScope.description}",${requestScope.price},"${requestScope.category}");  </script>    
+        </c:if>
+        
     </body>
 </html>

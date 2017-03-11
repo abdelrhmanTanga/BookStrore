@@ -14,6 +14,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -112,11 +113,21 @@ public class ProductAddition extends HttpServlet {
         product.setPrice(Integer.parseInt(request.getParameter("price")));
         product.setImage(url);*/
         if (adminFacadeHandler.addBook(product)) {
-            out.println("true");
-            
+            //out.println("true");
+            request.setAttribute("check", true);
         } else {
-            out.println("false");
+            //out.println("false");
+            request.setAttribute("check", false);
+            
+            request.setAttribute("name", product.getName());
+            request.setAttribute("quantity", product.getQuantity());
+            request.setAttribute("author", product.getAuthor());
+            request.setAttribute("description", product.getDescription());
+            request.setAttribute("price", product.getPrice());
+            request.setAttribute("category", product.getCategory());
         }
+        RequestDispatcher rd= request.getRequestDispatcher("AddProductController");
+        rd.include(request, response);
     }
 
 // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

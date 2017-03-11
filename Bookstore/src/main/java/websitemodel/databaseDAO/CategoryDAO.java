@@ -58,6 +58,27 @@ public class CategoryDAO {
             return null;
         }
     }
+	
+	
+	public List<Category> getAllCategories() 
+    {
+        List<Category> categories = new ArrayList<>();
+        try {
+            pst = connection.prepareStatement("SELECT * FROM category");
+            rs = pst.executeQuery();
+            while (rs.next()) {
+                Category category = new Category();
+                category.setId(rs.getInt(1));
+                category.setName(rs.getString(2));
+                categories.add(category);
+            }
+            pst.close();
+            rs.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return categories;
+    }
 
     
     

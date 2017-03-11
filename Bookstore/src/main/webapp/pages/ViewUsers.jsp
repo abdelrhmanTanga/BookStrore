@@ -11,17 +11,17 @@
         <title> Admin Panel </title>
 
         <!-- Bootstrap CSS -->    
-        <link href="css/bootstrap.min.css" rel="stylesheet" />
+        <link href="${pageContext.request.contextPath}/pages/css/bootstrap.min.css" rel="stylesheet" />
         <!-- bootstrap theme -->
-        <link href="css/bootstrap-theme.css" rel="stylesheet" />
+        <link href="${pageContext.request.contextPath}/pages/css/bootstrap-theme.css" rel="stylesheet" />
         <!--external css-->
         <!-- font icon -->
-        <link href="css/elegant-icons-style.css" rel="stylesheet" />
-        <link href="css/font-awesome.min.css" rel="stylesheet" />    
+        <link href="${pageContext.request.contextPath}/pages/css/elegant-icons-style.css" rel="stylesheet" />
+        <link href="${pageContext.request.contextPath}/pages/css/font-awesome.css" rel="stylesheet" />    
         <!-- Custom styles -->
-        <link href="css/style.css" rel="stylesheet">
-        <link href="css/style-responsive.css" rel="stylesheet" />
-        <link href="css/jquery-ui-1.10.4.min.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/pages/css/style.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/pages/css/style-responsive.css" rel="stylesheet" />
+        <link href="${pageContext.request.contextPath}/pages/css/jquery-ui-1.10.4.min.css" rel="stylesheet">
         <!-- =======================================================
             Author: Forth Team
         ======================================================= -->
@@ -67,7 +67,7 @@
                         <li class="dropdown">
                             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                                 <span class="profile-ava">
-                                    <img alt="" width='40' height='40' src="img/admin.png">
+                                    <img alt="" width='40' height='40' src="${(pageContext.request.contextPath).concat('/pages/img/admin1.png')}">
                                 </span>
                                 <span class="username">Admin</span>
                                 <b class="caret"></b>
@@ -255,29 +255,30 @@
 
 
         <!-- javascripts -->
-        <script src="js/jquery.js"></script>
-        <script src="js/jquery-1.8.3.min.js"></script>
-        <script type="text/javascript" src="js/jquery-ui-1.9.2.custom.min.js"></script>
+        <script src="${pageContext.request.contextPath}/pages/js/jquery.js"></script>
+        <script src="${pageContext.request.contextPath}/pages/js/jquery-1.8.3.min.js"></script>
+        <script type="${pageContext.request.contextPath}/pages/text/javascript" src="js/jquery-ui-1.9.2.custom.min.js"></script>
         <!-- bootstrap -->
-        <script src="js/bootstrap.min.js"></script>
+        <script src="${pageContext.request.contextPath}/pages/js/bootstrap.min.js"></script>
         <!-- nice scroll -->
-        <script src="js/jquery.scrollTo.min.js"></script>
-        <script src="js/jquery.nicescroll.js" type="text/javascript"></script>
+        <script src="${pageContext.request.contextPath}/pages/js/jquery.scrollTo.min.js"></script>
+        <script src="${pageContext.request.contextPath}/pages/js/jquery.nicescroll.js" type="text/javascript"></script>
         <!--script for this page only-->
-        <script src="js/jquery.rateit.min.js"></script>
+        <script src="${pageContext.request.contextPath}/pages/js/jquery.rateit.min.js"></script>
         <!-- custom select -->
-        <script src="js/jquery.customSelect.min.js" ></script>
+        <script src="${pageContext.request.contextPath}/pages/js/jquery.customSelect.min.js" ></script>
 
         <!--custome script for all page-->
-        <script src="js/scripts.js"></script>
+        <script src="${pageContext.request.contextPath}/pages/js/scripts.js"></script>
         <!-- custom script for this page-->
-        <script src="js/jquery.autosize.min.js"></script>
-        <script src="js/jquery.placeholder.min.js"></script>
-        <script src="js/gdp-data.js"></script>	
-        <script src="js/morris.min.js"></script>
-        <script src="js/sparklines.js"></script>	
-        <script src="js/jquery.slimscroll.min.js"></script>
+        <script src="${pageContext.request.contextPath}/pages/js/jquery.autosize.min.js"></script>
+        <script src="${pageContext.request.contextPath}/pages/js/jquery.placeholder.min.js"></script>
+        <script src="${pageContext.request.contextPath}/pages/js/gdp-data.js"></script>	
+        <script src="${pageContext.request.contextPath}/pages/js/morris.min.js"></script>
+        <script src="${pageContext.request.contextPath}/pages/js/sparklines.js"></script>	
+        <script src="${pageContext.request.contextPath}/pages/js/jquery.slimscroll.min.js"></script>
 
         <!-- javascripts -->
+        
     </body>
 </html>
