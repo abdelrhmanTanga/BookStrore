@@ -1,0 +1,151 @@
+<html>
+<head>
+<title>
+
+  </title>
+<link rel="shortcut icon" href="assets/ico/shopping_cart.png">
+<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
+<link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+      <link rel="stylesheet" href="assets/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="assets/css/form-elements.css">
+      <link rel="stylesheet" href="assets/css/style.css">
+<script type= "text/javascript" src = "countries.js"></script>
+
+
+
+</head>
+<body>
+                <div class="row">
+                        <div class="col-sm-5">
+
+                        	<div class="form-box">
+	                        	<div class="form-top">
+	                        		<div class="form-top-left">
+	                        			<h3>Login</h3>
+	                            		<p>Enter username and password:</p>
+	                        		</div>
+	                        		<div class="form-top-right">
+	                        			<i class="fa fa-lock"></i>
+	                        		</div>
+	                            </div>
+	                            <div class="form-bottom">
+				                    <form role="form" action="" method="post" class="login-form">
+				                    	<div class="form-group">
+				                    		<label class="sr-only" for="form-username">Username</label>
+				                        	<input type="text" name="form-username" placeholder="Username" class="form-username form-control" id="form-username">
+				                        </div>
+				                        <div class="form-group">
+				                        	<label class="sr-only" for="form-password">Password</label>
+				                        	<input type="password" name="form-password" placeholder="Password" class="form-password form-control" id="form-password">
+				                        </div>
+				                        <button type="submit" class="btn">Sign in</button>
+				                    </form>
+			                    </div>
+		                    </div>
+
+
+                        </div>
+
+                        <div class="col-sm-1 middle-border"></div>
+                        <div class="col-sm-1"></div>
+
+                        <div class="col-sm-5">
+
+                        	<div class="form-box">
+                        		<div class="form-top">
+	                        		<div class="form-top-left">
+	                        			<h3>Join us now</h3>
+	                            		<p>Fill in the form below:</p>
+	                        		</div>
+	                        		<div class="form-top-right">
+	                        			<i class="fa fa-pencil"></i>
+	                        		</div>
+	                            </div>
+	                            <div class="form-bottom">
+				                    <form role="form" action="" method="post" class="registration-form">
+                      <!-- username -->
+				                    	<div class="form-group">
+				                    		<label class="sr-only" for="form-first-name">Username</label>
+				                        	<input type="text" name="form-first-name" placeholder="Username" class="form-first-name form-control" id="signup-username">
+				                        </div>
+
+                      <!-- password -->
+
+                      <div class="form-group">
+                        <label class="sr-only" for="form-password">Username</label>
+                          <input type="text" name="form-password" placeholder="Password" class="form-password form-control" id="signup-password">
+                        </div>
+
+                      <!-- email address -->
+				                        <div class="form-group">
+				                        	<label class="sr-only" for="form-email">Email</label>
+				                        	<input type="text" name="form-email" placeholder="Email" class="form-email form-control" id="form-email">
+				                        </div>
+                      <!-- home address -->
+				                        <div class="form-group">
+				                        	<label class="sr-only" for="form-address">Address</label>
+				                        	<input type="text" name="form-address" placeholder="Address"
+				                        				class="form-address form-control" id="form-address"></textarea>
+				                        </div>
+                      <!-- country  -->
+
+                            <div class="container">
+                            <form class="form-horizontal">
+                                <div class="form-group">
+                                    <label>Select Country</label><br>
+                                    <select id="country" name ="country"></select><br>
+                                    <label>Select State</label>
+                                     <select name ="state" id ="state"></select>
+                                </div>
+                            </form>
+                            </div>
+
+                      <!-- gender -->
+
+                              <div class="form-group">
+                                <label >Gender</label>
+                                <select name="form-gender" class="form-gender form-control" id="form-gender">
+                                   <option>Male</option>
+                                   <option>Female</option>
+                                 </select>
+                              </div>
+                    <!-- birthday -->
+                              <div class="form-group">
+                                <label >Date of birth</label>
+                                <input type="date" name="form-DOB"class="form-DOB form-control" id="form-DOB">
+                              </div>
+                    <!-- Job -->
+                              <div class="form-group">
+                                <label class="sr-only" for="form-job">Job</label>
+                                <input type="text" name="form-job" placeholder="Job" class="form-job form-control" id="form-job"> </div>
+                    <!-- favorite category-->
+                                <div class="form-group">
+                                  <label >Favorite Category</label>
+                                  <select name="form-category" class="form-category form-control" id="form-category">
+                                     <option>category 1</option>
+                                     <option>category 2</option>
+                                   </select>
+                                </div>
+                    <!-- phone number-->
+                              <div class="form-group">
+                                <label class="sr-only" for="form-phone">phone</label>
+                                <input type="number" name="form-phone" placeholder="Phone Number  " class="form-phone form-control" id="form-phone">
+                              </div>
+                    <!-- credit card limit-->
+                            <div class="form-group">
+                              <label class="sr-only" for="form-credit">credit limit</label>
+                              <input type="number" name="form-credit" placeholder="Creadet Cared limits  " class="form-credit form-control" id="form-gender">
+                            </div>
+
+				                        <button type="submit" class="btn">Sign me up!</button>
+				                    </form>
+			                    </div>
+                        	</div>
+
+                        </div>
+                    </div>
+</body>
+</html>
+<script language="javascript">
+	populateCountries("country", "state");
+</script>
