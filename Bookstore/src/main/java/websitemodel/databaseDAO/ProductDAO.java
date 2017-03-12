@@ -163,20 +163,17 @@ public class ProductDAO {
 
     //mohamed ali end
         /////////////////////////search
-    public List<Product> search(String searchKey, int category) throws SQLException {
+    public List<Product> search(String searchKey) throws SQLException {
         List<Product> products = new ArrayList();
 
         try {
-            if (category == 0) {
-                pst = connection.prepareStatement("SELECT * FROM product where name like ? ");
-                pst.setString(1, searchKey);
-            } else if (searchKey == null) {
-                pst = connection.prepareStatement("SELECT * FROM product where category = ? ");
-                pst.setInt(1, category);
+             if (searchKey == null) {
+                pst = connection.prepareStatement("SELECT * FROM product");
+              
             } else {
-                pst = connection.prepareStatement("SELECT * FROM product where name like ? and category=?");
+                pst = connection.prepareStatement("SELECT * FROM product where name like ?");
                 pst.setString(1, searchKey);
-                pst.setInt(2, category);
+               
             }
 
             rs = pst.executeQuery();

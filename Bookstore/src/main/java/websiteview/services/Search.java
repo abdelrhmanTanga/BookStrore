@@ -78,7 +78,6 @@ public class Search extends HttpServlet {
         SearchDTO searchDTO=new SearchDTO();
         ProductHandler productHandler= new ProductHandler();
         searchDTO.setSearchKey(request.getParameter("searchkey"));
-        //searchDTO.setCategory(request.getParameter("category"));
         productHandler.search(searchDTO);
       
     }

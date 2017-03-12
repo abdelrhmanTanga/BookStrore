@@ -37,13 +37,13 @@
                     <div class="row">
                         <div class="col-sm-3">
                             <div class="logo pull-left">
-                                <a href="viewproducts.jsp"><img src="images/logo.png" alt="" /></a>
+                                <a href="/productviewer"><img src="images/logo.png" alt="" /></a>
                             </div>
 
                         </div>
                         <div class="col-sm-5">
                             <div class="search_box pull-right">
-                                <form action="/search" method="post">
+                                <form action="/Search" method="post">
                                     <div class="input-group">
                                         <input type="text" placeholder="Search"/>
                                         <div class="input-group-btn">
@@ -60,9 +60,9 @@
                                     
                                    <!-- <li><a href="#"><i class="fa fa-user"></i> Account</a></li> -->
 
-                                     <li><a href="cart.html"><i class="fa fa-shopping-cart"></i> Cart</a></li> 
+                                     <li><a href="/cart"><i class="fa fa-shopping-cart"></i> Cart</a></li> 
                                     <li><a href="login.html"><i class="fa fa-lock"></i> Login</a></li>
-                                      <li><a href="login.html"><i class="fa fa-lock"></i> Signup</a></li>
+                                      <li><a href="signup.html"><i class="fa fa-lock"></i> Signup</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -81,13 +81,13 @@
                     <div class="row">
                         <div class="col-sm-3">
                             <div class="logo pull-left">
-                                <a href="viewproducts.jsp"><img src="images/logo.png" alt="" /></a>
+                                <a href="/productviewer"><img src="images/logo.png" alt="" /></a>
                             </div>
 
                         </div>
                         <div class="col-sm-5">
                             <div class="search_box pull-right">
-                                <form action="/search" method="post">
+                                <form action="/Search" method="post">
                                     <div class="input-group">
                                         <input type="text" placeholder="Search"/>
                                         <div class="input-group-btn">
@@ -102,10 +102,9 @@
                             <div class="shop-menu pull-right">
                                 <ul class="nav navbar-nav">
                                     
-                                   <li><a href="#"><i class="fa fa-user"></i> Account</a></li> 
-
-                                     <li><a href="cart.html"><i class="fa fa-shopping-cart"></i> Cart</a></li> 
-                                    <li><a href="login.html"><i class="fa fa-lock"></i> Logout</a></li>
+                                   <li><a href="#"><i class="fa fa-user"></i>${logged}</a></li> 
+                                     <li><a href="/cart"><i class="fa fa-shopping-cart"></i> Cart</a></li> 
+                                    <li><a href="/signout"><i class="fa fa-lock"></i> Logout</a></li>
                                      <!-- <li><a href="login.html"><i class="fa fa-lock"></i> Signup</a></li>-->
                                 </ul>
                             </div>
@@ -118,12 +117,6 @@
         </header><!--/header-->    
             
         </c:if>
-        
-        
-        
-        
-        
-        
         
         <!-- Category Part -->
         <div class="col-sm-3">
@@ -146,7 +139,7 @@
                     <h2>Price Range</h2>
                     <div class="well text-center">
                         <input type="text" class="span2" value="" data-slider-min="0" data-slider-max="600" data-slider-step="5" data-slider-value="[250,450]" id="sl2" ><br />
-                        <b class="pull-left">$ 0</b> <b class="pull-right">$ 600</b>
+                        <b class="pull-left">$ 0</b> <b class="pull-right">$ 6000</b>
                     </div>
                 </div><!--/price-range-->
                 <div class="shipping text-center"><!--shipping-->
