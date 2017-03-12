@@ -11,17 +11,17 @@
         <title> Admin Panel </title>
 
         <!-- Bootstrap CSS -->    
-        <link href="css/bootstrap.min.css" rel="stylesheet" />
+        <link href="${pageContext.request.contextPath}/pages/css/bootstrap.min.css" rel="stylesheet" />
         <!-- bootstrap theme -->
-        <link href="css/bootstrap-theme.css" rel="stylesheet" />
+        <link href="${pageContext.request.contextPath}/pages/css/bootstrap-theme.css" rel="stylesheet" />
         <!--external css-->
         <!-- font icon -->
-        <link href="css/elegant-icons-style.css" rel="stylesheet" />
-        <link href="css/font-awesome.min.css" rel="stylesheet" />    
+        <link href="${pageContext.request.contextPath}/pages/css/elegant-icons-style.css" rel="stylesheet" />
+        <link href="${pageContext.request.contextPath}/pages/css/font-awesome.css" rel="stylesheet" />    
         <!-- Custom styles -->
-        <link href="css/style.css" rel="stylesheet">
-        <link href="css/style-responsive.css" rel="stylesheet" />
-        <link href="css/jquery-ui-1.10.4.min.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/pages/css/style.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/pages/css/style-responsive.css" rel="stylesheet" />
+        <link href="${pageContext.request.contextPath}/pages/css/jquery-ui-1.10.4.min.css" rel="stylesheet">
 
         <!-- =======================================================
             Author: Forth Team
@@ -31,11 +31,9 @@
     <body>
         <!--navbar start-->
 
+         <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+         
         <section id='container'>
-
-
-
-
 
             <!--header start-->
             <header class="header dark-bg">
@@ -68,7 +66,7 @@
                         <li class="dropdown">
                             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                                 <span class="profile-ava">
-                                    <img alt="" width='40' height='40' src="img/admin.png">
+                                    <img alt="" width='40' height='40' src="${(pageContext.request.contextPath).concat('/pages/img/admin1.png')}">
                                 </span>
                                 <span class="username">Admin</span>
                                 <b class="caret"></b>
@@ -99,13 +97,13 @@
                             </a>
                         </li>
                         <li>                     
-                            <a class="" href="AddProduct.html">
+                            <a class="" href="AddProduct.jsp">
                                 <i class="icon_book_alt"></i>
                                 <span>Add Product</span>
                             </a>                                  
                         </li>
                         <li>                     
-                            <a class="" href="ViewUsers.html">
+                            <a class="" href="ViewUsers.jsp">
                                 <i class="icon_group"></i>
                                 <span>View Customers</span>
                             </a>
@@ -122,7 +120,7 @@
                         <div class="col-lg-12">
                             <h3 class="page-header"><i class="fa fa-laptop"></i>Home Page</h3>
                             <ol class="breadcrumb">
-                                <li><i class="fa fa-home"></i><a href="test.html">Home</a></li>
+                                <li><i class="fa fa-home"></i><a href="#">Home</a></li>
                                 <!--	<li><i class="fa fa-laptop"></i><a href="test.html"></a></li>		-->				  	
                             </ol>
                         </div>
@@ -134,7 +132,7 @@
                             <a href='#' >
                                 <div class="info-box blue-bg">
                                     <i class="fa fa-home"></i>
-                                    <div class="count">6000 </div>
+                                    <div id="productCount1" class="count"> ${ requestScope.productsCount } </div>
                                     <div class="title">Home </div>						
                                 </div><!--/.info-box-->			
                             </a>
@@ -144,7 +142,7 @@
                             <a href='#' >
                                 <div class="info-box blue-bg">
                                     <i class="fa fa-book"></i>
-                                    <div class="count">6000 </div>
+                                    <div id="productCount2" class="count"> ${ requestScope.productsCount } </div>
                                     <div class="title">Add Product</div>						
                                 </div><!--/.info-box-->			
                             </a>
@@ -154,7 +152,7 @@
                             <a href='#' >
                                 <div class="info-box blue-bg">
                                     <i class="fa fa-group"></i>
-                                    <div class="count">6000 </div>
+                                    <div class="count"> ${ requestScope.usersCount } </div>
                                     <div class="title">View Customers</div>						
                                 </div><!--/.info-box-->		
                             </a>
@@ -192,30 +190,26 @@
 
                                             <tbody>
 
-                                                <tr>
-                                                    <td><input type="checkbox" class="checkthis" /></td>
-                                                    <td>Javascript</td>
-                                                    <td>60</td>
-                                                    <td>999-888-742</td>
-                                                    <td>50$</td>
-                                                    <td>programming</td>
-                                                    <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
-                                                    <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="fa fa-times"></span></button></p></td>
-                                                </tr>
+                                                <c:forEach var="row" items="${requestScope.products}">
+                                                    <tr id="${row.getId()}" >
+                                                        <td><input type="checkbox" class="checkthis" /></td>
+                                                        <td>${row.getName()}</td>
+                                                        <td>${row.getQuantity()}</td>
+                                                        <td>${row.getISBN()}</td>
+                                                        <td>${row.getPrice()}</td>
+                                                        <td>${row.getCategory()}</td>
+                                                        <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" onclick="setUpdataData(this.id)" data-title="Edit" data-toggle="modal" id="edit${row.getId()}" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
+                                                        <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" onclick="deleteProduct(this.id)" data-title="Delete" data-toggle="modal" id="delete${row.getId()}" data-target="#delete" ><span class="fa fa-times"></span></button></p></td>
+                                                    </tr>
+                                                </c:forEach>    
 
                                             </tbody>
 
                                         </table>
 
                                         <div class="clearfix"></div>
-                                        <ul class="pagination pull-right">
+                                        <ul id="pagination" class="pagination pull-right">
                                             <li class="disabled"><a href="#"><span class="fa fa-chevron-left"></span></a></li>
-                                            <li class="active"><a href="#">1</a></li>
-                                            <li><a href="#">2</a></li>
-                                            <li><a href="#">3</a></li>
-                                            <li><a href="#">4</a></li>
-                                            <li><a href="#">5</a></li>
-                                            <li><a href="#"><span class="fa fa-chevron-right"></span></a></li>
                                         </ul>
 
                                     </div>
@@ -234,7 +228,7 @@
                                     </div>
                                     <div class="modal-body">
                                         <div class="form">
-                                            <form class="form-validate form-horizontal" id="feedback_form" method="get" action="">
+                                            <form class="form-validate form-horizontal" id="feedback_form" method="" action="javascript:editProduct()" >
                                                 <div class="form-group ">
                                                     <label for="pname" class="control-label col-lg-2">PName <span class="required">*</span></label>
                                                     <div class="col-lg-10">
@@ -276,10 +270,10 @@
                                                 <div class="form-group ">
                                                     <label for="category" class="control-label col-lg-2">Category <span class="required">*</span></label>
                                                     <div class="col-lg-10">
-                                                        <select class="form-control selectpicker" id="category" name="category"  >
-                                                            <option selected>Programming</option>
-                                                            <option>Cooking</option>
-                                                            <option>Science</option>
+                                                        <select class="form-control selectpicker" id="category" name="category" value="" >
+                                                            <c:forEach var="row" items="${ requestScope.categories }">
+                                                               <option value="${row.getId()}" > ${ row.getName() } </option>
+                                                            </c:forEach>
                                                         </select>
                                                     </div>
                                                 </div>   
@@ -290,11 +284,13 @@
                                                         <input class="form-control" id="pimage" name="pimage"  type="file" required />
                                                     </div>
                                                 </div>   
+                                                
+                                                <div class="modal-footer ">
+                                                    <button type="submit"  class="btn btn-warning btn-lg" id="" name="editbutton"   style="width: 100%;"  ><span class="fa fa-check-square"></span> Update</button>
+                                                 </div>
                                             </form>
                                         </div>
-                                        <div class="modal-footer ">
-                                            <button type="button" class="btn btn-warning btn-lg"  style="width: 100%;"><span class="fa fa-check-square"></span>Â Update</button>
-                                        </div>
+                                       
                                     </div>
                                     <!-- /.modal-content --> 
                                 </div>
@@ -308,16 +304,16 @@
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="fa fa-times" aria-hidden="true"></span></button>
-                                        <h4 class="modal-title custom_align" id="Heading">Delete this entry</h4>
+                                        <h4 class="modal-title custom_align" id="Heading">Delete This Product</h4>
                                     </div>
                                     <div class="modal-body">
 
-                                        <div class="alert alert-danger"><span class="fa fa-warning"></span> Are you sure you want to delete this Record?</div>
+                                        <div class="alert alert-danger"><span class="fa fa-warning"></span> Are you sure you want to delete this Product?</div>
 
                                     </div>
                                     <div class="modal-footer ">
-                                        <button type="button" class="btn btn-success" ><span class="fa fa-check"></span>Â Yes</button>
-                                        <button type="button" class="btn btn-default" data-dismiss="modal"><span class="fa fa-times"></span>Â No</button>
+                                        <button type="button" class="btn btn-success" name="deleteFinalName" id="" onclick="deleteFinal(this.id)" data-dismiss="modal" ><span class="fa fa-check"></span> Yes</button>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal"><span class="fa fa-times"></span> No</button>
                                     </div>
                                 </div>
                                 <!-- /.modal-content --> 
@@ -343,37 +339,36 @@
 
             </section>
 
-
-
         </section>
 
 
 
 
-        <!-- javascripts -->
-        <script src="js/jquery.js"></script>
-        <script src="js/jquery-1.8.3.min.js"></script>
-        <script type="text/javascript" src="js/jquery-ui-1.9.2.custom.min.js"></script>
+<!-- javascripts -->
+        <script src="${pageContext.request.contextPath}/pages/js/jquery.js"></script>
+        <script src="${pageContext.request.contextPath}/pages/js/jquery-1.8.3.min.js"></script>
+        <script type="${pageContext.request.contextPath}/pages/text/javascript" src="js/jquery-ui-1.9.2.custom.min.js"></script>
         <!-- bootstrap -->
-        <script src="js/bootstrap.min.js"></script>
+        <script src="${pageContext.request.contextPath}/pages/js/bootstrap.min.js"></script>
         <!-- nice scroll -->
-        <script src="js/jquery.scrollTo.min.js"></script>
-        <script src="js/jquery.nicescroll.js" type="text/javascript"></script>
+        <script src="${pageContext.request.contextPath}/pages/js/jquery.scrollTo.min.js"></script>
+        <script src="${pageContext.request.contextPath}/pages/js/jquery.nicescroll.js" type="text/javascript"></script>
         <!--script for this page only-->
-        <script src="js/jquery.rateit.min.js"></script>
+        <script src="${pageContext.request.contextPath}/pages/js/jquery.rateit.min.js"></script>
         <!-- custom select -->
-        <script src="js/jquery.customSelect.min.js" ></script>
+        <script src="${pageContext.request.contextPath}/pages/js/jquery.customSelect.min.js" ></script>
 
         <!--custome script for all page-->
-        <script src="js/scripts.js"></script>
+        <script src="${pageContext.request.contextPath}/pages/js/scripts.js"></script>
         <!-- custom script for this page-->
-        <script src="js/jquery.autosize.min.js"></script>
-        <script src="js/jquery.placeholder.min.js"></script>
-        <script src="js/gdp-data.js"></script>	
-        <script src="js/morris.min.js"></script>
-        <script src="js/sparklines.js"></script>	
-        <script src="js/jquery.slimscroll.min.js"></script>
-
+        <script src="${pageContext.request.contextPath}/pages/js/jquery.autosize.min.js"></script>
+        <script src="${pageContext.request.contextPath}/pages/js/jquery.placeholder.min.js"></script>
+        <script src="${pageContext.request.contextPath}/pages/js/gdp-data.js"></script>	
+        <script src="${pageContext.request.contextPath}/pages/js/morris.min.js"></script>
+        <script src="${pageContext.request.contextPath}/pages/js/sparklines.js"></script>	
+        <script src="${pageContext.request.contextPath}/pages/js/jquery.slimscroll.min.js"></script>
+        <script src="${pageContext.request.contextPath}/pages/js/mali/home.js"></script>
+        <script>  makePagination(${requestScope.productsCount}) </script>
         <!-- javascripts -->
     </body>
 </html>

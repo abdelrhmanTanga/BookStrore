@@ -12,7 +12,7 @@ package websiteview.model;
 public class ProductPageDTO {
 
     private String name;
-    private String Author;
+    private String author;
     private long ISBN;
     private String description;
     private int category;
@@ -29,11 +29,11 @@ public class ProductPageDTO {
     }
 
     public String getAuthor() {
-        return Author;
+        return author;
     }
 
     public void setAuthor(String Author) {
-        this.Author = Author;
+        this.author = Author;
     }
 
     public long getISBN() {

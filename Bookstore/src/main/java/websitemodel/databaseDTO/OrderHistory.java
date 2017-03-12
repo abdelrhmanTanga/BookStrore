@@ -28,4 +28,14 @@ public class OrderHistory {
     public void setEmail(String email) {
         this.email = email;
     }
+	
+	 public OrderHistory()
+     {
+     }
+     
+     public OrderHistory(int id,String email)
+     {
+         this.id = id;
+         this.email = email;
+     }
 }

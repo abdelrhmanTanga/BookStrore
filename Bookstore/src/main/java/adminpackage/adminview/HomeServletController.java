@@ -3,35 +3,31 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package websiteview.services;
+package adminpackage.adminview;
 
-import Facade.Session;
+import Facade.AdminFacadeHandler;
+import adminpackage.adminmodel.HomePageWrapper;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.sql.DataSource;
-import websiteview.model.SignInDTO;
 
 /**
  *
- * @author abdelrhman galal
+ * @author TOSHIBA
  */
-public class SignIn extends HttpServlet {
+@WebServlet(name = "HomeServletController", urlPatterns = {"/HomeServletController"})
+public class HomeServletController extends HttpServlet {
 
+    AdminFacadeHandler adminFacadeHandler;
+    
+    ServletContext context;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -41,20 +37,36 @@ public class SignIn extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    Session session;
-
+    
     @Override
     public void init(ServletConfig config)
             throws ServletException {
+        context = config.getServletContext();
         super.init(config); //To change body of generated methods, choose Tools | Templates.
-        session = new Session();
-
+        adminFacadeHandler = new AdminFacadeHandler();
     }
-
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //////////////// ABDELRHman
-        
-        /////////////////// abdelrhman
+    
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        //response.setContentType("text/html;charset=UTF-8");
+       HomePageWrapper homePageWrapper;
+       if( request.getParameter("page") == null )
+       {
+           homePageWrapper = adminFacadeHandler.adminHomePage(1);
+       }else
+       {
+            String paginationNumber = request.getParameter("page");
+            homePageWrapper = adminFacadeHandler.adminHomePage(Integer.parseInt(paginationNumber)); 
+       }
+      
+       
+       request.setAttribute("usersCount", homePageWrapper.getUsersCount() );
+       request.setAttribute("productsCount", homePageWrapper.getProductsCount() );
+       request.setAttribute("products", homePageWrapper.getProducts() );
+       request.setAttribute("categories", homePageWrapper.getCategories());
+       
+       RequestDispatcher rd = request.getRequestDispatcher("pages/Home.jsp");
+       rd.forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
