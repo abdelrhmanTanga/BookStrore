@@ -32,6 +32,7 @@ public class CartDAO {
         this.connection = connection;
     }
 
+  
     public boolean addToCart(Cart cart) {
         try {
             PreparedStatement pst = connection.prepareStatement("insert into cart values (?,?,?)");
