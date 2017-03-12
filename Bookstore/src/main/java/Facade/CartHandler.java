@@ -5,8 +5,12 @@
  */
 package Facade;
 
+import java.awt.print.Book;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import websitemodel.ConnectionPool;
@@ -15,12 +19,19 @@ import websitemodel.databaseDAO.ProductDAO;
 import websitemodel.databaseDTO.Cart;
 import websitemodel.databaseDTO.Product;
 import websiteview.model.AddToCartWrapper;
+import websiteview.model.CartDTO;
 
 /**
  *
  * @author abdelrhman galal
  */
 public class CartHandler {
+
+    CartDAO cartDao;
+
+    public CartHandler() {
+       // cartDao = new CartDAO();
+    }
 
     public boolean addToCart(AddToCartWrapper order) {
         try {
@@ -52,4 +63,46 @@ public class CartHandler {
 
     }
 
+    public List<CartDTO> getCart(String Email) throws SQLException {
+        Connection connection = ConnectionPool.getInstance().getConnection();
+        ProductDAO productDAO = new ProductDAO(connection);
+        CartDTO cartdto = new CartDTO();
+        List<CartDTO> theCart = null;
+//        try {
+////            theCart = CartDAO.readAll(Email);
+////
+////            if (theCart != null && !theCart.isEmpty()) {
+////                Iterator<CartDTO> iteratorCart = theCart.iterator();
+////
+////                List<productDAO> CartBooks = new ProductDAO().getProductInfo(iteratorCart.getID());
+////                for (Iterator<Product> iterator = CartBooks.iterator(); iterator.hasNext();) {
+////                    Cart cartN = iteratorCart.next();
+////                    Product bookN = iterator.next();
+////                    cartN.setBook(bookN);
+//                    // cartN.set;
+//                
+//
+//            } else {
+//                theCart = new ArrayList<>();
+//            }
+//    } catch (SQLException ex) {
+//            ex.printStackTrace();
+//        }
+
+        return theCart;
+    }
+
+//    public boolean freeCart(String Email) {
+//        boolean deleted = false;
+//        try {
+//            deleted = CartDAO.freeCartOfClient(Email);
+//
+//        } catch (SQLException ex) {
+//            ex.printStackTrace();
+//        }
+//        return deleted;
+//
+//    }
+
 }
+

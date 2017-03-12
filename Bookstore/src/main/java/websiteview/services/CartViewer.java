@@ -8,11 +8,20 @@ package websiteview.services;
 import Facade.CartHandler;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Vector;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import websitemodel.databaseDTO.Cart;
+import websitemodel.databaseDTO.Client;
+import websiteview.model.CartDTO;
+import websiteview.model.ProductModel;
 
 /**
  *
@@ -38,8 +47,25 @@ public class CartViewer extends HttpServlet {
         cartHandler = new CartHandler();
     }
 
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
 
+          /////////////// loader cart
+        
+     /*  List<CartDTO> cartItems = CartHandler.getcart(Email);
+        request.setAttribute("Items", cartItems);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/cart.jsp");
+        dispatcher.include(request, response);*/
+        
+        /////////////////or another way 
+//       HttpSession session = request.getSession(false);
+//          String Email= request.session.getAttribute("loggedIn");
+   //    String Email = request.getSession().getAttribute("loggedIn").getEmail();
+           HttpSession session = request.getSession(false);
+       String email;
+        email = request.getSession().getAttribute("loggedIn").toString();
+        List<CartDTO> clientCart = new CartHandler().getCart(email);
+
+        response.sendRedirect("/BookStore/cart.jsp");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -54,7 +80,7 @@ public class CartViewer extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+       
     }
 
     /**
@@ -68,7 +94,7 @@ public class CartViewer extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+       
     }
 
     /**
