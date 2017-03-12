@@ -118,13 +118,14 @@ public class CartHandler {
             cartDAO.resetCart(fullCart.elementAt(1).getEmail());
             clientDAO.deductCredit(fullCart.elementAt(1).getEmail(), totalPrice);
 
-            /*OrderHistory orderHistory = new OrderHistory();
+            OrderHistory orderHistory = new OrderHistory();
+            orderHistory.setEmail(fullCart.elementAt(1).getEmail());
             OrderHistoryDAO orderHistoryDAO = new OrderHistoryDAO(connection);
             orderHistory = orderHistoryDAO.addOrder(orderHistory);
 
             OrderHistoryItems orderHistoryItems = new OrderHistoryItems();
             OrderHistoryItemsDAO historyItemsDAO = new OrderHistoryItemsDAO(connection1);
-            historyItemsDAO.addOrderItems(orderHistory.getId(), fullCart);*/
+            historyItemsDAO.addOrderItems(orderHistory.getId(), fullCart);
 
             connection.close();
             connection1.close();
@@ -134,6 +135,20 @@ public class CartHandler {
             Logger.getLogger(CartHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
+    }
+
+    public void test() {
+        try {
+            Connection connection = ConnectionPool.getInstance().getConnection();
+            OrderHistoryDAO orderHistoryDAO = new OrderHistoryDAO(connection);
+            OrderHistory orderHistory = new OrderHistory();
+            orderHistory.setEmail("abdo@gmail.com");
+            orderHistoryDAO.addOrder(orderHistory);
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(CartHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
 
 }

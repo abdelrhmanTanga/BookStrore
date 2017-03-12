@@ -5,24 +5,18 @@
  */
 package websiteview.services;
 
-import Facade.CartHandler;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Vector;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import websiteview.model.CheckoutDTO;
 
 /**
  *
  * @author abdelrhman galal
  */
-public class Checkout extends HttpServlet {
+public class ProfileViewer extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,27 +27,9 @@ public class Checkout extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    CartHandler cartHandler;
-
-    @Override
-    public void init(ServletConfig config)
-            throws ServletException {
-        super.init(config); //To change body of generated methods, choose Tools | Templates.
-        cartHandler = new CartHandler();
-    }
-
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession(false);
-        if (session != null){
-            String email = (String) session.getAttribute("LoggedIn");
-            CheckoutDTO orderInfo = cartHandler.doCheckout(email);
-            
-            request.setAttribute("orderInfo", orderInfo);
-            RequestDispatcher dispatcher = request.getRequestDispatcher("");
-            dispatcher.include(request, response);
-        }else{
-            ////////////////////// logic for not signed in (redirect to sign in page)
-        }
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
