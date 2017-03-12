@@ -101,5 +101,23 @@ public class Product {
     public void setId(int id) {
         this.id = id;
     }
+	
+	 public Product()
+    {
+    }
+    
+    public Product(int id,String name,int quantity,String Author,long ISBN,String description,int category,String reviews,int price,String image)
+    {
+        this.id = id;
+        this.name = name;
+        this.quantity = quantity;
+        this.Author = Author;
+        this.ISBN = ISBN;
+        this.description = description;
+        this.category = category;
+        this.reviews = reviews;
+        this.price = price;
+        this.image = image;
+    }
 
 }

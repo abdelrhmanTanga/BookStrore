@@ -47,9 +47,9 @@ public class ProductPage extends HttpServlet {
         if (productId != null) {
             ProductPageDTO productInfo = productHandler.getProductInfo(Integer.parseInt(productId));
             if (productInfo != null) {
-                //request.setAttribute("productInfo", productInfo);
-                /*RequestDispatcher dispatcher = request.getRequestDispatcher("");
-                dispatcher.forward(request, response);*/
+                request.setAttribute("productInfo", productInfo);
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/ProductPage.jsp");
+                dispatcher.forward(request, response);
                 out.println("true 1" + productInfo.getAuthor() + productInfo.getDescription());
             } else {
                 //////////////////// trouble in info from database

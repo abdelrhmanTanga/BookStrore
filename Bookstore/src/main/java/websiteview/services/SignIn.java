@@ -52,6 +52,7 @@ public class SignIn extends HttpServlet {
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //////////////// ABDELRHman
         PrintWriter out = response.getWriter();
         SignInDTO signInDTO = new SignInDTO();
         signInDTO.setEmail(request.getParameter("email"));
@@ -66,9 +67,9 @@ public class SignIn extends HttpServlet {
             session.setAttribute("loggedIn", "abdo zeft");
             //////////////// what evet the fuck u do when its false
             out.println("false abdo");
-            
-        }
 
+        }
+        /////////////////// abdelrhman
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

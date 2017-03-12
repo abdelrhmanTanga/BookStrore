@@ -9,6 +9,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -57,6 +59,27 @@ public class CategoryDAO {
             Logger.getLogger(CategoryDAO.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
+    }
+	
+	
+	public List<Category> getAllCategories() 
+    {
+        List<Category> categories = new ArrayList<>();
+        try {
+            PreparedStatement pst = connection.prepareStatement("SELECT * FROM category");
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                Category category = new Category();
+                category.setId(rs.getInt(1));
+                category.setName(rs.getString(2));
+                categories.add(category);
+            }
+            pst.close();
+            rs.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return categories;
     }
 
     

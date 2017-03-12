@@ -48,7 +48,7 @@ public class ProductViewer extends HttpServlet {
         Vector<HeaderCategories> categories = productHandler.getCategories();
         if (categories != null) {
             //response.setContentType("applicatio");
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/viewproducts.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/navbar.jsp");
             dispatcher.include(request, response);
         } else {
             //////////////////////// what to do if errors 

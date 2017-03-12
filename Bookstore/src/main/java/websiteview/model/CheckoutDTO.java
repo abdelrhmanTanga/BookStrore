@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package websitemodel.databaseDAO;
+package websiteview.model;
 
 /**
  *
  * @author abdelrhman galal
  */
-public class OrderHistroryItemsDAO {
+public class CheckoutDTO {
     
 }
