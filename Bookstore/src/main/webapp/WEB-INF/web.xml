@@ -43,9 +43,29 @@
         <servlet-name>CartViewer</servlet-name>
         <servlet-class>websiteview.services.CartViewer</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Checkout</servlet-name>
+        <servlet-class>websiteview.services.Checkout</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ProfileViewer</servlet-name>
+        <servlet-class>websiteview.services.ProfileViewer</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>signout</servlet-name>
+        <servlet-class>websiteview.services.SignOut</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>test</servlet-name>
+        <servlet-class>websiteview.services.test</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SignIn</servlet-name>
         <url-pattern>/SignIn</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>signout</servlet-name>
+        <url-pattern>/signout</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ProductViewer</servlet-name>
@@ -78,6 +98,18 @@
     <servlet-mapping>
         <servlet-name>CartViewer</servlet-name>
         <url-pattern>/cart</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Checkout</servlet-name>
+        <url-pattern>/checkout</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProfileViewer</servlet-name>
+        <url-pattern>/profileviewer</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>test</servlet-name>
+        <url-pattern>/test</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

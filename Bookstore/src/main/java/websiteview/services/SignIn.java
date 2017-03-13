@@ -53,7 +53,22 @@ public class SignIn extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //////////////// ABDELRHman
-        
+        PrintWriter out = response.getWriter();
+        SignInDTO signInDTO = new SignInDTO();
+        signInDTO.setEmail(request.getParameter("email"));
+        signInDTO.setPassword(request.getParameter("password"));
+        if (session.verifyUser(signInDTO)) {
+            HttpSession session = request.getSession(true);
+            session.setAttribute("loggedIn", signInDTO.getEmail());
+            ///////////// where ever the fuck u redirect when its true
+            out.println("true");
+        } else {
+            HttpSession session = request.getSession(true);
+            session.setAttribute("loggedIn", "abdo zeft");
+            //////////////// what evet the fuck u do when its false
+            out.println("false abdo");
+
+        }
         /////////////////// abdelrhman
     }
 

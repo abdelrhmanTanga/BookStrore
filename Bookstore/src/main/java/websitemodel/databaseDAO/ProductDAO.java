@@ -31,6 +31,10 @@ public class ProductDAO {
         this.connection = connection;
     }
 
+    public ProductDAO() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     //////////////////// abdelrhman galal start
     public boolean addBook(Product newBook) {
         
@@ -304,6 +308,8 @@ public class ProductDAO {
                 product.setReviews(rs.getString("reviews")); product.setPrice(rs.getInt("price"));
                 product.setCategory(rs.getInt("category"));  product.setImage(rs.getString("image"));
             }    
+            pst.close();
+            rs.close();
         } catch (SQLException ex) {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -312,20 +318,17 @@ public class ProductDAO {
 
     //mohamed ali end
         /////////////////////////search
-    public List<Product> search(String searchKey, int category) throws SQLException {
+    public List<Product> search(String searchKey) throws SQLException {
         List<Product> products = new ArrayList();
 
         try {
-            if (category == 0) {
-                pst = connection.prepareStatement("SELECT * FROM product where name like ? ");
-                pst.setString(1, searchKey);
-            } else if (searchKey == null) {
-                pst = connection.prepareStatement("SELECT * FROM product where category = ? ");
-                pst.setInt(1, category);
+             if (searchKey == null) {
+                pst = connection.prepareStatement("SELECT * FROM product");
+              
             } else {
-                pst = connection.prepareStatement("SELECT * FROM product where name like ? and category=?");
+                pst = connection.prepareStatement("SELECT * FROM product where name like ?");
                 pst.setString(1, searchKey);
-                pst.setInt(2, category);
+               
             }
 
             rs = pst.executeQuery();
@@ -350,5 +353,17 @@ public class ProductDAO {
         return products;
     }
     ////////////////////////////////
+
+    public void updateQuantity(int bookID, int quantity) {
+        Product product = getProductData(bookID);
+        try {
+            PreparedStatement pst = connection.prepareStatement("update product set quantity = ? where id = ?");
+            pst.setInt(1,product.getQuantity() - quantity);
+            pst.setInt(2, bookID);
+            pst.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
 }

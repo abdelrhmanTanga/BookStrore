@@ -7,6 +7,7 @@ package Facade;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -106,7 +107,7 @@ public class ProductHandler {
 
             Connection conn = ConnectionPool.getInstance().getConnection();
             ProductDAO productDAO = new ProductDAO(conn);
-            //productDAO.search(search.getSearchKey(), search.getCategory())
+            List<Product> products= productDAO.search(search.getSearchKey());
 
             
             conn.close();

@@ -11,7 +11,7 @@ package websiteview.model;
  */
 public class SearchDTO {
     String searchKey;
-    int category;
+    
 
     public String getSearchKey() {
         return searchKey;
@@ -21,12 +21,6 @@ public class SearchDTO {
         this.searchKey = searchKey;
     }
 
-    public int getCategory() {
-        return category;
-    }
-
-    public void setCategory(int category) {
-        this.category = category;
-    }
+    
     
 }
