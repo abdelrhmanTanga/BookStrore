@@ -38,13 +38,13 @@ public class CartViewer extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    CartHandler cartHandler;
+   
 
     @Override
     public void init(ServletConfig config)
             throws ServletException {
         super.init(config); //To change body of generated methods, choose Tools | Templates.
-        cartHandler = new CartHandler();
+       CartHandler cartHandler = new CartHandler();
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
@@ -62,9 +62,10 @@ public class CartViewer extends HttpServlet {
    //    String Email = request.getSession().getAttribute("loggedIn").getEmail();
            HttpSession session = request.getSession(false);
        String email;
-        email = request.getSession().getAttribute("loggedIn").toString();
-        List<CartDTO> clientCart = new CartHandler().getCart(email);
-
+        email = (String) request.getSession().getAttribute("loggedIn");
+        List<CartDTO> clientCart;
+        clientCart = cartHandler.getCart(email);
+        request.setAttribute("cartItem", clientCart);
         response.sendRedirect("/BookStore/cart.jsp");
     }
 

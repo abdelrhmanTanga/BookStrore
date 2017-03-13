@@ -20,6 +20,7 @@ import websitemodel.databaseDTO.Cart;
 import websitemodel.databaseDTO.Product;
 import websiteview.model.AddToCartWrapper;
 import websiteview.model.CartDTO;
+import websiteview.model.ProductModel;
 
 /**
  *
@@ -27,7 +28,7 @@ import websiteview.model.CartDTO;
  */
 public class CartHandler {
 
-    CartDAO cartDao;
+    
 
     public CartHandler() {
        // cartDao = new CartDAO();
@@ -67,31 +68,39 @@ public class CartHandler {
         Connection connection = ConnectionPool.getInstance().getConnection();
         ProductDAO productDAO = new ProductDAO(connection);
         CartDTO cartdto = new CartDTO();
+      //  Cart initialCart = new Cart();
+        List<Cart> initialCart = null ;
+        List<ProductModel> cartBooks=null;
         List<CartDTO> theCart = null;
-//        try {
-////            theCart = CartDAO.readAll(Email);
-////
-////            if (theCart != null && !theCart.isEmpty()) {
-////                Iterator<CartDTO> iteratorCart = theCart.iterator();
-////
-////                List<productDAO> CartBooks = new ProductDAO().getProductInfo(iteratorCart.getID());
-////                for (Iterator<Product> iterator = CartBooks.iterator(); iterator.hasNext();) {
-////                    Cart cartN = iteratorCart.next();
-////                    Product bookN = iterator.next();
-////                    cartN.setBook(bookN);
-//                    // cartN.set;
-//                
-//
-//            } else {
-//                theCart = new ArrayList<>();
-//            }
-//    } catch (SQLException ex) {
-//            ex.printStackTrace();
-//        }
+        CartDAO cartDAO = new CartDAO(connection);
+            initialCart = cartDAO.readAll(Email);
+              
+            if (initialCart != null && !initialCart.isEmpty()) {
+                Iterator<Cart> iteratorCart = initialCart.iterator();
 
-        return theCart;
+               cartBooks = new ProductDAO().getProductInfo(iteratorCart.getID());
+                
+                connection.close();
+//                for (Iterator<ProductModel> iterator = cartBooks.iterator(); iterator.hasNext();) {
+//                 theCart .setName(cartBooks.iterator().getName()); 
+//                 theCart .setName(cartBooks.iterator().getISBN()); 
+//                }
+                  int i = 0;
+		while (i < cartBooks.size()) {
+                    theCart = new List<CartDTO>(); 
+                 theCart.setName(cartBooks.get(i).getName()); 
+                 theCart.setISBN(cartBooks.get(i).getISBN()); 
+                 theCart.setPrice(cartBooks.get(i).getPrice()); 
+                  theCart.setImage(cartBooks.get(i).getImage()); 
+			i++;
+		}
+
+       
     }
 
+             return theCart;
+             
+    }}
 //    public boolean freeCart(String Email) {
 //        boolean deleted = false;
 //        try {
@@ -104,5 +113,4 @@ public class CartHandler {
 //
 //    }
 
-}
 

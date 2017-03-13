@@ -26,12 +26,13 @@
         <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/ico/apple-touch-icon-114-precomposed.png">
         <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
         <link rel="apple-touch-icon-precomposed" href="images/ico/apple-touch-icon-57-precomposed.png">
-        <%@page import="Facade.CartHandler"%>
-        <%@page import="websiteview.model.CartDTO"%>
-        <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-        <jsp:useBean id="CartHandler" scope="page" class="" />
-        <jsp:useBean id="email" scope="session" type="" />
-        <c:set var="cartList" value="${CartHandler.getCart(email) }"> </c:set> 
+         <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+        <%-- <%@page import="Facade.CartHandler"%>
+        <%-- <%@page import="websiteview.model.CartDTO"%>
+       
+        <%-- <jsp:useBean id="CartHandler" scope="page" class="" /> 
+        <jsp:useBean id="email" scope="session" type="" />--%>
+       
 
         <c:set var="total" value="0"/>
     </head>
