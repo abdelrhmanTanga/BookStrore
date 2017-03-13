@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import java.util.UUID;
 
 /**
  *
@@ -53,7 +54,7 @@ public class ProductAddition extends HttpServlet {
     }
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, Exception {
-        //response.setContentType("text/html;charset=UTF-8");
+        response.setContentType("text/plain;charset=UTF-8");
 
         DiskFileItemFactory factory = new DiskFileItemFactory();
         ServletFileUpload upload = new ServletFileUpload(factory);
@@ -92,42 +93,25 @@ public class ProductAddition extends HttpServlet {
                         break;
                 }
             } else {
+                
                 //response.setContentLength((int) item.getSize() + 1000);
-                item.write(new File(context.getRealPath("/pages/images/").replaceAll("\\\\build", "") + item.getName()));
-                url = context.getRealPath("/pages/images/").replaceAll("\\\\build","") + item.getName();
-                product.setImage(url);
+                item.write(new File(context.getRealPath("/pages/images/").replaceAll("\\\\target\\\\MavenOnlineShoping-1.0-SNAPSHOT", "\\\\src\\\\main\\\\webapp") + item.getName()));
+                //System.out.println(context.getRealPath("/pages/images/").replaceAll("\\\\target\\\\MavenOnlineShoping-1.0-SNAPSHOT", "\\\\src\\\\main\\\\webapp") + item.getName());
+                url = context.getRealPath("/pages/images/").replaceAll("\\\\target\\\\MavenOnlineShoping-1.0-SNAPSHOT", "\\\\src\\\\main\\\\webapp") + item.getName();
+                 UUID idOne = UUID.randomUUID();
+                product.setImage( idOne.toString()+  item.getName().substring(item.getName().length() - 4) );
             }
         }
         
         PrintWriter out = response.getWriter();
 
-//////////////////// filling the product model
-        /*product.setName(request.getParameter("pname"));
-        System.out.println(request.getParameter("quantity"));
-        System.out.println(request.getParameter("quantity"));
-        product.setQuantity(Integer.parseInt(request.getParameter("quantity")));
-        product.setAuthor(request.getParameter("author"));
-        product.setISBN(Integer.parseInt(request.getParameter("isbn")));
-        product.setDescription(request.getParameter("description"));
-        product.setCategory(request.getParameter("category"));
-        product.setPrice(Integer.parseInt(request.getParameter("price")));
-        product.setImage(url);*/
+
         if (adminFacadeHandler.addBook(product)) {
-            //out.println("true");
-            request.setAttribute("check", true);
+            out.print("true");
         } else {
             //out.println("false");
-            request.setAttribute("check", false);
-            
-            request.setAttribute("name", product.getName());
-            request.setAttribute("quantity", product.getQuantity());
-            request.setAttribute("author", product.getAuthor());
-            request.setAttribute("description", product.getDescription());
-            request.setAttribute("price", product.getPrice());
-            request.setAttribute("category", product.getCategory());
+            out.print("false");
         }
-        RequestDispatcher rd= request.getRequestDispatcher("AddProductController");
-        rd.include(request, response);
     }
 
 // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
