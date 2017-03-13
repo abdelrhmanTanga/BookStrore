@@ -8,12 +8,14 @@ package websiteview.services;
 import Facade.ProductHandler;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Vector;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import websiteview.model.HeaderCategories;
 import websiteview.model.ProductPageDTO;
 
 /**
@@ -43,21 +45,30 @@ public class ProductPage extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String productId = request.getParameter("productid");
-        PrintWriter out = response.getWriter();
+        //PrintWriter out = response.getWriter();
         if (productId != null) {
             ProductPageDTO productInfo = productHandler.getProductInfo(Integer.parseInt(productId));
             if (productInfo != null) {
+                System.out.println("before header");
+                Vector<HeaderCategories> categories = productHandler.getCategories();
+                if (categories != null) {
+                    request.setAttribute("categories", categories);
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/navbar.jsp");
+                    dispatcher.include(request, response);
+                } else {
+                    //////////////////////// what to do if errors 
+                }
                 request.setAttribute("productInfo", productInfo);
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/ProductPage.jsp");
-                dispatcher.forward(request, response);
-                out.println("true 1" + productInfo.getAuthor() + productInfo.getDescription());
+                dispatcher.include(request, response);
+                //out.println("true 1" + productInfo.getAuthor() + productInfo.getDescription());
             } else {
                 //////////////////// trouble in info from database
-                out.println("false 2 database trouble");
+                //out.println("false 2 database trouble");
             }
         } else {
             //////////////////// request is not valid 
-            out.println("false 3 trouble in request blablablabal");
+            //out.println("false 3 trouble in request blablablabal");
         }
 
     }

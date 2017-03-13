@@ -32,15 +32,22 @@ public class CartDAO {
         this.connection = connection;
     }
 
-  
     public boolean addToCart(Cart cart) {
         try {
-            PreparedStatement pst = connection.prepareStatement("insert into cart values (?,?,?)");
-            pst.setString(1, cart.getEmail());
-            pst.setInt(2, cart.getBookID());
-            pst.setInt(3, cart.getQuantity());
-            pst.executeUpdate();
-            return true;
+            PreparedStatement pst = connection.prepareStatement("select * from cart where id = ?");
+            pst.setInt(1, cart.getBookID());
+            ResultSet rs = pst.executeQuery();
+            if (!rs.next()) {
+                pst = connection.prepareStatement("insert into cart values (?,?,?)");
+                pst.setString(1, cart.getEmail());
+                pst.setInt(2, cart.getBookID());
+                pst.setInt(3, cart.getQuantity());
+                pst.executeUpdate();
+                System.out.println("in dao  ");
+                return true;
+            } else {
+                return false;
+            }
         } catch (SQLException ex) {
             Logger.getLogger(CartDAO.class.getName()).log(Level.SEVERE, null, ex);
             return false;

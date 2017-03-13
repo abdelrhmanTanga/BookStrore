@@ -316,6 +316,7 @@ public class ProductDAO {
             }
 
             rs = pst.executeQuery();
+            
             while (rs.next()) {
                 Product product = new Product();
                 product.setName(rs.getString(2));
@@ -330,11 +331,13 @@ public class ProductDAO {
             }
             rs.close();
             pst.close();
+            return products;
         } catch (SQLException ex) {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         }
 
-        return products;
+        
     }
     ////////////////////////////////
 

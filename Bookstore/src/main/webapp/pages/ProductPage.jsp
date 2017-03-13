@@ -94,7 +94,7 @@
                             <h2>${productInfo.name}</h2>
                             <p>ISBN: ${productInfo.ISBN}</p>
                             <h1>Rating</h1>
-                            <fieldset class="rating">
+                            <fieldset onchange="test()" class="rating" >
                                 <input type="radio" id="star5" name="rating" value="5" /><label class = "full" for="star5" title="Awesome - 5 stars"></label>
                                 <input type="radio" id="star4half" name="rating" value="4 and a half" /><label class="half" for="star4half" title="Pretty good - 4.5 stars"></label>
                                 <input type="radio" id="star4" name="rating" value="4" /><label class = "full" for="star4" title="Pretty good - 4 stars"></label>
@@ -125,4 +125,10 @@
             </div>
         </div>
     </div>
+                        <script>
+                            function test(){
+                                
+                                document.write(document.getElementById("").value);
+                            }
+                        </script>
 </html>

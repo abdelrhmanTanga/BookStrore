@@ -7,6 +7,7 @@ package Facade;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -45,9 +46,11 @@ public class ProductHandler {
                     product.setId(products.elementAt(i).getId());
                     productsResponse.add(product);
                 }
+                connection.close();
                 return productsResponse;
             } else {
                 System.out.println("null 1");
+                connection.close();
                 return null;
             }
         } catch (SQLException ex) {
@@ -91,8 +94,10 @@ public class ProductHandler {
                 productPageDTO.setName(product.getName());
                 productPageDTO.setPrice(product.getPrice());
                 productPageDTO.setReviews(product.getReviews());
+                connection.close();
                 return productPageDTO;
             } else {
+                connection.close();
                 return null;
             }
         } catch (SQLException ex) {
@@ -101,19 +106,36 @@ public class ProductHandler {
         }
 
     }
+
     ////////////////////yasmeen
-     public void search(SearchDTO search) {
+    public List<ProductModel> search(SearchDTO search) {
         try {
 
             Connection conn = ConnectionPool.getInstance().getConnection();
             ProductDAO productDAO = new ProductDAO(conn);
-            List<Product> products= productDAO.search(search.getSearchKey());
-
-            
+            List<Product> products = productDAO.search(search.getSearchKey());
+            List<ProductModel> viewProducts = new ArrayList<>();
+            for (int i = 0; i < products.size(); i++){
+                ProductModel productView = new ProductModel();
+                //productView.setAuthor(products.get(i).getAuthor());
+                //productView.setCategory(products.get(i).getCategory());
+                //productView.setDescription(products.get(i).getDescription());
+                productView.setISBN(products.get(i).getISBN());
+                productView.setImage(products.get(i).getImage());
+                productView.setName(products.get(i).getName());
+                productView.setPrice(products.get(i).getPrice());
+                productView.setId(products.get(i).getId());
+                //productView.setReviews(products.get(i).getReviews());
+                viewProducts.add(productView);
+            }
             conn.close();
+            return viewProducts;
         } catch (SQLException ex) {
             Logger.getLogger(ProductHandler.class.getName()).log(Level.SEVERE, null, ex);
-        }}
+            return null;
+        }
+        
+    }
     //////////////////
 
 }
