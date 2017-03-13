@@ -144,5 +144,18 @@ public class AdminFacadeHandler {
         return product;
     }
     
+    public boolean addNewCategory(String categoryName)
+    {
+        boolean check = false;
+        try {
+            Connection connection = ConnectionPool.getInstance().getConnection();
+            check = new CategoryDAO(connection).addCategory(categoryName);
+            connection.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(AdminFacadeHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return check;
+    }
+    
 
 }

@@ -82,6 +82,22 @@ public class CategoryDAO {
         return categories;
     }
 
-    
+    public boolean addCategory(String CategoryName)
+    {
+        boolean check = false;
+        try {
+            PreparedStatement pst = connection.prepareStatement("INSERT INTO category VALUES(categoryid.nextval,?)");
+            pst.setString(1,CategoryName );
+            int number = pst.executeUpdate();
+            if( number > 0 ) 
+            {
+                check = true;
+            }
+            pst.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return check;
+    }
     
 }

@@ -31,8 +31,8 @@
     <body>
         <!--navbar start-->
 
-         <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-         
+        <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
         <section id='container'>
 
             <!--header start-->
@@ -204,7 +204,7 @@
                                                 </c:forEach>    
 
                                             </tbody>
-                                                   
+
                                         </table>
                                         <button type="button"  class="btn btn-danger" data-toggle="modal" onclick="CheckIfProductsSelceted()" id="" data-target="" > Delete Selected Products </button>
                                         <div class="clearfix"></div>
@@ -224,16 +224,16 @@
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="fa fa-times" aria-hidden="true"></span></button>
-                                        <h4 class="modal-title custom_align" id="Heading">Edit Your Detail</h4>
+                                        <h4 class="modal-title custom_align" id="Heading">Edit Product Detail</h4>
                                     </div>
                                     <div class="modal-body">
                                         <div class="form">
                                             <form class="form-validate form-horizontal" id="feedback_form" method="post" enctype="multipart/form-data" action="javascript:editProduct();" >
                                                 <input type="hidden" id="pid" name="pid"  value="" required="" />
                                                 <div class="form-group ">
-                                                    <label for="pname" class="control-label col-lg-2">PName <span class="required">*</span></label>
+                                                    <label for="pname" class="control-label col-lg-2">Product Name(5-20 character) <span class="required">*</span></label>
                                                     <div class="col-lg-10">
-                                                        <input class="form-control " id="pname" name="pname" minlength="5" maxlength="30"  type="text" required />
+                                                        <input class="form-control " id="pname" name="pname" pattern="^[a-zA-Z][a-zA-Z0-9\s]{5,25}"  type="text" required />
                                                     </div>
                                                 </div>
                                                 <div class="form-group ">
@@ -243,21 +243,21 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group ">
-                                                    <label for="author" class="control-label col-lg-2">Author <span class="required">*</span></label>
+                                                    <label for="author" class="control-label col-lg-2">Author(5-20 character) <span class="required">*</span></label> <br>
                                                     <div class="col-lg-10">
-                                                        <input class="form-control " id="author" type="text" minlength="5" maxlength="30" name="author" required />
+                                                        <input class="form-control " id="author" type="text" minlength="5" pattern="^[a-zA-Z][a-zA-Z0-9\s]{5,25}" required />
                                                     </div>
                                                 </div>
                                                 <div class="form-group ">
-                                                    <label for="isbn" class="control-label col-lg-2">ISBN <span class="required">*</span></label>
+                                                    <label for="isbn" class="control-label col-lg-2">ISBN(13 digit) <span class="required">*</span></label>
                                                     <div class="col-lg-10">
-                                                        <input class="form-control" id="isbn" name="isbn" type="number" min="1" max="9999999999999"  required />
+                                                        <input class="form-control" id="isbn" name="isbn" type="text" pattern="[0-9]{13}"  required />
                                                     </div>
                                                 </div>                                      
                                                 <div class="form-group ">
-                                                    <label for="description" class="control-label col-lg-2">Description <span class="required">*</span></label>
-                                                    <div class="col-lg-10">
-                                                        <textarea class="form-control " id="description" name="description" minlength="20" maxlength="150" required></textarea>
+                                                    <label for="description" class="control-label col-lg-3">Description(20+) <span class="required">*</span></label>
+                                                    <div class="col-lg-9">
+                                                        <input class="form-control " id="description" name="description" pattern="^[a-zA-Z][a-zA-Z0-9\s]{20,100}"   required />
                                                     </div>
                                                 </div>
 
@@ -268,30 +268,44 @@
                                                     </div>
                                                 </div>   
 
+                                                
+
+
                                                 <div class="form-group ">
-                                                    <label for="category" class="control-label col-lg-2">Category <span class="required">*</span></label>
-                                                    <div class="col-lg-10">
-                                                        <select class="form-control selectpicker" id="category" name="category" value="" >
+                                                   <label for="category" class="control-label col-lg-2">Category <span class="required">*</span></label>
+                                                   <div class="col-lg-10" >
+                                                        <select class="form-control selectpicker" id="category" name="category" required >
                                                             <c:forEach var="row" items="${ requestScope.categories }">
-                                                               <option value="${row.getId()}" > ${ row.getName() } </option>
+                                                                <option> ${ row.getName() } </option>
                                                             </c:forEach>
                                                         </select>
                                                     </div>
-                                                </div>   
-
+                                                </div>
+                                                
                                                 <div class="form-group ">
                                                     <label for="pimage" class="control-label col-lg-2">Image <span class="required">*</span></label>
                                                     <div class="col-lg-10">
-                                                        <input class="form-control" id="pimage" name="pimage"  type="file" required />
+                                                        <input class="form-control" id="pimage" name="pimage" type="file"  accept=' image/jpeg, image/png' required />
                                                     </div>
                                                 </div>   
                                                 
                                                 <div class="modal-footer ">
                                                     <button type="submit"  class="btn btn-warning btn-lg" id="" name="editbutton"   style="width: 100%;"  ><span class="fa fa-check-square"></span> Update</button>
-                                                 </div>
+                                                </div>
+                                                
+                                                
+                                                <div class="form-group " style="display: none;" id="success-alert-isbn" >
+                                                    <label for="" class="control-label col-lg-6"></label>
+                                                    <div class="alert alert-success col-lg-6"  id="success-alert-isbn">
+                                                        <button type="button" class="close" data-dismiss="alert">x</button>
+                                                        <strong>Failed: In Update Product! </strong>
+                                                             The ISBN Of The Product Already Exist!
+                                                    </div>
+                                                </div> 
+
                                             </form>
                                         </div>
-                                       
+
                                     </div>
                                     <!-- /.modal-content --> 
                                 </div>
@@ -321,9 +335,9 @@
                             </div>
                             <!-- /.modal-dialog --> 
                         </div>
-                        
-                        
-                        
+
+
+
                         <div class="modal fade" id="deleteselected" tabindex="-1" role="dialog" aria-labelledby="deleteSelecetdProducts" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
@@ -345,9 +359,9 @@
                             </div>
                             <!-- /.modal-dialog --> 
                         </div>
-                        
-                        
-                        
+
+
+
 
                     </div>
 
@@ -372,7 +386,7 @@
 
 
 
-<!-- javascripts -->
+        <!-- javascripts -->
         <script src="${pageContext.request.contextPath}/pages/js/jquery.js"></script>
         <script src="${pageContext.request.contextPath}/pages/js/jquery-1.8.3.min.js"></script>
         <script type="${pageContext.request.contextPath}/pages/text/javascript" src="js/jquery-ui-1.9.2.custom.min.js"></script>
@@ -398,7 +412,7 @@
         <script src="${pageContext.request.contextPath}/pages/js/mali/home.js"></script>
         <script src="${pageContext.request.contextPath}/pages/js/mali/update.js"></script>
         <script src="${pageContext.request.contextPath}/pages/js/mali/delete.js"></script>
-        <script>  makePagination(${requestScope.productsCount}) </script>
+        <script>  makePagination(${requestScope.productsCount})</script>
         <!-- javascripts -->
     </body>
 </html>

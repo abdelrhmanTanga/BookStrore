@@ -132,7 +132,7 @@
                             <a href='HomeServletController' >
                                 <div class="info-box blue-bg">
                                     <i class="fa fa-home"></i>
-                                    <div class="count"> ${requestScope.productsCount} </div>
+                                    <div class="count" id="productCount1" > ${requestScope.productsCount} </div>
                                     <div class="title">Home </div>						
                                 </div><!--/.info-box-->			
                             </a>
@@ -142,7 +142,7 @@
                             <a href='AddProductController' >
                                 <div class="info-box blue-bg">
                                     <i class="fa fa-book"></i>
-                                    <div class="count"> ${requestScope.productsCount} </div>
+                                    <div class="count" id="productCount2" > ${requestScope.productsCount} </div>
                                     <div class="title">Add Product</div>						
                                 </div><!--/.info-box-->			
                             </a>
@@ -249,10 +249,8 @@
 
                                             <div class="form-group col-sm-12">
 
-
-
-                                                <div class="col-sm-2">
-                                                    <label for="category"  class="control-label col-lg-2"> Category </label>
+                                                <div class="col-sm-2"  >
+                                                    <label for="category" style="margin-left: 90px;" class="control-label col-lg-2">Category<span class="required">*</span> </label>
                                                 </div>
                                                 <div class="col-sm-4">
                                                     <select class="form-control selectpicker" id="category" name="category" required >
@@ -264,15 +262,41 @@
                                                 </div>
 
                                                 <div class="col-sm-2">
-                                                    <label for="newcategory" class="control-label ">Add New Category</label></div>
+                                                    <label for="newcategory" class="control-label "  style="margin-left: 35px;" >Add New Category</label></div>
                                                 <div class="col-sm-2"><input class="form-control " id="newcategory" name="newcategory" type="text"  pattern="^[a-zA-Z][a-zA-Z0-9\s]{5,40}"  /></div>
                                                 <div class="col-sm-2"><button class="btn btn-primary form-control" type="button" onclick="addNewCategory()" >Add New Category</button> 
                                                 </div>
 
-
-
                                             </div>
-
+                                            
+                                            <div class="form-group " style="display: none;" id="success-alert-new-categorysuccess1" >
+                                                <label for="" class="control-label col-lg-6"></label>
+                                                <div class="alert alert-success col-lg-6"  id="success-alert-new-category-success">
+                                                        <button type="button" class="close" data-dismiss="alert">x</button>
+                                                        <strong>Successfully Category Added! </strong>
+                                                        The Category Added Successfully.
+                                                </div>
+                                             </div> 
+                                            
+                                            
+                                            <div class="form-group " style="display: none;" id="danger-alert-new-category-fail1" >
+                                                <label for="" class="control-label col-lg-6"></label>
+                                                <div class="alert alert-danger col-lg-6"  id="danger-alert-new-category-fail">
+                                                        <button type="button" class="close" data-dismiss="alert">x</button>
+                                                        <strong>Failure In Adding Category! </strong>
+                                                        This Category Name Is Already Exist.
+                                                </div>
+                                             </div>   
+                                            
+                                            
+                                            <div class="form-group " style="display: none;" id="danger-alert-new-category-empty1" >
+                                                <label for="" class="control-label col-lg-6"></label>
+                                                <div class="alert alert-danger col-lg-6"  id="danger-alert-new-category-empty">
+                                                        <button type="button" class="close" data-dismiss="alert">x</button>
+                                                        <strong>Failure In Adding Category! </strong>
+                                                       Please Add Category Name To Add.
+                                                </div>
+                                             </div>   
 
 
 

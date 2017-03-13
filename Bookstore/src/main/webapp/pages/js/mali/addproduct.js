@@ -115,6 +115,8 @@ function addProductToDB()
 					$("#danger-alert-product-add").slideUp(600);
 				});	
 				clearAllAddFields();
+				document.getElementById("productCount1").innerHTML = parseInt(document.getElementById("productCount1").innerHTML)+1;
+				document.getElementById("productCount2").innerHTML = parseInt(document.getElementById("productCount2").innerHTML)+1;
 			}
 		}
 	};
@@ -130,5 +132,48 @@ function addProductToDB()
 
 function addNewCategory()
 {
+	var newcategory = document.getElementById("newcategory");
+	var newcategoryname = newcategory.value.toLowerCase();
 	
+	if( !newcategory.value )  //the category name field is empty
+	{
+		$("#danger-alert-new-category-empty1").fadeTo(2000, 500).slideUp(600, function(){
+			$("#danger-alert-new-category-empty1").slideUp(600);
+		});	
+	}else if( checkCategoryName(newcategoryname) )
+	{
+		$("#danger-alert-new-category-fail1").fadeTo(2000, 500).slideUp(600, function(){
+			$("#danger-alert-new-category-fail1").slideUp(600);
+		});	
+	}else{
+		  var xhttp = new XMLHttpRequest();
+		  xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				if( this.responseText == "true" )
+				{
+					var newcategoryname = document.getElementById("newcategory");
+					$("#category").append("<option> "+ newcategoryname.value +" </option>");
+					newcategoryname.value = '';
+					
+				}
+			}
+		  };
+		  xhttp.open("POST", "AddProductController", true);
+		  xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+		  xhttp.send("name="+newcategoryname+"&time="+new Date().getTime());
+	}
+}
+
+
+function checkCategoryName(name)
+{
+	check = false;
+	category = document.getElementById("category");
+	$("#category option").each(function()
+	{
+		// Add $(this).val() to your list
+		if( name == $(this).val() ) 
+			check = true;
+	});
+	return check;
 }
