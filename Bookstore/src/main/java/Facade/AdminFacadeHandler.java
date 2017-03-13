@@ -6,6 +6,7 @@
 package Facade;
 
 import adminpackage.adminmodel.AddProductPageWrapper;
+import adminpackage.adminmodel.AdminUpdateProductWrapper;
 import adminpackage.adminmodel.AdminViewProduct;
 import adminpackage.adminmodel.HomePageWrapper;
 import java.sql.Connection;

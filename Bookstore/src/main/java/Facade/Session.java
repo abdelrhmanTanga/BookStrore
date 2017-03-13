@@ -21,11 +21,9 @@ import websiteview.model.SignUpDTO;
  */
 public class Session {
 
-    Client clientsDAO;
+    
 
-    public Session() {
-        clientsDAO = new Client();
-    }
+    
 
     public boolean check() {
         return true;
@@ -36,6 +34,7 @@ public class Session {
         try {
             Connection connection = ConnectionPool.getInstance().getConnection();
             ClientDAO clientDAO=new ClientDAO(connection);
+            Client clientsDAO = new Client();
             clientsDAO.setEmail(signupDTO.getEmail());
             clientsDAO.setName(signupDTO.getUserName());
             clientsDAO.setCredit(signupDTO.getCreditCardLimits());
@@ -85,5 +84,33 @@ public class Session {
         }
 
     }
+    
+    ////////////////////////////////////////
 
+    public boolean signIn(SignInDTO signInDTO){
+        try {
+            Connection connection = ConnectionPool.getInstance().getConnection();
+            ClientDAO clientDAO=new ClientDAO(connection);
+            Client client = new Client();
+            client.setEmail(signInDTO.getEmail());
+            client.setPassword(signInDTO.getPassword());
+            if(clientDAO.verifyUser(client))
+            {
+                System.out.println("login successfully");
+                connection.close();
+                return true;
+            }
+            else
+            {
+                System.out.println("login failed");
+                connection.close();
+                return false;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Session.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+
+    /////////////////////////////////
 }

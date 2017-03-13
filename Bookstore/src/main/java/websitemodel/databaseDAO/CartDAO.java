@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import websitemodel.databaseDTO.Cart;
@@ -26,22 +27,27 @@ public class CartDAO {
     private static final String SQL_DELETE = "DELETE FROM CART WHERE EMAIL=? and ID=?"; //bookID in database ??
     private static final String SQL_DELETE_USER_CART = "DELETE FROM CART WHERE  EMAIL=? ";
     Connection connection;
-    PreparedStatement statement = null;
-    ResultSet resultSet = null;
 
     public CartDAO(Connection connection) {
         this.connection = connection;
     }
 
-  
     public boolean addToCart(Cart cart) {
         try {
-            PreparedStatement pst = connection.prepareStatement("insert into cart values (?,?,?)");
-            pst.setString(1, cart.getEmail());
-            pst.setInt(2, cart.getBookID());
-            pst.setInt(3, cart.getQuantity());
-            pst.executeUpdate();
-            return true;
+            PreparedStatement pst = connection.prepareStatement("select * from cart where id = ?");
+            pst.setInt(1, cart.getBookID());
+            ResultSet rs = pst.executeQuery();
+            if (!rs.next()) {
+                pst = connection.prepareStatement("insert into cart values (?,?,?)");
+                pst.setString(1, cart.getEmail());
+                pst.setInt(2, cart.getBookID());
+                pst.setInt(3, cart.getQuantity());
+                pst.executeUpdate();
+                System.out.println("in dao  ");
+                return true;
+            } else {
+                return false;
+            }
         } catch (SQLException ex) {
             Logger.getLogger(CartDAO.class.getName()).log(Level.SEVERE, null, ex);
             return false;
@@ -51,7 +57,7 @@ public class CartDAO {
     public boolean add(Cart cartObj) throws SQLException {
         try {
 
-            statement = connection.prepareStatement(SQL_INSERT);
+            PreparedStatement statement = connection.prepareStatement(SQL_INSERT);
             statement.setInt(1, cartObj.getBookID());
             statement.setString(2, cartObj.getEmail());
             statement.setInt(3, cartObj.getQuantity());
@@ -70,8 +76,8 @@ public class CartDAO {
     public boolean delete(Cart cartItem) throws SQLException {
 
         try {
-            statement = connection.prepareStatement(SQL_DELETE);
-            statement.setInt(1, cartItem.getBId());
+            PreparedStatement statement = connection.prepareStatement(SQL_DELETE);
+            statement.setInt(1, cartItem.getBookID());
             statement.setString(2, cartItem.getEmail());
             if (statement.executeUpdate() > 0) {
                 return true;
@@ -90,9 +96,9 @@ public class CartDAO {
         try {
 
             Cart cart = null;
-            statement = connection.prepareStatement(SQL_READ);
+            PreparedStatement statement = connection.prepareStatement(SQL_READ);
             statement.setString(1, Email);
-            resultSet = statement.executeQuery();
+            ResultSet resultSet = statement.executeQuery();
             cartList = getCart(resultSet);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -125,7 +131,7 @@ public class CartDAO {
         boolean isDeleted = false;
         try {
 
-            statement = connection.prepareStatement(SQL_DELETE_USER_CART);
+            PreparedStatement statement = connection.prepareStatement(SQL_DELETE_USER_CART);
             statement.setString(1, Email);
             if (statement.executeUpdate() > 0) {
                 isDeleted = true;
@@ -140,22 +146,61 @@ public class CartDAO {
     }
 
     //////////////////////// abdelrhman 
-    
+    public boolean cartIsEmpty(String email) {
+        try {
+            PreparedStatement pst = connection.prepareStatement("select * from cart where email = ?");
+            pst.setString(1, email);
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CartDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+
+    }
+
+    public Vector<Cart> getCart(String email) {
+        try {
+            PreparedStatement pst = connection.prepareStatement("select id,quantity from cart where email = ?");
+            pst.setString(1, email);
+            ResultSet rs = pst.executeQuery();
+            Vector<Cart> cartList = new Vector<>();
+            while (rs.next()) {
+                Cart cart = new Cart();
+                cart.setBookID(rs.getInt(1));
+                cart.setEmail(email);
+                cart.setQuantity(rs.getInt(2));
+                cartList.add(cart);
+            }
+            return cartList;
+        } catch (SQLException ex) {
+            Logger.getLogger(CartDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+
+    }
+
+    public void resetCart(String email) {
+        try {
+            PreparedStatement pst = connection.prepareStatement("Delete from cart where email = ?");
+            pst.setString(1, email);
+            pst.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(CartDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 //////////////////////////abdelrhman
-    
+
 ////////////////////////omnia
-    
 ///////////////////////omnia
-    
 ////////////////////////mohamed
-    
 ///////////////////////mohamed
-    
 /////////////////////////yasmin
-    
 /////////////////////////yasmin
-    
 ////////////////////////heba
-    
 ///////////////////////heba
 }

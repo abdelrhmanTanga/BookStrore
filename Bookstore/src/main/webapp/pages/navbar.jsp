@@ -1,185 +1,152 @@
-<html>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html lang="en">
     <head>
-    
-    <link href="${pageContext.request.contextPath}/pages/css/navbar.css" type="text/css" rel="stylesheet"/>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
-        <script src="${pageContext.request.contextPath}/pages/js/navbar.js"></script>
-        
-    <script>
-    $(document).ready(function(){
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <title>BOOK Store</title>
+        <link href="${pageContext.request.contextPath}/pages/css/bootstrap.min.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/pages/css/font-awesome.min.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/pages/css/prettyPhoto.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/pages/css/price-range.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/pages/css/animate.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/pages/css/main.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/pages/css/responsive.css" rel="stylesheet">
+        <link rel="shortcut icon" href="images/ico/favicon.ico">
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="images/ico/apple-touch-icon-144-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/ico/apple-touch-icon-114-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" href="images/ico/apple-touch-icon-57-precomposed.png">
+        <script src="${pageContext.request.contextPath}/pages/js/jquery.js"></script>
+        <script src="${pageContext.request.contextPath}/pages/js/bootstrap.min.js"></script>
+        <script src="${pageContext.request.contextPath}/pages/js/jquery.scrollUp.min.js"></script>
+        <script src="${pageContext.request.contextPath}/pages/js/price-range.js"></script>
+        <script src="${pageContext.request.contextPath}/pages/js/jquery.prettyPhoto.js"></script>
+        <script src="${pageContext.request.contextPath}/pages/js/main.js"></script>
+    </head><!--/head-->
 
- $("#dropdownCart").on('click','.btnDelete',function(){
-       $(this).closest('li').remove();
-     });
+    <body>
 
-});
-    </script>
-    </head>
-    
-<body>
-    <div class="container">
-  <nav class="navbar navbar-inverse">
-    <div class="navbar-header">
-    	<button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".js-navbar-collapse">
-			<span class="sr-only">Toggle navigation</span>
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
-		</button>
-		<a class="navbar-brand" href="#">BOOK STORE</a>
-	</div>
-	
-	<div class="collapse navbar-collapse js-navbar-collapse">
-		<ul class="nav navbar-nav">
-            <li>
-           <form class="navbar-form" role="search" action="/OnlineBookstore/Search" method="post">
-        <div class="input-group">
-            <input type="text" class="form-control" placeholder="Search" name="searchkey">
-            <div class="input-group-btn">
-                <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+        <c:if test="${logged==null}">
+            <header id="header"><!--header-->
+
+                <div class="header-middle"><!--header-middle-->
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="logo pull-left">
+                                    <a href="/BookStore/productviewer"><img src="${pageContext.request.contextPath}/pages/images/logo.png" alt="" /></a>
+                                </div>
+
+                            </div>
+                            <div class="col-sm-5">
+                                <div class="search_box pull-right">
+                                    <form action="BookStore/Search" method="post">
+                                        <div class="input-group">
+                                            <input type="text" placeholder="Search"/>
+                                            <div class="input-group-btn">
+                                                <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4">
+                                <div class="shop-menu pull-right">
+                                    <ul class="nav navbar-nav">
+
+                                        <!-- <li><a href="#"><i class="fa fa-user"></i> Account</a></li> -->
+
+                                        <li><a href="/cart"><i class="fa fa-shopping-cart"></i> Cart</a></li> 
+                                        <li><a href="${pageContext.request.contextPath}/pages/login.html"><i class="fa fa-lock"></i> Login</a></li>
+                                        <li><a href="${pageContext.request.contextPath}/pages/signup.jsp"><i class="fa fa-lock"></i> Signup</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!--/header-middle-->
+
+
+            </header><!--/header-->
+        </c:if>
+        <c:if test="${logged != null}">
+            <header id="header"><!--header-->
+
+                <div class="header-middle"><!--header-middle-->
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="logo pull-left">
+                                    <a href="/productviewer"><img src="images/logo.png" alt="" /></a>
+                                </div>
+
+                            </div>
+                            <div class="col-sm-5">
+                                <div class="search_box pull-right">
+                                    <form action="/BookStore/Search" method="post">
+                                        <div class="input-group">
+                                            <input type="text" placeholder="Search"/>
+                                            <div class="input-group-btn">
+                                                <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4">
+                                <div class="shop-menu pull-right">
+                                    <ul class="nav navbar-nav">
+
+                                        <li><a href="#"><i class="fa fa-user"></i>${logged}</a></li> 
+                                        <li><a href="/cart"><i class="fa fa-shopping-cart"></i> Cart</a></li> 
+                                        <li><a href="/signout"><i class="fa fa-lock"></i> Logout</a></li>
+                                        <!-- <li><a href="login.html"><i class="fa fa-lock"></i> Signup</a></li>-->
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!--/header-middle-->
+
+
+            </header><!--/header-->    
+
+        </c:if>
+
+        <!-- Category Part -->
+        <div class="col-sm-3">
+            <div class="left-sidebar">
+                <h2>Category</h2>
+                <div class="panel-group category-products" id="accordian"><!--category-productsr-->
+                    <c:forEach items="${categories}" var="category">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title"><a href="#">${category.name}</a></h4>
+                            </div>
+                        </div>
+                    </c:forEach>
+
+                </div><!--/category-products-->
+
+
+
+                <div class="price-range"><!--price-range-->
+                    <h2>Price Range</h2>
+                    <div class="well text-center">
+                        <input type="text" class="span2" value="" data-slider-min="0" data-slider-max="600" data-slider-step="5" data-slider-value="[250,450]" id="sl2" ><br />
+                        <b class="pull-left">$ 0</b> <b class="pull-right">$ 6000</b>
+                    </div>
+                </div><!--/price-range-->
+                <div class="shipping text-center"><!--shipping-->
+                    <img src="${pageContext.request.contextPath}/pages/images/home/shipping.jpg" alt="" />
+                </div><!--/shipping-->
+
             </div>
         </div>
-        </form>
-            </li>
-			<li class="dropdown mega-dropdown">
-				<a href="#" class="dropdown-toggle" data-toggle="dropdown">Category <span class="caret"></span></a>				
-				<ul class="dropdown-menu mega-dropdown-menu">
-					<li class="col-sm-3">
-						<ul>
-							<li class="dropdown-header">Categorie</li>                            
-                            <div id="menCollection" class="carousel slide" data-ride="carousel">
-                              <div class="carousel-inner">
-                                <div class="item active">
-                                    <a href="#"><img src="images/mfcuuqrt.jpg" class="img-responsive" alt="product 1"></a>
-                                    <h4><small>A book is a dream that you hold in your hands.</small></h4>                                            
-                                </div><!-- End Item -->
-                                <div class="item">
-                                    <a href="#"><img src="http://placehold.it/254x150/3498db/f5f5f5/&text=New+Collection" class="img-responsive" alt="product 2"></a>
-                                    <h4><small>Gold sandals with shiny touch</small></h4>                                        
-                                    <button class="btn btn-primary" type="button">9,99 €</button> <button href="#" class="btn btn-default" type="button"><span class="glyphicon glyphicon-heart"></span> Add to Wishlist</button>        
-                                </div><!-- End Item -->
-                                <div class="item">
-                                    <a href="#"><img src="http://placehold.it/254x150/2ecc71/f5f5f5/&text=New+Collection" class="img-responsive" alt="product 3"></a>
-                                    <h4><small>Denin jacket stamped</small></h4>                                        
-                                    <button class="btn btn-primary" type="button">49,99 €</button> <button href="#" class="btn btn-default" type="button"><span class="glyphicon glyphicon-heart"></span> Add to Wishlist</button>      
-                                </div><!-- End Item -->                                
-                              </div><!-- End Carousel Inner -->
-                              <!-- Controls -->
-                              <a class="left carousel-control" href="#menCollection" role="button" data-slide="prev">
-                                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                                <span class="sr-only">Previous</span>
-                              </a>
-                              <a class="right carousel-control" href="#menCollection" role="button" data-slide="next">
-                                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                                <span class="sr-only">Next</span>
-                              </a>
-                            </div><!-- /.carousel -->
-                            <li class="divider"></li>
-                           
-						</ul>
-					</li>
-					<li class="col-sm-3">
-						<ul>
-							<li class="dropdown-header">Categories</li>
-							<li><a href="#">Art & Design</a></li>
-                            <li><a href="#">Children</a></li>
-                            <li><a href="#">History & Politics</a></li>
-							<li><a href="#">Literature & Fiction</a></li>
-                            							<li><a href="#">Religion</a></li>
-
-						</ul>
-					</li>
-					<li class="col-sm-3">
-						<ul>
-							<li class="dropdown-header">Languages</li>
-							<li><a href="#">Arabic</a></li>
-							<li><a href="#">English</a></li>
-							<li><a href="#">French</a></li>                            
-							<li><a href="#">German</a></li>							
-						</ul>
-					</li>
-<!--
-					<li class="col-sm-3">
-						<ul>
-							<li class="dropdown-header">Much more</li>
-                            <li><a href="#">Easy to Customize</a></li>
-							<li><a href="#">Calls to action</a></li>
-							<li><a href="#">Custom Fonts</a></li>
-							<li><a href="#">Slide down on Hover</a></li>                         
-						</ul>
-					</li>
--->
-				</ul>				
-			</li>
-           
-		</ul>
-      
-        <ul class="nav navbar-nav navbar-right">
-            
-            <li>
-        <a class="navbar-brand" href="#">My Account</a>
-                </li>
-<!--        <li><a href="cartPage.html">My cart<span> (0) </span>items</a></li>-->
-              <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> <span class="glyphicon glyphicon-shopping-cart"></span> Cart Items<span class="caret"></span></a>
-          <ul class="dropdown-menu dropdown-cart" role="menu" id="dropdownCart">
-              <li>
-                  <span class="item">
-                    <span class="item-left">
-                        <img src="" alt="" />
-                        <span class="item-info">
-                            <span>Item name</span>
-                            <span>23$</span>
-                        </span>
-                    </span>
-                    <span class="item-right">
-                        <button class="btnDelete btn btn-xs btn-danger pull-right">x</button>
-                    </span>
-                </span>
-              </li>
-              <li>
-                  <span class="item">
-                    <span class="item-left">
-                        <img src="" alt="" />
-                        <span class="item-info">
-                            <span>Item name</span>
-                            <span>23$</span>
-                        </span>
-                    </span>
-                    <span class="item-right">
-                        <button class="btnDelete btn btn-xs btn-danger pull-right">x</button>
-                    </span>
-                </span>
-              </li>
-              <li>
-                  <span class="item">
-                    <span class="item-left">
-                        <img src="" alt="" />
-                        <span class="item-info">
-                            <span>Item name</span>
-                            <span>23$</span>
-                        </span>
-                    </span>
-                    <span class="item-right">
-                        <button class="btnDelete btn btn-xs btn-danger pull-right">x</button>
-                    </span>
-                </span>
-              </li>
-              
-              <li class="divider"></li>
-              <li><a class="text-center" href="cartPage.jsp">View Cart</a></li>
-          </ul>
-        </li>
-      </ul>
-    
-      </ul>
-	</div><!-- /.nav-collapse -->
-  </nav>
-</div>
-    
-</body>
-
+    </body>
 </html>

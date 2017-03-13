@@ -10,6 +10,7 @@ package websitemodel.databaseDTO;
  * @author abdelrhman galal
  */
 public class Cart {
+
     private String email;
     private int bookID;
     private int quantity;
@@ -38,7 +39,4 @@ public class Cart {
         this.quantity = quantity;
     }
 
-    public int getBId() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }

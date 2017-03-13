@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -52,9 +53,26 @@ public class SignIn extends HttpServlet {
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //////////////// ABDELRHman
-        
-        /////////////////// abdelrhman
+
+        //PrintWriter out = response.getWriter();
+        SignInDTO signInDTO = new SignInDTO();
+        signInDTO.setEmail(request.getParameter("username"));
+        signInDTO.setPassword(request.getParameter("password"));
+        if (session.signIn(signInDTO)) {
+            HttpSession session = request.getSession(true);
+            session.setAttribute("loggedIn", signInDTO.getEmail());
+            ///////////// where ever the fuck u redirect when its true
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher("productviewer");
+            dispatcher.forward(request, response);
+            //out.println("true");
+        } else {
+            //HttpSession session = request.getSession(true);
+            //session.setAttribute("loggedIn", "abdo zeft");
+            //////////////// what evet the fuck u do when its false
+            //out.println("false" + signInDTO.getEmail() + " " + signInDTO.getPassword());
+
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

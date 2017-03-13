@@ -47,7 +47,7 @@ public class ProductViewer extends HttpServlet {
         //////////////header loader
         Vector<HeaderCategories> categories = productHandler.getCategories();
         if (categories != null) {
-            //response.setContentType("applicatio");
+            request.setAttribute("categories", categories);
             RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/navbar.jsp");
             dispatcher.include(request, response);
         } else {

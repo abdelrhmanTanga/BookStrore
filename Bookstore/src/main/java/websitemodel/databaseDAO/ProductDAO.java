@@ -37,6 +37,9 @@ public class ProductDAO {
 
     //////////////////// abdelrhman galal start
     public boolean addBook(Product newBook) {
+        
+        if( checkISBN( newBook.getISBN()) )
+            return false;
         try {
             pst = connection.prepareStatement("insert into product values (productid.nextval,?,?,?,?,?,?,?,?,?)");
             pst.setString(1, newBook.getName());
@@ -152,13 +155,25 @@ public class ProductDAO {
         } catch (SQLException ex) {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
+      
         return number;
     }
 
     public List<Product> getAllProducts(int pageNumber) {
-        List<Product> products = new ArrayList();
+        List<Product> products = new ArrayList<>();
         try {
-            pst = connection.prepareStatement("SELECT count(id) FROM product");
+            pst = connection.prepareStatement("SELECT * FROM (select p.*, rownum r from product p) where r > ? and r <= ?");
+            pst.setInt(1, (pageNumber * 10) - 10);
+            pst.setInt(2, (pageNumber * 10) );
+            rs = pst.executeQuery();
+            while (rs.next()) {
+                Product product;
+                product = new Product(rs.getInt("id"), rs.getString("name"), rs.getInt("quantity"),
+                        rs.getString("author"), rs.getLong("isbn"), rs.getString("description"), rs.getInt("category"), rs.getString("reviews"), rs.getInt("price"), rs.getString("image"));
+                products.add(product);
+            }
+            pst.close();
+            rs.close();
         } catch (SQLException ex) {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -202,11 +217,11 @@ public class ProductDAO {
 
 
     // public String addProduct(Product product)
-    public boolean checkISBN(int isbn) {
+    public boolean checkISBN(long isbn) {
         boolean check = false;
         try {
             pst = connection.prepareStatement("SELECT * FROM product WHERE isbn=? ");
-            pst.setInt(1, isbn);
+            pst.setLong(1, isbn);
             rs = pst.executeQuery();
             if (rs.next()) {
                 check = true;
@@ -237,7 +252,8 @@ public class ProductDAO {
 
     public boolean updateProduct(Product product) {
         boolean check = false;
-
+        if( checkISBN( product.getISBN()) )
+            return false;
         try {
             pst = connection.prepareStatement("UPDATE product SET name=?,quantity=?,author=?,isbn=?,description=?,price=?,category=?,image=? WHERE id=?");
             pst.setString(1, product.getName());
@@ -292,6 +308,8 @@ public class ProductDAO {
                 product.setReviews(rs.getString("reviews")); product.setPrice(rs.getInt("price"));
                 product.setCategory(rs.getInt("category"));  product.setImage(rs.getString("image"));
             }    
+            pst.close();
+            rs.close();
         } catch (SQLException ex) {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -300,23 +318,21 @@ public class ProductDAO {
 
     //mohamed ali end
         /////////////////////////search
-    public List<Product> search(String searchKey, int category) throws SQLException {
+    public List<Product> search(String searchKey) throws SQLException {
         List<Product> products = new ArrayList();
 
         try {
-            if (category == 0) {
-                pst = connection.prepareStatement("SELECT * FROM product where name like ? ");
-                pst.setString(1, searchKey);
-            } else if (searchKey == null) {
-                pst = connection.prepareStatement("SELECT * FROM product where category = ? ");
-                pst.setInt(1, category);
+             if (searchKey == null) {
+                pst = connection.prepareStatement("SELECT * FROM product");
+              
             } else {
-                pst = connection.prepareStatement("SELECT * FROM product where name like ? and category=?");
+                pst = connection.prepareStatement("SELECT * FROM product where name like ?");
                 pst.setString(1, searchKey);
-                pst.setInt(2, category);
+               
             }
 
             rs = pst.executeQuery();
+            
             while (rs.next()) {
                 Product product = new Product();
                 product.setName(rs.getString(2));
@@ -331,12 +347,26 @@ public class ProductDAO {
             }
             rs.close();
             pst.close();
+            return products;
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+
+        
+    }
+    ////////////////////////////////
+
+    public void updateQuantity(int bookID, int quantity) {
+        Product product = getProductData(bookID);
+        try {
+            PreparedStatement pst = connection.prepareStatement("update product set quantity = ? where id = ?");
+            pst.setInt(1,product.getQuantity() - quantity);
+            pst.setInt(2, bookID);
+            pst.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        return products;
     }
-    ////////////////////////////////
 
 }
