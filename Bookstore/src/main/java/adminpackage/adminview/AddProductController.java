@@ -49,14 +49,17 @@ public class AddProductController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //response.setContentType("text/html;charset=UTF-8");
-        
-        
-        request.setAttribute("usersCount", adminFacadeHandler.addProductPage().getUsersCount() );
-        request.setAttribute("productsCount", adminFacadeHandler.addProductPage().getProductsCount() );
-        request.setAttribute("categories", adminFacadeHandler.addProductPage().getCategories() );
-        RequestDispatcher rd = request.getRequestDispatcher("pages/AddProduct.jsp");
-        rd.include(request, response);
-        
+        PrintWriter out = response.getWriter();
+       if( request.getParameter("name") != null )
+       {
+            out.print( adminFacadeHandler.addNewCategory( request.getParameter("name") ) );
+       }else{
+            request.setAttribute("usersCount", adminFacadeHandler.addProductPage().getUsersCount() );
+            request.setAttribute("productsCount", adminFacadeHandler.addProductPage().getProductsCount() );
+            request.setAttribute("categories", adminFacadeHandler.addProductPage().getCategories() );
+            RequestDispatcher rd = request.getRequestDispatcher("pages/AddProduct.jsp");
+            rd.forward(request, response);
+       }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

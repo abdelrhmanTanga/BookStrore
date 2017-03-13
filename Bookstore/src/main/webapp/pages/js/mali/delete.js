@@ -77,7 +77,6 @@ function deleteSelectedProducts()
 			//console.log(this.responseText);  //the message which is written in the our.println
 			document.getElementById("productCount1").innerHTML = document.getElementById("productCount1").innerHTML-1;
 			document.getElementById("productCount2").innerHTML = document.getElementById("productCount2").innerHTML-1;
-			console.log(x);
 			}
 		};
 		xhttp.open("GET", "DeleteProductServlet?id="+ids[j]+"&time="+new Date().getTime() , true);
