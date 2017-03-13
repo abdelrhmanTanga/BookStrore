@@ -91,13 +91,13 @@
                     <!-- sidebar menu start-->
                     <ul class="sidebar-menu">                
                         <li class="active">
-                            <a class="" href="#">
+                            <a class="" href="HomeServletController">
                                 <i class="icon_house_alt"></i>
                                 <span>Home</span>
                             </a>
                         </li>
                         <li>                     
-                            <a class="" href="AddProduct.jsp">
+                            <a class="" href="AddProductController">
                                 <i class="icon_book_alt"></i>
                                 <span>Add Product</span>
                             </a>                                  
@@ -129,7 +129,7 @@
                     <div class="row">
 
                         <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-                            <a href='#' >
+                            <a href='HomeServletController' >
                                 <div class="info-box blue-bg">
                                     <i class="fa fa-home"></i>
                                     <div id="productCount1" class="count"> ${ requestScope.productsCount } </div>
@@ -139,7 +139,7 @@
                         </div><!--/.col-->
 
                         <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-                            <a href='#' >
+                            <a href='AddProductController' >
                                 <div class="info-box blue-bg">
                                     <i class="fa fa-book"></i>
                                     <div id="productCount2" class="count"> ${ requestScope.productsCount } </div>
@@ -177,7 +177,7 @@
 
                                             <thead>
 
-                                            <th><input type="checkbox" id="checkall" /></th>
+                                            <th><input type="checkbox" id="checkall" onchange="selectAll()" /></th>
                                             <th>Product Name</th>
                                             <th>Available Quantity</th>
                                             <th>ISBN</th>
@@ -192,21 +192,21 @@
 
                                                 <c:forEach var="row" items="${requestScope.products}">
                                                     <tr id="${row.getId()}" >
-                                                        <td><input type="checkbox" class="checkthis" /></td>
+                                                        <td><input type="checkbox" name="checkboxs" id="select${row.getId()}" class="checkthis" /></td>
                                                         <td>${row.getName()}</td>
                                                         <td>${row.getQuantity()}</td>
                                                         <td>${row.getISBN()}</td>
                                                         <td>${row.getPrice()}</td>
-                                                        <td>${row.getCategory()}</td>
+                                                        <td> <c:forEach  var="category" items="${requestScope.categories}" >  <c:if test="${row.getCategory()==category.getId()}" > ${category.getName()}   </c:if>  </c:forEach>  </td>
                                                         <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" onclick="setUpdataData(this.id)" data-title="Edit" data-toggle="modal" id="edit${row.getId()}" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
                                                         <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" onclick="deleteProduct(this.id)" data-title="Delete" data-toggle="modal" id="delete${row.getId()}" data-target="#delete" ><span class="fa fa-times"></span></button></p></td>
                                                     </tr>
                                                 </c:forEach>    
 
                                             </tbody>
-
+                                                   
                                         </table>
-
+                                        <button type="button"  class="btn btn-danger" data-toggle="modal" onclick="CheckIfProductsSelceted()" id="" data-target="" > Delete Selected Products </button>
                                         <div class="clearfix"></div>
                                         <ul id="pagination" class="pagination pull-right">
                                             <li class="disabled"><a href="#"><span class="fa fa-chevron-left"></span></a></li>
@@ -228,7 +228,8 @@
                                     </div>
                                     <div class="modal-body">
                                         <div class="form">
-                                            <form class="form-validate form-horizontal" id="feedback_form" method="" action="javascript:editProduct()" >
+                                            <form class="form-validate form-horizontal" id="feedback_form" method="post" enctype="multipart/form-data" action="javascript:editProduct();" >
+                                                <input type="hidden" id="pid" name="pid"  value="" required="" />
                                                 <div class="form-group ">
                                                     <label for="pname" class="control-label col-lg-2">PName <span class="required">*</span></label>
                                                     <div class="col-lg-10">
@@ -320,6 +321,33 @@
                             </div>
                             <!-- /.modal-dialog --> 
                         </div>
+                        
+                        
+                        
+                        <div class="modal fade" id="deleteselected" tabindex="-1" role="dialog" aria-labelledby="deleteSelecetdProducts" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="fa fa-times" aria-hidden="true"></span></button>
+                                        <h4 class="modal-title custom_align" id="Heading">Delete Selected Products</h4>
+                                    </div>
+                                    <div class="modal-body">
+
+                                        <div class="alert alert-danger"><span class="fa fa-warning"></span> Are you sure you want to delete Selected Products?</div>
+
+                                    </div>
+                                    <div class="modal-footer ">
+                                        <button type="button" class="btn btn-success" name="deleteFinalName" id="" onclick="deleteSelectedProducts()" data-dismiss="modal" ><span class="fa fa-check"></span> Yes</button>
+                                        <button type="button" id="closedialog" class="btn btn-default" data-dismiss="modal"><span class="fa fa-times"></span> No</button>
+                                    </div>
+                                </div>
+                                <!-- /.modal-content --> 
+                            </div>
+                            <!-- /.modal-dialog --> 
+                        </div>
+                        
+                        
+                        
 
                     </div>
 
@@ -368,6 +396,8 @@
         <script src="${pageContext.request.contextPath}/pages/js/sparklines.js"></script>	
         <script src="${pageContext.request.contextPath}/pages/js/jquery.slimscroll.min.js"></script>
         <script src="${pageContext.request.contextPath}/pages/js/mali/home.js"></script>
+        <script src="${pageContext.request.contextPath}/pages/js/mali/update.js"></script>
+        <script src="${pageContext.request.contextPath}/pages/js/mali/delete.js"></script>
         <script>  makePagination(${requestScope.productsCount}) </script>
         <!-- javascripts -->
     </body>

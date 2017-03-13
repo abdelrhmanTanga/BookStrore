@@ -22,15 +22,14 @@
         <link href="${pageContext.request.contextPath}/pages/css/style.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/pages/css/style-responsive.css" rel="stylesheet" />
         <link href="${pageContext.request.contextPath}/pages/css/jquery-ui-1.10.4.min.css" rel="stylesheet">
-        <script src="${pageContext.request.contextPath}/pages/js/mali/addproduct.js" ></script>
         <!-- =======================================================
             Author: Forth Team
         ======================================================= -->
     </head>
 
     <body>
-        
-       <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+        <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
         <!--navbar start-->
 
         <section id='container'>
@@ -91,19 +90,19 @@
                     <!-- sidebar menu start-->
                     <ul class="sidebar-menu">                
                         <li class="active">
-                            <a class="" href="Home.jsp">
+                            <a class="" href="HomeServletController">
                                 <i class="icon_house_alt"></i>
                                 <span>Home</span>
                             </a>
                         </li>
                         <li>                     
-                            <a class="" href="#">
+                            <a class="" href="AddProductController">
                                 <i class="icon_book_alt"></i>
                                 <span>Add Product</span>
                             </a>                                  
                         </li>
                         <li>                     
-                            <a class="" href="ViewUsers.jsp">
+                            <a class="" href="HomeServletController">
                                 <i class="icon_group"></i>
                                 <span>View Customers</span>
                             </a>
@@ -130,7 +129,7 @@
                     <div class="row">
 
                         <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-                            <a href='#' >
+                            <a href='HomeServletController' >
                                 <div class="info-box blue-bg">
                                     <i class="fa fa-home"></i>
                                     <div class="count"> ${requestScope.productsCount} </div>
@@ -140,7 +139,7 @@
                         </div><!--/.col-->
 
                         <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-                            <a href='#' >
+                            <a href='AddProductController' >
                                 <div class="info-box blue-bg">
                                     <i class="fa fa-book"></i>
                                     <div class="count"> ${requestScope.productsCount} </div>
@@ -150,7 +149,7 @@
                         </div><!--/.col-->
 
                         <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-                            <a href='#' >
+                            <a href='HomeServletController' >
                                 <div class="info-box blue-bg">
                                     <i class="fa fa-group"></i>
                                     <div class="count"> ${requestScope.usersCount} </div>
@@ -166,36 +165,54 @@
 
                     <!-- Form validations -->              
                     <div class="row">
-                       
-                        
-                                
+
+
+
                         <div class="col-lg-12">
-                        
-                            <c:if test="${requestScope.check == true}" >   
-                                <!-- success message  -->
-                                <div class="alert alert-success">
-                                    <strong>Success!</strong> The Book Added Successfully.
-                                </div>
-                            </c:if>
-                        
-                            <c:if test="${requestScope.check == false}" >
-                                <!-- failed message  -->
-                                <div class="alert alert-danger">
-                                    <strong>Failed!</strong> The ISBN Already Exist.
-                                </div>
-                            </c:if>
-                        
+
+                            <div class="alert alert-success" style="display:none;" id="danger-alert-product-add">
+                                <button type="button" class="close" data-dismiss="alert">x</button>
+                                <strong>The Product Added Successfully! </strong>
+                                the product added to db.
+                            </div>
+
+
+                            <div class="alert alert-danger" style="display:none;" id="danger-alert-product-not-added">
+                                <button type="button" class="close" data-dismiss="alert">x</button>
+                                <strong>Failure In Adding The Product To DB </strong>
+                                The ISBN Of The Product Already Exist!
+                            </div>
+
+
+                            <div class="alert alert-danger" style="display:none;" id="danger-alert">
+                                <button type="button" class="close" data-dismiss="alert">x</button>
+                                <strong>Failure In Uploading Image! </strong>
+                                The File Must Be png or jpg Image.
+                            </div>
+
+                            <div class="alert alert-danger" style="display:none;" id="danger-alert-size">
+                                <button type="button" class="close" data-dismiss="alert">x</button>
+                                <strong>Failure In Uploading Image! </strong>
+                                The Image Size Must Not Be Greater Than 1 MB.
+                            </div>
+
+                            <div class="alert alert-danger" style="display:none;" id="danger-alert-filename">
+                                <button type="button" class="close" data-dismiss="alert">x</button>
+                                <strong>Failure In Uploading Image! </strong>
+                                The Image Name Must Not Be Greater Than 50 Character.
+                            </div>
+
                             <section class="panel">  
                                 <header class="panel-heading">
                                     Add Product
                                 </header>
                                 <div class="panel-body">
                                     <div class="form">
-                                        <form class="form-validate form-horizontal" id="feedback_form" method="post" action="/OnlineBookstore/adminadd" enctype="multipart/form-data">
+                                        <form class="form-validate form-horizontal" id="addproductform" method="post" action="javascript:addProductToDB();" enctype="multipart/form-data">
                                             <div class="form-group ">
-                                                <label for="pname" class="control-label col-lg-2">Product Name <span class="required">*</span></label>
+                                                <label for="pname" class="control-label col-lg-2">Product Name(5-20 character) <span class="required">*</span></label>
                                                 <div class="col-lg-10">
-                                                    <input class="form-control " id="pname" name="pname" minlength="5" maxlength="30"  type="text" required />
+                                                    <input class="form-control " id="pname" name="pname" pattern="^[a-zA-Z][a-zA-Z0-9\s]{5,25}"  type="text" required />
                                                 </div>
                                             </div>
                                             <div class="form-group ">
@@ -205,50 +222,67 @@
                                                 </div>
                                             </div>
                                             <div class="form-group ">
-                                                <label for="author" class="control-label col-lg-2">Author <span class="required">*</span></label>
+                                                <label for="author" class="control-label col-lg-2">Author(5-20 character) <span class="required">*</span></label>
                                                 <div class="col-lg-10">
-                                                    <input class="form-control " id="author" type="text" minlength="5" maxlength="30" name="author" required />
+                                                    <input class="form-control " id="author" type="text" minlength="5" pattern="^[a-zA-Z][a-zA-Z0-9\s]{5,25}" required />
                                                 </div>
                                             </div>
                                             <div class="form-group ">
-                                                <label for="isbn" class="control-label col-lg-2">ISBN <span class="required">*</span></label>
+                                                <label for="isbn" class="control-label col-lg-2">ISBN(13 digit) <span class="required">*</span></label>
                                                 <div class="col-lg-10">
-                                                    <input class="form-control" id="isbn" name="isbn" type="number" min="1" max="9999999999999"  required />
+                                                    <input class="form-control" id="isbn" name="isbn" type="text" pattern="[0-9]{13}"  required />
                                                 </div>
                                             </div>                                      
                                             <div class="form-group ">
-                                                <label for="description" class="control-label col-lg-2">Description <span class="required">*</span></label>
+                                                <label for="description" class="control-label col-lg-2">Description(20-100 character) <span class="required">*</span></label>
                                                 <div class="col-lg-10">
-                                                    <textarea class="form-control " id="description" name="description" minlength="20" maxlength="150" required></textarea>
+                                                    <input class="form-control " id="description" name="description" pattern="^[a-zA-Z][a-zA-Z0-9\s]{20,100}"   required />
                                                 </div>
                                             </div>
-                                            
+
                                             <div class="form-group ">
                                                 <label for="price" class="control-label col-lg-2">Price <span class="required">*</span></label>
                                                 <div class="col-lg-10">
                                                     <input class="form-control" id="price" name="price" min="10" max="9999" type="number" required />
                                                 </div>
                                             </div>   
-                                            
-                                            <div class="form-group ">
-                                                <label for="category" class="control-label col-lg-2">Category <span class="required">*</span></label>
-                                                <div class="col-lg-10">
+
+                                            <div class="form-group col-sm-12">
+
+
+
+                                                <div class="col-sm-2">
+                                                    <label for="category"  class="control-label col-lg-2"> Category </label>
+                                                </div>
+                                                <div class="col-sm-4">
                                                     <select class="form-control selectpicker" id="category" name="category" required >
-                                                        
+
                                                         <c:forEach var="row" items="${ requestScope.categories }">
-                                                               <option> ${ row.getName() } </option>
+                                                            <option> ${ row.getName() } </option>
                                                         </c:forEach>
                                                     </select>
                                                 </div>
-                                            </div>   
-                                            
+
+                                                <div class="col-sm-2">
+                                                    <label for="newcategory" class="control-label ">Add New Category</label></div>
+                                                <div class="col-sm-2"><input class="form-control " id="newcategory" name="newcategory" type="text"  pattern="^[a-zA-Z][a-zA-Z0-9\s]{5,40}"  /></div>
+                                                <div class="col-sm-2"><button class="btn btn-primary form-control" type="button" onclick="addNewCategory()" >Add New Category</button> 
+                                                </div>
+
+
+
+                                            </div>
+
+
+
+
                                             <div class="form-group ">
                                                 <label for="pimage" class="control-label col-lg-2">Image <span class="required">*</span></label>
                                                 <div class="col-lg-10">
-                                                    <input class="form-control" id="pimage" name="pimage"  type="file" required />
+                                                    <input class="form-control" id="pimage" name="pimage" type="file"  accept=' image/jpeg, image/png' required />
                                                 </div>
                                             </div>   
-                                            
+
                                             <div class="form-group">
                                                 <div class="col-lg-offset-2 col-lg-10">
                                                     <center>
@@ -310,13 +344,13 @@
         <script src="${pageContext.request.contextPath}/pages/js/morris.min.js"></script>
         <script src="${pageContext.request.contextPath}/pages/js/sparklines.js"></script>	
         <script src="${pageContext.request.contextPath}/pages/js/jquery.slimscroll.min.js"></script>
-
+        <script src="${pageContext.request.contextPath}/pages/js/mali/addproduct.js" ></script>
         <!-- javascripts -->
-        
+
         <c:if test="${requestScope.check == false}" >
             <!-- failed message  -->
-            <script> setData("${requestScope.name}",${requestScope.quantity},"${requestScope.author}","${requestScope.description}",${requestScope.price},"${requestScope.category}");  </script>    
+            <script> setData("${requestScope.name}",${requestScope.quantity}, "${requestScope.author}", "${requestScope.description}",${requestScope.price}, "${requestScope.category}");</script>    
         </c:if>
-        
+
     </body>
 </html>

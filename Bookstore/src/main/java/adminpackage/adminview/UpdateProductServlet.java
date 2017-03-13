@@ -6,8 +6,15 @@
 package adminpackage.adminview;
 
 import Facade.AdminFacadeHandler;
+import adminpackage.adminmodel.AdminUpdateProductWrapper;
+import adminpackage.adminmodel.AdminViewProduct;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Iterator;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -16,6 +23,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import websitemodel.databaseDTO.Product;
 
 /**
@@ -51,17 +62,73 @@ public class UpdateProductServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        if( request.getParameter("pname") != null )
-        {
-            System.out.println("yes");
-        }else{
-            System.out.println("yes10");
-            out.println(false);
-            RequestDispatcher rd = request.getRequestDispatcher("HomeServletController");
-            rd.forward(request, response);
+            PrintWriter out = response.getWriter();
+       
+            String value = "defa";
+            Product product = new Product();
+            
+            try {
+                DiskFileItemFactory factory = new DiskFileItemFactory();
+                ServletFileUpload upload = new ServletFileUpload(factory);
+                List<FileItem> items = upload.parseRequest(request);
+                Iterator itr = items.iterator();
+                String url = "";
+                while ( itr.hasNext() ) {
+                    FileItem item = (FileItem) itr.next();
+                    if (item.isFormField()) {
+                        String name = item.getFieldName();
+                        value = item.getString();
+                        switch (name) {
+                            case "pid":
+                                product.setId(Integer.parseInt(value));
+                                break;
+                            case "pname":
+                                product.setName(value);
+                                break;
+                            case "quantity":
+                                product.setQuantity(Integer.parseInt(value));
+                                break;
+                            case "author":
+                                product.setAuthor(value);
+                                break;
+                            case "isbn":
+                                product.setISBN(Long.parseLong(value));
+                                break;
+                            case "description":
+                                product.setDescription(value);
+                                break;
+                            case "category":
+                                product.setCategory(Integer.parseInt(value));
+                                break;
+                            case "price":
+                                product.setPrice(Integer.parseInt(value));
+                                break;
+                        }
+                    } else {
+                        
+                        try {
+                            //response.setContentLength((int) item.getSize() + 1000);
+                            System.out.println(item.getName());
+                            item.write(new File(context.getRealPath("/pages/images/").replaceAll("\\\\target\\\\MavenOnlineShoping-1.0-SNAPSHOT", "\\\\src\\\\main\\\\webapp") + item.getName()));
+                            System.out.println(context.getRealPath("/pages/images/").replaceAll("\\\\target\\\\MavenOnlineShoping-1.0-SNAPSHOT", "\\\\src\\\\main\\\\webapp") + item.getName());
+                            url = context.getRealPath("/pages/images/").replaceAll("\\\\target\\\\MavenOnlineShoping-1.0-SNAPSHOT", "\\\\src\\\\main\\\\webapp") + item.getName();
+                            product.setImage(url);
+                        } catch (Exception ex) {
+                            Logger.getLogger(UpdateProductServlet.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+            } catch (FileUploadException ex) {
+                Logger.getLogger(UpdateProductServlet.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            if( value != null )
+            {
+                out.println(adminFacadeHandler.UpdateProduct(product));
+            }
+            
         }
-    }
+  
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
