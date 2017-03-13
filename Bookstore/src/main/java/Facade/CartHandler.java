@@ -169,10 +169,11 @@ public class CartHandler {
             initialCart = cartDAO.readAll(Email);
               
             if (initialCart != null && !initialCart.isEmpty()) {
-                Iterator<Cart> iteratorCart = initialCart.iterator();
+//                Iterator<Cart> iteratorCart = initialCart.iterator();
+//
+//               cartBooks = new ProductDAO().getProductInfo(iteratorCart.getID());
+//                
 
-               cartBooks = new ProductDAO().getProductInfo(iteratorCart.getID());
-                
                 connection.close();
 //                for (Iterator<ProductModel> iterator = cartBooks.iterator(); iterator.hasNext();) {
 //                 theCart .setName(cartBooks.iterator().getName()); 
@@ -180,11 +181,11 @@ public class CartHandler {
 //                }
                   int i = 0;
 		while (i < cartBooks.size()) {
-                    theCart = new List<CartDTO>(); 
-                 theCart.setName(cartBooks.get(i).getName()); 
-                 theCart.setISBN(cartBooks.get(i).getISBN()); 
-                 theCart.setPrice(cartBooks.get(i).getPrice()); 
-                  theCart.setImage(cartBooks.get(i).getImage()); 
+                    theCart = new ArrayList<CartDTO>(); 
+                 theCart.get(i).setName(cartBooks.get(i).getName()); 
+                 theCart.get(i).setISBN(cartBooks.get(i).getISBN()); 
+                 theCart.get(i).setPrice(cartBooks.get(i).getPrice()); 
+                  theCart.get(i).setImage(cartBooks.get(i).getImage()); 
 			i++;
 		}
 

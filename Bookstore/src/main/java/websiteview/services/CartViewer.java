@@ -38,13 +38,13 @@ public class CartViewer extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-   
+   CartHandler cartHandler;
 
     @Override
     public void init(ServletConfig config)
             throws ServletException {
         super.init(config); //To change body of generated methods, choose Tools | Templates.
-       CartHandler cartHandler = new CartHandler();
+        cartHandler= new CartHandler();
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
