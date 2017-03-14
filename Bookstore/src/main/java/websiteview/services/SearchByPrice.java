@@ -5,22 +5,18 @@
  */
 package websiteview.services;
 
-import Facade.Session;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import websiteview.model.SignUpDTO;
 
 /**
  *
  * @author yasmeen
  */
-@WebServlet(name = "SignUp", urlPatterns = {"/SignUp"})
-public class SignUp extends HttpServlet {
+public class SearchByPrice extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +35,10 @@ public class SignUp extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet SignUp</title>");
+            out.println("<title>Servlet SearchByPrice</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet SignUp at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet SearchByPrice at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -60,7 +56,7 @@ public class SignUp extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        processRequest(request, response);
     }
 
     /**
@@ -74,20 +70,8 @@ public class SignUp extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        SignUpDTO signupDTO = new SignUpDTO();
-        Session session = new Session();
-        signupDTO.setUserName(request.getParameter("name"));
-        signupDTO.setPassword(request.getParameter("password"));
-        signupDTO.setAddress(request.getParameter("address"));
-        signupDTO.setPhone(Integer.parseInt(request.getParameter("phone")));
-        signupDTO.setCountry(request.getParameter("country"));
-        signupDTO.setEmail(request.getParameter("email"));
-        signupDTO.setCreditCardLimits(Integer.parseInt(request.getParameter("creditcard")));
-        signupDTO.setBirthday(request.getParameter("BirthDay"));
-        signupDTO.setGender(request.getParameter("gender"));
-        signupDTO.setJob(request.getParameter("job"));
-        signupDTO.setFavouriteCategory(request.getParameter("favourite"));
-        session.signUp(signupDTO);
+        String priceParameter= request.getParameter("price");
+        float price=Float.parseFloat(priceParameter);
     }
 
     /**

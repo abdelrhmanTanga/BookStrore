@@ -40,7 +40,7 @@
                     <!--<div class="row row-eq-height"> <!--This is a row begining-->
                     <c:forEach items="${products}" var="product">   
                         <div class="col-sm-3" id="${product.id}">  <!--This is a column begining-->
-                            <div class="product-image-wrapper">
+                            <div class="product-image-wrapper" style="line-height: 2.928571429;">
                                 <div class="single-products">
                                     <div class="productinfo text-center">
                                         <img src="${'/OnlineBookstore/imageloader?path='.concat(product.image)}" alt="" />

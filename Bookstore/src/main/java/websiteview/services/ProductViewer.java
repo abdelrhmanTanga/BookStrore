@@ -46,10 +46,12 @@ public class ProductViewer extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //////////////header loader
         Vector<HeaderCategories> categories = productHandler.getCategories();
+         RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/navbar.jsp");
+            dispatcher.include(request, response);
         if (categories != null) {
             request.setAttribute("categories", categories);
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/navbar.jsp");
-            dispatcher.include(request, response);
+            RequestDispatcher dispatcher2 = request.getRequestDispatcher("/pages/categoryBar.jsp");
+            dispatcher2.include(request, response);
         } else {
             //////////////////////// what to do if errors 
         }
@@ -61,8 +63,8 @@ public class ProductViewer extends HttpServlet {
         //ProductModel[] products = (ProductModel[]) products2.toArray();
         request.setAttribute("products", products);
         System.out.println("after get product");
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/viewproducts.jsp");
-        dispatcher.include(request, response);
+        RequestDispatcher dispatcher3 = request.getRequestDispatcher("/pages/viewproducts.jsp");
+        dispatcher3.include(request, response);
         
         
         //////////// footer loader

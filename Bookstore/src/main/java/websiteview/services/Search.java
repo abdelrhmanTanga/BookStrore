@@ -9,6 +9,7 @@ import Facade.ProductHandler;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.Vector;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import websitemodel.databaseDTO.Product;
+import websiteview.model.HeaderCategories;
 import websiteview.model.ProductModel;
 import websiteview.model.SearchDTO;
 
@@ -83,7 +85,14 @@ public class Search extends HttpServlet {
         searchDTO.setSearchKey(request.getParameter("searchkey"));
         List<ProductModel> products = productHandler.search(searchDTO);
         request.setAttribute("products", products);
-
+        Vector<HeaderCategories> categories = productHandler.getCategories();
+        if (categories != null) {
+            request.setAttribute("categories", categories);
+        }
+        RequestDispatcher dispatcher1 = request.getRequestDispatcher("/pages/navbar.jsp");
+        dispatcher1.include(request, response);
+        RequestDispatcher dispatcher2 = request.getRequestDispatcher("/pages/categoryBar.jsp");
+        dispatcher2.include(request, response);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/viewproducts.jsp");
         dispatcher.include(request, response);
     }

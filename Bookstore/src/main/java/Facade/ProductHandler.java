@@ -115,7 +115,7 @@ public class ProductHandler {
             ProductDAO productDAO = new ProductDAO(conn);
             List<Product> products = productDAO.search(search.getSearchKey());
             List<ProductModel> viewProducts = new ArrayList<>();
-            for (int i = 0; i < products.size(); i++){
+            for (int i = 0; i < products.size(); i++) {
                 ProductModel productView = new ProductModel();
                 //productView.setAuthor(products.get(i).getAuthor());
                 //productView.setCategory(products.get(i).getCategory());
@@ -134,8 +134,34 @@ public class ProductHandler {
             Logger.getLogger(ProductHandler.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
-        
+
     }
     //////////////////
 
+    public List<ProductModel> searchByCategory(String categoryID) {
+        try {
+
+            Connection conn = ConnectionPool.getInstance().getConnection();
+            ProductDAO productDAO = new ProductDAO(conn);
+            List<Product> products = productDAO.searchByCategories(categoryID);
+            List<ProductModel> viewProducts = new ArrayList<>();
+            for (int i = 0; i < products.size(); i++) {
+                ProductModel productView = new ProductModel();
+                productView.setISBN(products.get(i).getISBN());
+                productView.setImage(products.get(i).getImage());
+                productView.setName(products.get(i).getName());
+                productView.setPrice(products.get(i).getPrice());
+                productView.setId(products.get(i).getId());
+                viewProducts.add(productView);
+            }
+            conn.close();
+            return viewProducts;
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductHandler.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+
+    }
+
+    //////////////
 }
