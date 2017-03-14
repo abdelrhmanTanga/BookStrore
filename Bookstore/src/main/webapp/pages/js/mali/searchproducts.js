@@ -120,7 +120,7 @@ function productSearch(s)
 			
 				//darw the pagination
 				var searchpage = document.getElementById("pagination");
-				searchpage.parentElement.removeChild(searchpage);
+				$("#pagination").empty();
 				makePagination(data.productsCount,2);
 				
         	}

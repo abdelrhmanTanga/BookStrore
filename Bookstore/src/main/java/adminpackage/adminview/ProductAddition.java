@@ -94,12 +94,11 @@ public class ProductAddition extends HttpServlet {
                 }
             } else {
                 
-                //response.setContentLength((int) item.getSize() + 1000);
-                item.write(new File(context.getRealPath("/pages/images/").replaceAll("\\\\target\\\\MavenOnlineShoping-1.0-SNAPSHOT", "\\\\src\\\\main\\\\webapp") + item.getName()));
-                //System.out.println(context.getRealPath("/pages/images/").replaceAll("\\\\target\\\\MavenOnlineShoping-1.0-SNAPSHOT", "\\\\src\\\\main\\\\webapp") + item.getName());
-                url = context.getRealPath("/pages/images/").replaceAll("\\\\target\\\\MavenOnlineShoping-1.0-SNAPSHOT", "\\\\src\\\\main\\\\webapp") + item.getName();
-                 UUID idOne = UUID.randomUUID();
+               //System.out.println(context.getRealPath("/pages/images/").replaceAll("\\\\target\\\\MavenOnlineShoping-1.0-SNAPSHOT", "\\\\src\\\\main\\\\webapp") + item.getName());
+                //url = context.getRealPath("/pages/images/").replaceAll("\\\\target\\\\MavenOnlineShoping-1.0-SNAPSHOT", "\\\\src\\\\main\\\\webapp") + item.getName();
+                UUID idOne = UUID.randomUUID();
                 product.setImage( idOne.toString()+  item.getName().substring(item.getName().length() - 4) );
+                item.write(new File(context.getRealPath("/pages/images/").replaceAll("\\\\target\\\\MavenOnlineShoping-1.0-SNAPSHOT", "\\\\src\\\\main\\\\webapp") +  idOne.toString()+  item.getName().substring(item.getName().length() - 4)));
             }
         }
         
