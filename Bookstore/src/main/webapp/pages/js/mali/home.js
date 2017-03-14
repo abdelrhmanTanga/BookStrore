@@ -1,14 +1,6 @@
-var mali_pname ;
-var mali_quantity ;
-var mali_author ;
-var mali_isbn ;
-var mali_description ;
-var mali_price ;
-var mali_category ;
-var mali_pimage ;
 
 
-function makePagination(productsCount)
+function makePagination(productsCount,check)
 {
 	var pagenumbers = Math.trunc(productsCount / 10);
 	
@@ -22,7 +14,10 @@ function makePagination(productsCount)
 		var myli = document.createElement('li');
 		var mya = document.createElement('a');
 		mya.innerHTML = i+1;
-		mya.setAttribute('href','HomeServletController?page='+(i+1));
+		if( check == 1 )
+			mya.setAttribute('href','HomeServletController?page='+(i+1));
+		else
+			mya.setAttribute('href','javascript:productSearch('+i+')');
 		myli.appendChild(mya);
 		pagination.appendChild(myli);
 	}

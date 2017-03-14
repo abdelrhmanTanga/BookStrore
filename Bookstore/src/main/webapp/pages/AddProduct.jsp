@@ -44,17 +44,7 @@
                 <a href="index.html" class="logo">Book Store <span class="lite">Admin Panel</span></a>
                 <!--logo end-->
 
-                <div class="nav search-row" id="top_menu">
-                    <!--  search form start -->
-                    <ul class="nav top-menu">                    
-                        <li>
-                            <form class="navbar-form">
-                                <input class="form-control" placeholder="Search" type="text">
-                            </form>
-                        </li>                    
-                    </ul>
-                    <!--  search form end -->                
-                </div>
+                
 
                 <div class="top-nav notification-row">                
                     <!-- notificatoin dropdown start-->
@@ -212,38 +202,38 @@
                                             <div class="form-group ">
                                                 <label for="pname" class="control-label col-lg-2">Product Name(5-20 character) <span class="required">*</span></label>
                                                 <div class="col-lg-10">
-                                                    <input class="form-control " id="pname" name="pname" pattern="^[a-zA-Z][a-zA-Z0-9\s]{5,25}"  type="text" required />
+                                                    <input class="form-control " id="pname" name="pname" oninvalid="setCustomValidity('must be from 5 to 20 character')" onchange="try{setCustomValidity('')}catch(e){}" pattern="^[a-zA-Z][a-zA-Z0-9\s]{5,25}"  type="text" required />
                                                 </div>
                                             </div>
                                             <div class="form-group ">
                                                 <label for="quantity" class="control-label col-lg-2">Quantity <span class="required">*</span></label>
                                                 <div class="col-lg-10">
-                                                    <input class="form-control" id="quantity" type="number" min="1" max="9999" name="quantity" required />
+                                                    <input class="form-control" id="quantity" type="number" oninvalid="setCustomValidity('max quantity is 9999')" onchange="try{setCustomValidity('')}catch(e){}" min="1" max="9999" name="quantity" required />
                                                 </div>
                                             </div>
                                             <div class="form-group ">
                                                 <label for="author" class="control-label col-lg-2">Author(5-20 character) <span class="required">*</span></label>
                                                 <div class="col-lg-10">
-                                                    <input class="form-control " id="author" type="text" minlength="5" pattern="^[a-zA-Z][a-zA-Z0-9\s]{5,25}" required />
+                                                    <input class="form-control " name="author" oninvalid="setCustomValidity('must be from 5 to 20 digits')" onchange="try{setCustomValidity('')}catch(e){}" id="author" type="text" minlength="5" pattern="^[a-zA-Z][a-zA-Z0-9\s]{5,25}" required />
                                                 </div>
                                             </div>
                                             <div class="form-group ">
                                                 <label for="isbn" class="control-label col-lg-2">ISBN(13 digit) <span class="required">*</span></label>
                                                 <div class="col-lg-10">
-                                                    <input class="form-control" id="isbn" name="isbn" type="text" pattern="[0-9]{13}"  required />
+                                                    <input class="form-control" id="isbn" oninvalid="setCustomValidity('must be 13 digits')" onchange="try{setCustomValidity('')}catch(e){}" name="isbn" type="text" pattern="[0-9]{13}"  required />
                                                 </div>
                                             </div>                                      
                                             <div class="form-group ">
                                                 <label for="description" class="control-label col-lg-2">Description(20-100 character) <span class="required">*</span></label>
                                                 <div class="col-lg-10">
-                                                    <input class="form-control " id="description" name="description" pattern="^[a-zA-Z][a-zA-Z0-9\s]{20,100}"   required />
+                                                    <input class="form-control " id="description" oninvalid="setCustomValidity('must be from 20 to 100 character')" onchange="try{setCustomValidity('')}catch(e){}" name="description" pattern="^[a-zA-Z][a-zA-Z0-9\s]{20,100}"   required />
                                                 </div>
                                             </div>
 
                                             <div class="form-group ">
                                                 <label for="price" class="control-label col-lg-2">Price <span class="required">*</span></label>
                                                 <div class="col-lg-10">
-                                                    <input class="form-control" id="price" name="price" min="10" max="9999" type="number" required />
+                                                    <input class="form-control" id="price" oninvalid="setCustomValidity('minimum is 10$ and max is 9999$')" onchange="try{setCustomValidity('')}catch(e){}" name="price" min="10" max="9999" type="number" required />
                                                 </div>
                                             </div>   
 

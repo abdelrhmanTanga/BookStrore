@@ -49,11 +49,26 @@
                     <!--  search form start -->
                     <ul class="nav top-menu">                    
                         <li>
-                            <form class="navbar-form">
-                                <input class="form-control" placeholder="Search" type="text">
+                            <form class="navbar-form" action="javascript:productSearch(1);" method="post"  >
+                                <input class="form-control" id="search" name="search"  placeholder="Search" type="text">
+
+                                <select id="searchcategory" style="height:50% ;" name="searchcategory" class="form-control selectpicker">
+                                        <option>All Categories</option>
+                                    <c:forEach var="row" items="${ requestScope.categories }">
+                                        <option> ${ row.getName() } </option>
+                                    </c:forEach>
+                                </select>
+
                             </form>
+
+
+
+
                         </li>                    
                     </ul>
+
+
+
                     <!--  search form end -->                
                 </div>
 
@@ -152,7 +167,7 @@
                             <a href='#' >
                                 <div class="info-box blue-bg">
                                     <i class="fa fa-group"></i>
-                                    <div class="count"> ${ requestScope.usersCount } </div>
+                                    <div class="count" id="userscount" > ${ requestScope.usersCount } </div>
                                     <div class="title">View Customers</div>						
                                 </div><!--/.info-box-->		
                             </a>
@@ -166,6 +181,12 @@
 
                         <div class="container">
                             <div class="row">
+
+                                <div class="alert alert-success" style="display:none;" id="alert-product-add">
+                                    <button type="button" class="close" data-dismiss="alert">x</button>
+                                    <strong>The Product Added Successfully! </strong>
+                                    the product added to db.
+                                </div>
 
 
                                 <div class="col-md-12">
@@ -188,7 +209,7 @@
 
                                             </thead>
 
-                                            <tbody>
+                                            <tbody id="tbody" >
 
                                                 <c:forEach var="row" items="${requestScope.products}">
                                                     <tr id="${row.getId()}" >
@@ -231,49 +252,67 @@
                                             <form class="form-validate form-horizontal" id="feedback_form" method="post" enctype="multipart/form-data" action="javascript:editProduct();" >
                                                 <input type="hidden" id="pid" name="pid"  value="" required="" />
                                                 <div class="form-group ">
-                                                    <label for="pname" class="control-label col-lg-2">Product Name(5-20 character) <span class="required">*</span></label>
+                                                    <label for="pname" class="control-label col-lg-2">Product Name <span class="required">*</span></label>
                                                     <div class="col-lg-10">
-                                                        <input class="form-control " id="pname" name="pname" pattern="^[a-zA-Z][a-zA-Z0-9\s]{5,25}"  type="text" required />
+                                                        <input class="form-control " id="pname" name="pname" oninvalid="setCustomValidity('must be from 5 to 25 character')" onchange="try {
+                                                                    setCustomValidity('')
+                                                                } catch (e) {
+                                                                }" pattern="^[a-zA-Z][a-zA-Z0-9\s]{5,25}"  type="text" required />
                                                     </div>
                                                 </div>
                                                 <div class="form-group ">
                                                     <label for="quantity" class="control-label col-lg-2">Quantity <span class="required">*</span></label>
                                                     <div class="col-lg-10">
-                                                        <input class="form-control" id="quantity" type="number" min="1" max="9999" name="quantity" required />
+                                                        <input class="form-control" id="quantity" type="number" oninvalid="setCustomValidity('max quantity is 9999')" onchange="try {
+                                                                    setCustomValidity('')
+                                                                } catch (e) {
+                                                                }"  min="1" max="9999" name="quantity" required />
                                                     </div>
                                                 </div>
                                                 <div class="form-group ">
-                                                    <label for="author" class="control-label col-lg-2">Author(5-20 character) <span class="required">*</span></label> <br>
+                                                    <label for="author" class="control-label col-lg-2">Author <span class="required">*</span></label> <br>
                                                     <div class="col-lg-10">
-                                                        <input class="form-control " id="author" type="text" minlength="5" pattern="^[a-zA-Z][a-zA-Z0-9\s]{5,25}" required />
+                                                        <input class="form-control " id="author" name="author" type="text" oninvalid="setCustomValidity('must be from 5 to 20 digits')" onchange="try {
+                                                                    setCustomValidity('')
+                                                                } catch (e) {
+                                                                }" minlength="5" pattern="^[a-zA-Z][a-zA-Z0-9\s]{5,25}" required />
                                                     </div>
                                                 </div>
                                                 <div class="form-group ">
-                                                    <label for="isbn" class="control-label col-lg-2">ISBN(13 digit) <span class="required">*</span></label>
+                                                    <label for="isbn" class="control-label col-lg-2">ISBN <span class="required">*</span></label>
                                                     <div class="col-lg-10">
-                                                        <input class="form-control" id="isbn" name="isbn" type="text" pattern="[0-9]{13}"  required />
+                                                        <input class="form-control" id="isbn" name="isbn" oninvalid="setCustomValidity('must be 13 digits')" onchange="try {
+                                                                    setCustomValidity('')
+                                                                } catch (e) {
+                                                                }" type="text" pattern="[0-9]{13}"  required />
                                                     </div>
                                                 </div>                                      
                                                 <div class="form-group ">
-                                                    <label for="description" class="control-label col-lg-3">Description(20+) <span class="required">*</span></label>
-                                                    <div class="col-lg-9">
-                                                        <input class="form-control " id="description" name="description" pattern="^[a-zA-Z][a-zA-Z0-9\s]{20,100}"   required />
+                                                    <label for="description"  class="control-label col-lg-2">Description <span class="required">*</span></label>
+                                                    <div class="col-lg-10">
+                                                        <input class="form-control " oninvalid="setCustomValidity('must be from 20 to 100 character')" onchange="try {
+                                                                    setCustomValidity('')
+                                                                } catch (e) {
+                                                                }" id="description" name="description" pattern="^[a-zA-Z][a-zA-Z0-9\s]{20,100}"   required />
                                                     </div>
                                                 </div>
 
                                                 <div class="form-group ">
                                                     <label for="price" class="control-label col-lg-2">Price <span class="required">*</span></label>
                                                     <div class="col-lg-10">
-                                                        <input class="form-control" id="price" name="price" min="10" max="9999" type="number" required />
+                                                        <input class="form-control" id="price" name="price" oninvalid="setCustomValidity('minimum is 10$ and max is 999$')" onchange="try {
+                                                                    setCustomValidity('')
+                                                                } catch (e) {
+                                                                }" min="10" max="999" type="number" required />
                                                     </div>
                                                 </div>   
 
-                                                
+
 
 
                                                 <div class="form-group ">
-                                                   <label for="category" class="control-label col-lg-2">Category <span class="required">*</span></label>
-                                                   <div class="col-lg-10" >
+                                                    <label for="category" class="control-label col-lg-2">Category <span class="required">*</span></label>
+                                                    <div class="col-lg-10" >
                                                         <select class="form-control selectpicker" id="category" name="category" required >
                                                             <c:forEach var="row" items="${ requestScope.categories }">
                                                                 <option> ${ row.getName() } </option>
@@ -281,28 +320,44 @@
                                                         </select>
                                                     </div>
                                                 </div>
-                                                
+
                                                 <div class="form-group ">
-                                                    <label for="pimage" class="control-label col-lg-2">Image <span class="required">*</span></label>
+                                                    <label for="pimage" class="control-label col-lg-2">Image <span class="required"></span></label>
                                                     <div class="col-lg-10">
-                                                        <input class="form-control" id="pimage" name="pimage" type="file"  accept=' image/jpeg, image/png' required />
+                                                        <input class="form-control" id="pimage" name="pimage" type="file"  accept=' image/jpeg, image/png'  />
                                                     </div>
                                                 </div>   
-                                                
+
+                                                <div class="alert alert-danger" style="display:none;" id="danger-alert-product-not-updated">
+                                                    <button type="button" class="close" data-dismiss="alert">x</button>
+                                                    <strong>Failure In Adding The Product To DB </strong>
+                                                    The ISBN Of The Product Already Exist!
+                                                </div>
+
+
+                                                <div class="alert alert-danger" style="display:none;" id="danger-alert">
+                                                    <button type="button" class="close" data-dismiss="alert">x</button>
+                                                    <strong>Failure In Uploading Image! </strong>
+                                                    The File Must Be png or jpg Image.
+                                                </div>
+
+                                                <div class="alert alert-danger" style="display:none;" id="danger-alert-size">
+                                                    <button type="button" class="close" data-dismiss="alert">x</button>
+                                                    <strong>Failure In Uploading Image! </strong>
+                                                    The Image Size Must Not Be Greater Than 1 MB.
+                                                </div>
+
+                                                <div class="alert alert-danger" style="display:none;" id="danger-alert-filename">
+                                                    <button type="button" class="close" data-dismiss="alert">x</button>
+                                                    <strong>Failure In Uploading Image! </strong>
+                                                    The Image Name Must Not Be Greater Than 50 Character.
+                                                </div>
+
+
+
                                                 <div class="modal-footer ">
                                                     <button type="submit"  class="btn btn-warning btn-lg" id="" name="editbutton"   style="width: 100%;"  ><span class="fa fa-check-square"></span> Update</button>
                                                 </div>
-                                                
-                                                
-                                                <div class="form-group " style="display: none;" id="success-alert-isbn" >
-                                                    <label for="" class="control-label col-lg-6"></label>
-                                                    <div class="alert alert-success col-lg-6"  id="success-alert-isbn">
-                                                        <button type="button" class="close" data-dismiss="alert">x</button>
-                                                        <strong>Failed: In Update Product! </strong>
-                                                             The ISBN Of The Product Already Exist!
-                                                    </div>
-                                                </div> 
-
                                             </form>
                                         </div>
 
@@ -412,7 +467,8 @@
         <script src="${pageContext.request.contextPath}/pages/js/mali/home.js"></script>
         <script src="${pageContext.request.contextPath}/pages/js/mali/update.js"></script>
         <script src="${pageContext.request.contextPath}/pages/js/mali/delete.js"></script>
-        <script>  makePagination(${requestScope.productsCount})</script>
+        <script src="${pageContext.request.contextPath}/pages/js/mali/searchproducts.js"></script>
+        <script>  makePagination(${requestScope.productsCount},1)</script>
         <!-- javascripts -->
     </body>
 </html>
