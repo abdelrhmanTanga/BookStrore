@@ -48,7 +48,6 @@ public class AdminFacadeHandler {
                 newBook.setDescription(product.getDescription());
                 newBook.setISBN(product.getISBN());
                 newBook.setImage(product.getImage());
-                System.out.println(product.getName());
                 newBook.setName(product.getName());
                 newBook.setPrice(product.getPrice());
                 newBook.setQuantity(product.getQuantity());
@@ -118,12 +117,30 @@ public class AdminFacadeHandler {
         return check;
     }
     
-    public boolean UpdateProduct(Product product)
+    public boolean UpdateProduct(AdminUpdateProductWrapper product)
     {
         boolean check = false;
         try {
             Connection connection = ConnectionPool.getInstance().getConnection();
-            check = new ProductDAO(connection).updateProduct(product);
+            
+            Category category = new Category();
+            category.setName(product.getCategory().toLowerCase());
+            CategoryDAO categoryDAO = new CategoryDAO(ConnectionPool.getInstance().getConnection());
+            categoryDAO.getId(category);
+            
+            Product product1 = new Product();
+            
+            product1.setId(product.getId());
+            product1.setAuthor(product.getAuthor());
+            product1.setCategory(category.getId());
+            product1.setDescription(product.getDescription());
+            product1.setISBN(product.getISBN());
+            product1.setImage(product.getImage());
+            product1.setName(product.getName());
+            product1.setPrice(product.getPrice());
+            product1.setQuantity(product.getQuantity());
+            
+            check = new ProductDAO(connection).updateProduct(product1);
             connection.close();
         } catch (SQLException ex) {
             Logger.getLogger(AdminFacadeHandler.class.getName()).log(Level.SEVERE, null, ex);
@@ -157,5 +174,21 @@ public class AdminFacadeHandler {
         return check;
     }
     
+    
+    public HomePageWrapper adminHomePageSearch(int paginationNumber,String keyword,String category)
+    {
+        HomePageWrapper homePageWrapper = new HomePageWrapper();
+        try {
+            Connection connection = ConnectionPool.getInstance().getConnection();
+            homePageWrapper.setProducts(new ProductDAO(connection).searchForProductsByName(paginationNumber,keyword,category) );
+            homePageWrapper.setProductsCount( new ProductDAO(connection).getProductsCountBySearch(keyword,category) );
+            homePageWrapper.setUsersCount( new ClientDAO(connection).getUsersCount() );
+            homePageWrapper.setCategories(new CategoryDAO(connection).getAllCategories() );
+            connection.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(AdminFacadeHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return homePageWrapper;
+    }
 
 }

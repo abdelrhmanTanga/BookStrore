@@ -32,8 +32,8 @@ public class CategoryDAO {
             System.out.println(category.getName());
             pst.setString(1, category.getName());
             ResultSet rs = pst.executeQuery();
-            rs.next();
-            category.setId(rs.getInt(1));
+            if(rs.next())
+                category.setId(rs.getInt(1));
             rs.close();
             pst.close();
             return true;

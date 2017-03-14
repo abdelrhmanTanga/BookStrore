@@ -18,7 +18,7 @@ public class HomePageWrapper {
     private int usersCount;
     private int productsCount;
     private List<Product> products;
-     private List<Category> categories; 
+    private List<Category> categories; 
 
     public List<Category> getCategories() {
         return categories;
