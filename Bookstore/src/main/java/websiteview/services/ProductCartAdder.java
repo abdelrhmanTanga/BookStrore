@@ -42,6 +42,7 @@ public class ProductCartAdder extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String productAdd = request.getParameter("productid");
+        PrintWriter out = response.getWriter();
         HttpSession session = request.getSession(false);
         if (session != null) {
             String email = (String) session.getAttribute("loggedIn");
@@ -50,12 +51,16 @@ public class ProductCartAdder extends HttpServlet {
             order.setEmail(email);
             if (cartHandler.addToCart(order)) {
                 ///////////////////////// bussiness for add product
+                out.print("true");
+                System.out.println("true");
             } else {
                 ///////////////////////// bussieness for not so much
+                out.print("false");
+                System.out.println("false");
             }
         } else {
             //////////////////// bussiness for add product for not a signed in client
-
+            out.print("false");
         }
     }
 

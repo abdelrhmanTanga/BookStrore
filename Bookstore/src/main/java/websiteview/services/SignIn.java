@@ -19,6 +19,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -43,35 +44,52 @@ public class SignIn extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     Session session;
+    ServletContext context
 
     @Override
     public void init(ServletConfig config)
             throws ServletException {
         super.init(config); //To change body of generated methods, choose Tools | Templates.
         session = new Session();
-
+        context = config.getServletContext();
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         //PrintWriter out = response.getWriter();
         SignInDTO signInDTO = new SignInDTO();
-        signInDTO.setEmail(request.getParameter("username"));
+        signInDTO.setEmail(request.getParameter("email"));
         signInDTO.setPassword(request.getParameter("password"));
-        if (session.signIn(signInDTO)) {
-            HttpSession session = request.getSession(true);
-            session.setAttribute("loggedIn", signInDTO.getEmail());
-            ///////////// where ever the fuck u redirect when its true
+        String email = request.getParameter("email");
+        if (email != null) {
+            String loggedIn = (String) context.getAttribute(email);
+            if (loggedIn == null) {
 
-            RequestDispatcher dispatcher = request.getRequestDispatcher("productviewer");
-            dispatcher.forward(request, response);
-            //out.println("true");
+                if (session.signIn(signInDTO)) {
+                    HttpSession session = request.getSession(true);
+                    session.setAttribute("loggedIn", signInDTO.getEmail()); ///name products count // 
+                    context.setAttribute(signInDTO.getEmail(), signInDTO.getEmail());
+                    System.out.println("here in sign in");
+                    ///////////// where ever the fuck u redirect when its true
+
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("productviewer");
+                    dispatcher.forward(request, response);
+                    //out.println("true");
+                } else {
+                    //HttpSession session = request.getSession(true);
+                    //session.setAttribute("loggedIn", "abdo zeft");
+                    //////////////// what evet the fuck u do when its false
+                    //out.println("false" + signInDTO.getEmail() + " " + signInDTO.getPassword());
+
+                }
+            } else {
+                ////////////////////////// already logged in
+                System.out.println("already logged");
+            }
+
         } else {
-            //HttpSession session = request.getSession(true);
-            //session.setAttribute("loggedIn", "abdo zeft");
-            //////////////// what evet the fuck u do when its false
-            //out.println("false" + signInDTO.getEmail() + " " + signInDTO.getPassword());
-
+            System.out.println("not legal access");
+            response.sendRedirect("/BookStore/pages/signinpage.jsp");
         }
     }
 

@@ -10,14 +10,14 @@ package websiteview.model;
  * @author omnia
  */
 public class CartDTO {
-      private String name;
+
+    private String name;
     private int Price;
     private long ISBN;
     private String image;
     private int id;
-    private int itemQuantity ;
+    private int itemQuantity;
 
-   
     public String getName() {
         return name;
     }
@@ -57,8 +57,8 @@ public class CartDTO {
     public void setId(int id) {
         this.id = id;
     }
-    
-     public int getItemQuantity() {
+
+    public int getItemQuantity() {
         return itemQuantity;
     }
 
@@ -66,5 +66,4 @@ public class CartDTO {
         this.itemQuantity = itemQuantity;
     }
 
-    
 }

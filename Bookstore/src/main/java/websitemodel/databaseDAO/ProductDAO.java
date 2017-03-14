@@ -31,9 +31,7 @@ public class ProductDAO {
         this.connection = connection;
     }
 
-    public ProductDAO() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    
 
     //////////////////// abdelrhman galal start
     public boolean addBook(Product newBook) {

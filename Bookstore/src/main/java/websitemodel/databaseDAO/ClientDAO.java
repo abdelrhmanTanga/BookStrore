@@ -175,13 +175,13 @@ public class ClientDAO {
         if (client != null) {
             try {
                 PreparedStatement pst = connection.prepareStatement("update client set credit = ? where email = ?");
-                pst.setLong(1,client.getCredit() - totalPrice);
+                pst.setLong(1, client.getCredit() - totalPrice);
                 pst.setString(2, email);
                 pst.executeUpdate();
             } catch (SQLException ex) {
                 Logger.getLogger(ClientDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
         } else {
 
         }
@@ -213,5 +213,21 @@ public class ClientDAO {
             return null;
         }
 
+    }
+
+    public boolean checkUserExists(Client clientsDAO) {
+        try {
+            PreparedStatement pst = connection.prepareStatement("select * from client where email = ?");
+            pst.setString(1, clientsDAO.getEmail());
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                return false;
+            } else {
+                return true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
     }
 }
