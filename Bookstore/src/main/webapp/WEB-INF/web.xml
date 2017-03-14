@@ -59,6 +59,10 @@
         <servlet-name>test</servlet-name>
         <servlet-class>websiteview.services.test</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ProductCartRemover</servlet-name>
+        <servlet-class>websiteview.services.ProductCartRemover</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SignIn</servlet-name>
         <url-pattern>/SignIn</url-pattern>
@@ -110,6 +114,10 @@
     <servlet-mapping>
         <servlet-name>test</servlet-name>
         <url-pattern>/test</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProductCartRemover</servlet-name>
+        <url-pattern>/removeitem</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -94,6 +94,7 @@ public class CartHandler {
                         connection.close();
                         return true;
                     } else {
+                        connection.close();
                         return false;
                     }
                 } else {
@@ -192,6 +193,21 @@ public class CartHandler {
 
             return cartItems;
         } else {
+            return null;
+        }
+    }
+
+    public Integer getCartItems(String email) {
+        try {
+            Connection connection = ConnectionPool.getInstance().getConnection();
+            CartDAO cartDAO = new CartDAO(connection);
+            Cart cart = new Cart();
+            cart.setEmail(email);
+            Integer cartSize = cartDAO.getItemsCount(cart);
+            connection.close();
+            return cartSize;
+        } catch (SQLException ex) {
+            Logger.getLogger(CartHandler.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
     }

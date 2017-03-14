@@ -101,7 +101,7 @@ public class CartDAO {
                 }
                 cartItem = new Cart();
                 cartItem.setBookID(result.getInt("id"));
-                 cartItem.setQuantity(result.getInt("quantity"));
+                cartItem.setQuantity(result.getInt("quantity"));
                 list.add(cartItem);
             }
         } catch (SQLException ex) {
@@ -159,6 +159,8 @@ public class CartDAO {
                 cart.setQuantity(rs.getInt(2));
                 cartList.add(cart);
             }
+            pst.close();
+            rs.close();
             return cartList;
         } catch (SQLException ex) {
             Logger.getLogger(CartDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -184,13 +186,36 @@ public class CartDAO {
             pst.setInt(2, cart.getBookID());
             ResultSet rs = pst.executeQuery();
             if (rs.next()) {
+                pst.close();
+                rs.close();
                 return true;
             } else {
+                pst.close();
+                rs.close();
                 return false;
             }
         } catch (SQLException ex) {
             Logger.getLogger(CartDAO.class.getName()).log(Level.SEVERE, null, ex);
             return false;
+        }
+
+    }
+
+    public Integer getItemsCount(Cart cart) {
+        try {
+            PreparedStatement pst = connection.prepareStatement("select count(*) from cart where email = ?");
+            pst.setString(1, cart.getEmail());
+            ResultSet rs = pst.executeQuery();
+            Integer cartSize = null;
+            if (rs.next()) {
+                cartSize = rs.getInt(1);
+                return cartSize;
+            } else {
+                return null;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CartDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         }
 
     }
