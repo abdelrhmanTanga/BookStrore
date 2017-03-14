@@ -13,13 +13,13 @@
         <meta name="description" content="">
         <meta name="author" content="">
         <title>Cart | E-Shopper</title>
-        <link href="${pageContext.request.contextPath}/pages/css/bootstrap.min.css" rel="stylesheet">
-        <link href="${pageContext.request.contextPath}/pages/css/font-awesome.min.css" rel="stylesheet">
-        <link href="${pageContext.request.contextPath}/pages/css/prettyPhoto.css" rel="stylesheet">
-        <link href="${pageContext.request.contextPath}/pages/css/price-range.css" rel="stylesheet">
-        <link href="${pageContext.request.contextPath}/pages/css/animate.css" rel="stylesheet">
-        <link href="${pageContext.request.contextPath}/pages/css/main.css" rel="stylesheet">
-        <link href="${pageContext.request.contextPath}/pages/css/responsive.css" rel="stylesheet">
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/font-awesome.min.css" rel="stylesheet">
+        <link href="css/prettyPhoto.css" rel="stylesheet">
+        <link href="css/price-range.css" rel="stylesheet">
+        <link href="css/animate.css" rel="stylesheet">
+        <link href="css/main.css" rel="stylesheet">
+        <link href="css/responsive.css" rel="stylesheet">
 
         <link rel="shortcut icon" href="images/ico/favicon.ico">
         <link rel="apple-touch-icon-precomposed" sizes="144x144" href="images/ico/apple-touch-icon-144-precomposed.png">
@@ -62,7 +62,7 @@
 
                                 <tr>
                                     <td class="cart_product">
-                                        <a href=""><img src="${'/OnlineBookstore/imageloader?path='.concat(product.image)}" alt=""></a>
+                                        <a href=""><img src="${'/OnlineBookstore/imageloader?path='.concat(cartItem.image)}" alt=""></a>
                                     </td>
                                     <td class="cart_description">
                                         <h4><a href="">${cartItem.name}</a></h4>

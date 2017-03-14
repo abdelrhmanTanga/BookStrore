@@ -72,15 +72,21 @@
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
-                    document.write("true");
-                    console.log(clicked_id);
+                    if (this.responseText == "true") {
+                        document.write("true");
+                        console.log(clicked_id);
+                        console.log(this.responseText);
+                    } else {
+                        document.write("false");
+                        console.log(this.responseText);
+                    }
                 }
             };
             xhttp.open("GET", "/BookStore/addtocart?productid=" + clicked_id, true);
             xhttp.send();
         }
-        
-        function viewProduct(clicked_id){
+
+        function viewProduct(clicked_id) {
             window.location.href = "/BookStore/productpage?productid=" + clicked_id;
         }
     </script>

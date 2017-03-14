@@ -11,6 +11,8 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -38,35 +40,46 @@ public class CartViewer extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-   CartHandler cartHandler;
+    CartHandler cartHandler;
 
     @Override
     public void init(ServletConfig config)
             throws ServletException {
         super.init(config); //To change body of generated methods, choose Tools | Templates.
-        cartHandler= new CartHandler();
+        cartHandler = new CartHandler();
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
-
-          /////////////// loader cart
-        
-     /*  List<CartDTO> cartItems = CartHandler.getcart(Email);
-        request.setAttribute("Items", cartItems);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/cart.jsp");
-        dispatcher.include(request, response);*/
-        
-        /////////////////or another way 
-//       HttpSession session = request.getSession(false);
-//          String Email= request.session.getAttribute("loggedIn");
-   //    String Email = request.getSession().getAttribute("loggedIn").getEmail();
-           HttpSession session = request.getSession(false);
-       String email;
+        //PrintWriter out = response.getWriter();
+        HttpSession session = request.getSession(true);
+        if (session != null) {
+            String email = (String) session.getAttribute("loggedIn");
+            //String email = "abdkjsvbsdk";
+            //out.println("first");
+            System.out.println("first");
+            /////////// code to handle logged in clients
+            List<CartDTO> items = cartHandler.getCart(email);
+            if (items != null){
+                request.setAttribute("CartItem", items);
+                //out.println("second");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/navbar.jsp");
+                dispatcher.include(request, response);
+                //out.println("third");
+                dispatcher = request.getRequestDispatcher("/pages/cart.jsp");
+                dispatcher.include(request, response);
+                System.out.println("first");
+            }
+        } else {
+            ////////////////// code to handle offline users
+            //out.println("fourth");
+            System.out.println("first");
+        }
+        /*String email;
         email = (String) request.getSession().getAttribute("loggedIn");
         List<CartDTO> clientCart;
         clientCart = cartHandler.getCart(email);
         request.setAttribute("cartItem", clientCart);
-        response.sendRedirect("/BookStore/cart.jsp");
+        response.sendRedirect("/BookStore/cart.jsp");*/
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -81,7 +94,11 @@ public class CartViewer extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-       
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(CartViewer.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -95,7 +112,11 @@ public class CartViewer extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-       
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(CartViewer.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
