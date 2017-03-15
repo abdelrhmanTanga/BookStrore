@@ -80,7 +80,11 @@ public class SignIn extends HttpServlet {
 
                 if (session.signIn(signInDTO)) {
                     HttpSession session = request.getSession(true);
+                    System.out.println(signInDTO.getCartSize());
+                    System.out.println(signInDTO.getName());
                     session.setAttribute("loggedIn", signInDTO.getEmail()); ///name products count // 
+                    session.setAttribute("loggedEmail", signInDTO.getName());
+                    session.setAttribute("loggedCart", signInDTO.getCartSize());
                     context.setAttribute(signInDTO.getEmail(), signInDTO.getEmail());
                     System.out.println("here in sign in");
                     ///////////// where ever the fuck u redirect when its true

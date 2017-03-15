@@ -60,7 +60,7 @@
 
                                         <!-- <li><a href="#"><i class="fa fa-user"></i> Account</a></li> -->
 
-                                        <li><a href="/cart"><i class="fa fa-shopping-cart"></i>${cartSize} Cart</a></li> 
+                                        <li><a href="/BookStore/cart"><i class="fa fa-shopping-cart"></i>${cartSize} Cart</a></li> 
                                         <li><a href="${pageContext.request.contextPath}/pages/signinpage.jsp"><i class="fa fa-lock"></i> Login</a></li>
                                         <li><a href="${pageContext.request.contextPath}/pages/signuppage.jsp"><i class="fa fa-lock"></i> Signup</a></li>
                                     </ul>
@@ -103,7 +103,7 @@
                                     <ul class="nav navbar-nav">
 
                                         <li><a href="#"><i class="fa fa-user"></i>${loggedIn}</a></li> 
-                                        <li><a href="/cart"><i class="fa fa-shopping-cart"></i> Cart</a></li> 
+                                        <li><a href="/BookStore/cart"><i class="fa fa-shopping-cart"></i>${loggedCart} Cart</a></li> 
                                         <li><a href="/BookStore/signout"><i class="fa fa-lock"></i> Logout</a></li>
                                         <!-- <li><a href="login.html"><i class="fa fa-lock"></i> Signup</a></li>-->
                                     </ul>

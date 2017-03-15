@@ -55,9 +55,11 @@ public class OrderHistoryDAO {
             if (rs.next()) {
                 orderHistory.setId(rs.getInt(1));
             }
-            pst = connection.prepareStatement("insert into order_history values (?,?)");
+            pst = connection.prepareStatement("insert into order_history values (?,?,?,?)");
             pst.setInt(1, orderHistory.getId());
             pst.setString(2, orderHistory.getEmail());
+            pst.setString(3,orderHistory.getAddress());
+            pst.setLong(4,orderHistory.getPhone());
             pst.executeUpdate();
             pst.close();
             rs.close();
