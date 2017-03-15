@@ -10,7 +10,9 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import websitemodel.ConnectionPool;
+import websitemodel.databaseDAO.CartDAO;
 import websitemodel.databaseDAO.ClientDAO;
+import websitemodel.databaseDTO.Cart;
 import websitemodel.databaseDTO.Client;
 import websiteview.model.SignInDTO;
 import websiteview.model.SignUpDTO;
@@ -20,7 +22,7 @@ import websiteview.model.SignUpDTO;
  * @author abdelrhman galal
  */
 public class Session {
-    
+
     public boolean check() {
         return true;
     }
@@ -71,8 +73,16 @@ public class Session {
             client.setPassword(signInDTO.getPassword());
             ClientDAO clientDAO = new ClientDAO(connection);
             if (clientDAO.verifyUser(client)) {
-                connection.close();
-                return true;
+                System.out.println("logged in without the database");
+                if (clientDAO.register(client.getEmail())) {
+                    System.out.println("logged in with the database");
+                    connection.close();
+                    return true;
+                } else {
+                    connection.close();
+                    return false;
+                }
+
             } else {
                 connection.close();
                 return false;
@@ -90,16 +100,31 @@ public class Session {
         try {
             Connection connection = ConnectionPool.getInstance().getConnection();
             ClientDAO clientDAO = new ClientDAO(connection);
+            Connection connection1 = ConnectionPool.getInstance().getConnection();
+            CartDAO cartDAO = new CartDAO(connection1);
+            Cart cart = new Cart();
             Client client = new Client();
             client.setEmail(signInDTO.getEmail());
             client.setPassword(signInDTO.getPassword());
+            cart.setEmail(signInDTO.getEmail());
             if (clientDAO.verifyUser(client)) {
-                System.out.println("login successfully");
-                connection.close();
-                return true;
+                System.out.println("logged in without the database");
+                if (clientDAO.register(client.getEmail())) {
+                    System.out.println("logged in with the database");
+                    System.out.println("login successfully");
+                    signInDTO.setCartSize(cartDAO.getItemsCount(cart));
+                    signInDTO.setName(client.getName());
+                    connection1.close();
+                    connection.close();
+                    connection.close();
+                    return true;
+                } else {
+                    return true;
+                }
             } else {
                 System.out.println("login failed");
                 connection.close();
+                connection1.close();
                 return false;
             }
         } catch (SQLException ex) {

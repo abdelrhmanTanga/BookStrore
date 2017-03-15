@@ -73,21 +73,24 @@ public class CartDAO {
         return false;
     }
 
-    public List<Cart> readAll(String Email) throws SQLException {
-        List<Cart> cartList = null;
+    public List<Cart> readAll(String Email) {
         try {
-
-            Cart cart = null;
-            PreparedStatement statement = connection.prepareStatement(SQL_READ);
-            statement.setString(1, Email);
-            ResultSet resultSet = statement.executeQuery();
-            cartList = getCart(resultSet);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            //connection.close();
+            PreparedStatement pst = connection.prepareStatement("select * from cart where email = ?");
+            pst.setString(1, Email);
+            ResultSet rs = pst.executeQuery();
+            List<Cart> cartList = new ArrayList<>();
+            while (rs.next()){
+                Cart cart = new Cart();
+                cart.setBookID(rs.getInt(2));
+                cart.setEmail(Email);
+                cart.setQuantity(rs.getInt(3));
+                cartList.add(cart);
+            }
+            return cartList;
+        } catch (SQLException ex) {
+            Logger.getLogger(CartDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         }
-        return cartList;
     }
 
     private List<Cart> getCart(ResultSet result) {
@@ -126,6 +129,19 @@ public class CartDAO {
             connection.close();
         }
         return isDeleted;
+    }
+    
+    public synchronized boolean removeFromCart(Cart cart){
+        try {
+            PreparedStatement pst = connection.prepareStatement("delete from cart where email = ? and id = ?");
+            pst.setString(1, cart.getEmail());
+            pst.setInt(2, cart.getBookID());
+            pst.executeUpdate();
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(CartDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
     }
 
     //////////////////////// abdelrhman 

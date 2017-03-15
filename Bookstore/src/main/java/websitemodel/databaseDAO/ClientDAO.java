@@ -41,6 +41,7 @@ public class ClientDAO {
             pst.setString(2, client.getPassword());
             ResultSet rs = pst.executeQuery();
             if (rs.next()) {
+                client = getClientInfo(client);
                 rs.close();
                 pst.close();
                 return true;
@@ -70,6 +71,20 @@ public class ClientDAO {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return number;
+    }
+    
+    public boolean register(String email){
+        try {
+            PreparedStatement pst = connection.prepareStatement("update client set logged = 't' where email = ?");
+            pst.setString(1, email);
+            pst.executeUpdate();
+            System.out.println("tamam afanzem");
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+        
     }
 
     public List<Client> getAllClients(int pageNumber) {
@@ -196,6 +211,33 @@ public class ClientDAO {
             ResultSet rs = pst.executeQuery();
             if (rs.next()) {
                 Client client = new Client();
+                client.setEmail(rs.getString(1));
+                client.setName(rs.getString(2));
+                client.setCredit(rs.getInt(3));
+                client.setPassword(rs.getString(4));
+                client.setPhone(rs.getLong(5));
+                client.setAddress(rs.getString(6));
+                client.setCountry(rs.getString(7));
+                client.setGender(rs.getString(8));
+                client.setBirthday(rs.getString(9));
+                client.setJob(rs.getString(10));
+                return client;
+            } else {
+                return null;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+
+    }
+    
+    public Client getClientInfo(Client client) {
+        try {
+            PreparedStatement pst = connection.prepareStatement("select * from client where email = ?");
+            pst.setString(1, client.getEmail());
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
                 client.setEmail(rs.getString(1));
                 client.setName(rs.getString(2));
                 client.setCredit(rs.getInt(3));

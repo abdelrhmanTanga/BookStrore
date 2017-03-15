@@ -5,12 +5,15 @@
  */
 package websiteview.services;
 
+import Facade.CartHandler;
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -27,14 +30,58 @@ public class ProductCartRemover extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        PrintWriter out = response.getWriter();
-        System.out.println(request.getParameter("productid"));
-        out.print("true");
-        out.close();
+    CartHandler cartHandler;
+    
+    @Override
+    public void init(ServletConfig config)
+            throws ServletException {
+        super.init(config); //To change body of generated methods, choose Tools | Templates.
+        cartHandler = new CartHandler();
     }
-
+    
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("in setvlet");
+        HttpSession session = request.getSession(false);
+        PrintWriter out = response.getWriter();
+        if (session != null) {
+            String email = (String) session.getAttribute("loggedIn");
+            System.out.println("has session");
+            if (email != null && !email.equals("")) {
+                String productId = (String) request.getParameter("productid");
+                System.out.println("logged in email :" + email + " product ID :"+ productId);
+                if (productId != null) {
+                    int product = Integer.parseInt(productId);
+                    System.out.println("legal access");
+                    if (cartHandler.removeFromCart(product, email)) {
+                        System.out.println("item removed");
+                        out.print("true");
+                        out.close();
+                    } else {
+                        ///////////// remove failed
+                        out.print("false");
+                        out.close();
+                    }
+                } else {
+                    ////////////////// illegal 
+                    response.sendRedirect("/BookStore/productviewer");
+                }
+            } else {
+                /////////////////////not logged in
+            }
+        } else {
+            ////////////////// have no session
+        }
+    }
+    
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        processRequest(req, resp); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        processRequest(req, resp); //To change body of generated methods, choose Tools | Templates.
+    }
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -44,11 +91,6 @@ public class ProductCartRemover extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -58,20 +100,10 @@ public class ProductCartRemover extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
     /**
      * Returns a short description of the servlet.
      *
      * @return a String containing servlet description
      */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
+    // </editor-fold>
 }

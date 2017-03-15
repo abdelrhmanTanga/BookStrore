@@ -44,14 +44,21 @@ public class Checkout extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        if (session != null){
-            String email = (String) session.getAttribute("LoggedIn");
+        if (session != null) {
+            System.out.println("checking out");
+            String email = (String) session.getAttribute("loggedIn");
+            System.out.println("email is : " + email);
             CheckoutDTO orderInfo = cartHandler.doCheckout(email);
-            
-            request.setAttribute("orderInfo", orderInfo);
-            RequestDispatcher dispatcher = request.getRequestDispatcher("");
-            dispatcher.include(request, response);
-        }else{
+            if (orderInfo != null) {
+                System.out.println("checkout done");
+                System.out.println("orderInfo :" + orderInfo.getProducts().elementAt(0).getAuthor());
+                request.setAttribute("orderInfo", orderInfo);
+                RequestDispatcher dispatcher = request.getRequestDispatcher("");
+                dispatcher.include(request, response);
+            } else {
+                ///////////////// logic for not signed in
+            }
+        } else {
             ////////////////////// logic for not signed in (redirect to sign in page)
         }
     }
