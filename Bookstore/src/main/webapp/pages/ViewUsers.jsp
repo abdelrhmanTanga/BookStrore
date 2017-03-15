@@ -29,12 +29,8 @@
 
     <body>
         <!--navbar start-->
-
+        <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
         <section id='container'>
-
-
-
-
 
             <!--header start-->
             <header class="header dark-bg">
@@ -50,8 +46,8 @@
                     <!--  search form start -->
                     <ul class="nav top-menu">                    
                         <li>
-                            <form class="navbar-form">
-                                <input class="form-control" placeholder="Search" type="text">
+                            <form class="navbar-form" action="javascript:searchUsers(1);" method="post"  >
+                                <input class="form-control" id="search" name="search"  placeholder="Search" type="text">
                             </form>
                         </li>                    
                     </ul>
@@ -92,19 +88,19 @@
                     <!-- sidebar menu start-->
                     <ul class="sidebar-menu">                
                         <li class="active">
-                            <a class="" href="Home.html">
+                            <a class="" href="HomeServletController">
                                 <i class="icon_house_alt"></i>
                                 <span>Home</span>
                             </a>
                         </li>
                         <li>                     
-                            <a class="" href="AddProduct.html">
+                            <a class="" href="AddProductController">
                                 <i class="icon_book_alt"></i>
                                 <span>Add Product</span>
                             </a>                                  
                         </li>
                         <li>                     
-                            <a class="" href="ViewUsers.html">
+                            <a class="" href="ViewUsersController">
                                 <i class="icon_group"></i>
                                 <span>View Customers</span>
                             </a>
@@ -122,7 +118,7 @@
                         <div class="col-lg-12">
                             <h3 class="page-header"><i class="fa fa-laptop"></i>Home Page</h3>
                             <ol class="breadcrumb">
-                                <li><i class="fa fa-home"></i><a href="test.html">Home</a></li>
+                                <li><i class="fa fa-home"></i><a href="HomeServletController">Home</a></li>
                                 <!--	<li><i class="fa fa-laptop"></i><a href="test.html"></a></li>		-->				  	
                             </ol>
                         </div>
@@ -131,30 +127,30 @@
                     <div class="row">
 
                         <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-                            <a href='#' >
+                            <a href='HomeServletController' >
                                 <div class="info-box blue-bg">
                                     <i class="fa fa-home"></i>
-                                    <div class="count">6000 </div>
+                                    <div class="count" id="productCount1" > ${ requestScope.productsCount } </div>
                                     <div class="title">Home </div>						
                                 </div><!--/.info-box-->			
                             </a>
                         </div><!--/.col-->
 
                         <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-                            <a href='#' >
+                            <a href='AddProductController' >
                                 <div class="info-box blue-bg">
                                     <i class="fa fa-book"></i>
-                                    <div class="count">6000 </div>
+                                    <div class="count" id="productCount2" > ${ requestScope.productsCount } </div>
                                     <div class="title">Add Product</div>						
                                 </div><!--/.info-box-->			
                             </a>
                         </div><!--/.col-->
 
                         <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-                            <a href='#' >
+                            <a href='ViewUsersController' >
                                 <div class="info-box blue-bg">
                                     <i class="fa fa-group"></i>
-                                    <div class="count">6000 </div>
+                                    <div class="count" id="userscount" > ${ requestScope.usersCount } </div>
                                     <div class="title">View Customers</div>						
                                 </div><!--/.info-box-->		
                             </a>
@@ -179,7 +175,7 @@
 
                                             <thead>
 
-                                            <th><input type="checkbox" id="checkall" /></th>
+                                           
                                             <th>Name</th>
                                             <th>Email</th>
                                             <th>Phone</th>
@@ -192,36 +188,36 @@
 
                                             </thead>
 
-                                            <tbody>
-
-                                                <tr>
-                                                    <td><input type="checkbox" class="checkthis" /></td>
-                                                    <td>moahmed</td>
-                                                    <td>mohamed@yahoo.com</td>
-                                                    <td>010225544778</td>
-                                                    <td>CB 106/107 Street # 11 Wah Cantt Islamabad Pakistan</td>
-                                                    <td>egypt</td>
-                                                    <td>male</td>
-                                                    <td>11/2/1994</td>
-                                                    <td>developer</td>
-                                                    <td><button type="button" onclick="javascript:window.location.href='ViewUserOrderHistory.html';" class="btn btn-success">View Orders History</button></td>
-                                                </tr>
-
+                                            <tbody id="tbody">
+                                                <c:forEach var="row" items="${requestScope.clients}" >
+                                                    <tr id="${row.getEmail()}">
+                                                        <td>${row.getName()}</td>
+                                                        <td>${row.getEmail()}</td>
+                                                        <td>${row.getPhone()}</td>
+                                                        <td>${row.getAddress()}</td>
+                                                        <td>${row.getCountry()}</td>
+                                                        <td>
+                                                        <c:if test="${row.getGender() eq 'm'}">
+                                                            male
+                                                        </c:if>
+                                                        <c:if test="${row.getGender() eq 'f'}">
+                                                            female
+                                                        </c:if>   
+                                                        </td>
+                                                        <td>${row.getBirthday()}</td>
+                                                        <td>${row.getJob()}</td>
+                                                        <td><button type="button" onclick="javascript:window.location.href='ViewOrdersHistory?userMail=${row.getEmail()}';" class="btn btn-success">View Orders History</button></td>
+                                                    </tr>
+                                                </c:forEach>        
                                             </tbody>
 
                                         </table>
 
                                         <div class="clearfix"></div>
-                                        <ul class="pagination pull-right">
-                                            <li class="disabled"><a href="#"><span class="fa fa-chevron-left"></span></a></li>
-                                            <li class="active"><a href="#">1</a></li>
-                                            <li><a href="#">2</a></li>
-                                            <li><a href="#">3</a></li>
-                                            <li><a href="#">4</a></li>
-                                            <li><a href="#">5</a></li>
-                                            <li><a href="#"><span class="fa fa-chevron-right"></span></a></li>
-                                        </ul>
+                                        <ul class="pagination pull-right" id="pagination" >
 
+                                         <!--   <li><a href="#"><span class="fa fa-chevron-right"></span></a></li> -->
+                                        </ul>
                                     </div>
 
                                 </div>
@@ -229,8 +225,8 @@
                         </div>
 
 
-  
-                        </div>
+
+                    </div>
 
                 </section>
                 <div class="text-left">
@@ -241,7 +237,7 @@
                                 Licensing information: https://bootstrapmade.com/license/
                                 Purchase the pro version form: https://bootstrapmade.com/buy/?theme=NiceAdmin
                         -->
-                        <a href="https://bootstrapmade.com/free-business-bootstrap-themes-website-templates/">This Website Is made </a> by <a href="https://bootstrapmade.com/">The Forth Team</a>
+                        <a href="#">This Website Is made </a> by <a href="#">The Forth Team</a>
                     </div>
                 </div>
 
@@ -277,8 +273,11 @@
         <script src="${pageContext.request.contextPath}/pages/js/morris.min.js"></script>
         <script src="${pageContext.request.contextPath}/pages/js/sparklines.js"></script>	
         <script src="${pageContext.request.contextPath}/pages/js/jquery.slimscroll.min.js"></script>
+        <script src="${pageContext.request.contextPath}/pages/js/mali/home.js"></script>
+        <script src="${pageContext.request.contextPath}/pages/js/mali/viewusers.js"></script>
+        <script> makePagination(${requestScope.usersCount}, 3);</script>
 
         <!-- javascripts -->
-        
+
     </body>
 </html>

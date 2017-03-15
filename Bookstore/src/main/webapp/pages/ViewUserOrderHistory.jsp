@@ -29,14 +29,13 @@
     </head>
 
     <body>
+        
+        <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
+        
+       
         <!--navbar start-->
 
         <section id='container'>
-
-
-
-
-
             <!--header start-->
             <header class="header dark-bg">
                 <div class="toggle-nav">
@@ -46,18 +45,6 @@
                 <!--logo start-->
                 <a href="index.html" class="logo">Book Store <span class="lite">Admin Panel</span></a>
                 <!--logo end-->
-
-                <div class="nav search-row" id="top_menu">
-                    <!--  search form start -->
-                    <ul class="nav top-menu">                    
-                        <li>
-                            <form class="navbar-form">
-                                <input class="form-control" placeholder="Search" type="text">
-                            </form>
-                        </li>                    
-                    </ul>
-                    <!--  search form end -->                
-                </div>
 
                 <div class="top-nav notification-row">                
                     <!-- notificatoin dropdown start-->
@@ -93,19 +80,19 @@
                     <!-- sidebar menu start-->
                     <ul class="sidebar-menu">                
                         <li class="active">
-                            <a class="" href="#">
+                            <a class="" href="HomeServletController">
                                 <i class="icon_house_alt"></i>
                                 <span>Home</span>
                             </a>
                         </li>
                         <li>                     
-                            <a class="" href="AddProduct.html">
+                            <a class="" href="AddProductController">
                                 <i class="icon_book_alt"></i>
                                 <span>Add Product</span>
                             </a>                                  
                         </li>
                         <li>                     
-                            <a class="" href="ViewUsers.html">
+                            <a class="" href="ViewUsersController">
                                 <i class="icon_group"></i>
                                 <span>View Customers</span>
                             </a>
@@ -131,30 +118,30 @@
                     <div class="row">
 
                         <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-                            <a href='#' >
+                            <a href='HomeServletController' >
                                 <div class="info-box blue-bg">
                                     <i class="fa fa-home"></i>
-                                    <div class="count">6000 </div>
+                                    <div class="count" id="productCount1" > ${ requestScope.productsCount } </div>
                                     <div class="title">Home </div>						
                                 </div><!--/.info-box-->			
                             </a>
                         </div><!--/.col-->
 
                         <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-                            <a href='#' >
+                            <a href='AddProductController' >
                                 <div class="info-box blue-bg">
                                     <i class="fa fa-book"></i>
-                                    <div class="count">6000 </div>
+                                    <div class="count" id="productCount1"  > ${ requestScope.productsCount }  </div>
                                     <div class="title">Add Product</div>						
                                 </div><!--/.info-box-->			
                             </a>
                         </div><!--/.col-->
 
                         <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-                            <a href='#' >
+                            <a href='ViewUsersController' >
                                 <div class="info-box blue-bg">
                                     <i class="fa fa-group"></i>
-                                    <div class="count">6000 </div>
+                                    <div class="count" id="userscount"  > ${ requestScope.usersCount } </div>
                                     <div class="title">View Customers</div>						
                                 </div><!--/.info-box-->		
                             </a>
@@ -168,44 +155,60 @@
                         <div class="container">
                             <div class="row">
                                 <div class="col-sm-12 col-md-10 col-md-offset-1">
+                                  <c:if test="${requestScope.number == 1}">
+                                      <c:set var="productnumber" value="${-1}"/>
+                                    <c:forEach var="row" items="${requestScope.orders}" > 
                                     <table class="table table-hover">
                                         <thead>
                                             <tr>
                                                 <th>Product</th>
                                                 <th>Quantity</th>
                                                 <th class="text-center">Price</th>
-                                                <th> totalÂ </th>
+                                                <th> total </th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td class="col-sm-8 col-md-6">
-                                                    <div class="media">
-                                                        <img class="media-object" src="http://icons.iconarchive.com/icons/custom-icon-design/flatastic-2/72/product-icon.png" style="width: 72px; height: 72px;">
-                                                        <div class="media-body">
-                                                            <h4 class="media-heading"><a href="#">Product name</a></h4>
+                                            
+                                            <c:set var="total" value="${0}"/>
+                                            <c:set var="productnumber" value="${productnumber+1}"/>
+                                            <c:set var="counter" value="${0}"/>
+                                            <c:forEach var="row1" items="${requestScope.orders.get(productnumber).getProducts()}" >
+                                                <c:set var="item" value="${requestScope.orders.get(productnumber).getItems().get(counter)}"/>
+                                                <tr>
+                                                    <td class="col-sm-8 col-md-6">
+                                                        <div class="media">
+                                                            <img class="media-object" src="${pageContext.request.contextPath}/pages/images/${row1.getImage()}" style="width: 72px; height: 72px;">
+                                                            <div class="media-body">
+                                                                <h4 class="media-heading"><a href="#"> ${row1.getName()} </a></h4>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </td>
-                                                <td class="col-sm-1 col-md-1" style="text-align: center">
-                                                    <input type="number" class="form-control" id="quantity" value="3" disabled >
-                                                </td>
-                                                <td class="col-sm-1 col-md-1 text-center"><strong>$4.87</strong></td>
-                                                <td class="col-sm-1 col-md-1 text-center"><strong>$14.61</strong></td>
-                                                
-                                            </tr>
-                                           
+                                                    </td>
+                                                    <td class="col-sm-1 col-md-1" style="text-align: center">
+                                                        <input type="number" class="form-control" id="quantity" value="${item.getQuantity()}" disabled >
+                                                    </td>
+                                                    <td class="col-sm-1 col-md-1 text-center"><strong>$ ${row1.getPrice()}</strong></td>
+                                                    <td class="col-sm-1 col-md-1 text-center"><strong>$ ${row1.getPrice()*item.getQuantity() }</strong></td>
+                                                    <c:set var="total" value="${total+(row1.getPrice()*item.getQuantity())}"/>
+                                                    <c:set var="counter" value="${counter+1}"/>
+                                                </tr>
+                                            </c:forEach>   
                                         </tbody>
                                         <tfoot>
                                             <tr>
                                                 <td>   </td>
                                                 <td>   </td>
                                                 <td><h3>Total</h3></td>
-                                                <td class="text-right"><h3>$31.53</h3></td>
+                                                <td class="text-right"><h3>$ ${total}</h3></td>
                                             </tr>
                                             
                                         </tfoot>
                                     </table>
+                                </c:forEach>  
+                                </c:if>
+                                 
+                                    <c:if test="${requestScope.number == 0}">
+                                        <h3 style="color:red ; margin-left:30% ; "> No Orders Are Founded </h3>
+                                    </c:if>    
                                 </div>
                             </div>
                         </div>
@@ -222,7 +225,7 @@
                                 Licensing information: https://bootstrapmade.com/license/
                                 Purchase the pro version form: https://bootstrapmade.com/buy/?theme=NiceAdmin
                         -->
-                        <a href="https://bootstrapmade.com/free-business-bootstrap-themes-website-templates/">This Website Is made </a> by <a href="https://bootstrapmade.com/">The Forth Team</a>
+                        <a href="#">This Website Is made </a> by <a href="#">The Forth Team</a>
                     </div>
                 </div>
 

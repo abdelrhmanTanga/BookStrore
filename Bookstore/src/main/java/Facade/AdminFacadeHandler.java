@@ -6,8 +6,10 @@
 package Facade;
 
 import adminpackage.adminmodel.AddProductPageWrapper;
+import adminpackage.adminmodel.AdminOrdersHistoryWrapper;
 import adminpackage.adminmodel.AdminUpdateProductWrapper;
 import adminpackage.adminmodel.AdminViewProduct;
+import adminpackage.adminmodel.AdminViewUsersWrapper;
 import adminpackage.adminmodel.HomePageWrapper;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -19,8 +21,11 @@ import websitemodel.ConnectionPool;
 
 import websitemodel.databaseDAO.CategoryDAO;
 import websitemodel.databaseDAO.ClientDAO;
+import websitemodel.databaseDAO.OrderHistoryDAO;
+import websitemodel.databaseDAO.OrderHistoryItemsDAO;
 import websitemodel.databaseDAO.ProductDAO;
 import websitemodel.databaseDTO.Category;
+import websitemodel.databaseDTO.OrderHistory;
 import websitemodel.databaseDTO.Product;
 
 /**
@@ -189,6 +194,67 @@ public class AdminFacadeHandler {
             Logger.getLogger(AdminFacadeHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
         return homePageWrapper;
+    }
+    
+    
+    public AdminViewUsersWrapper adminViewUsersPage(int paginationNumber)
+    {
+        AdminViewUsersWrapper adminViewUsersWrapper = new AdminViewUsersWrapper();
+        try {
+            Connection connection = ConnectionPool.getInstance().getConnection();
+            adminViewUsersWrapper.setUsersCount(new ClientDAO(connection).getUsersCount() );
+            adminViewUsersWrapper.setProductsCount( new ProductDAO(connection).getProductsCount() );
+            adminViewUsersWrapper.setClients(new ClientDAO(connection).getAllClients(paginationNumber) );
+            connection.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(AdminFacadeHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return adminViewUsersWrapper;
+    }
+    
+    public AdminViewUsersWrapper adminViewUsersSearchPage(int paginationNumber,String keyword)
+    {
+        AdminViewUsersWrapper adminViewUsersWrapper = new AdminViewUsersWrapper();
+        try {
+            Connection connection = ConnectionPool.getInstance().getConnection();
+            adminViewUsersWrapper.setUsersCount(new ClientDAO(connection).getUserCountBySearch(keyword));
+            adminViewUsersWrapper.setProductsCount( new ProductDAO(connection).getProductsCount() );
+            adminViewUsersWrapper.setClients(new ClientDAO(connection).searchForUsersByName(paginationNumber,keyword) );
+            connection.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(AdminFacadeHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return adminViewUsersWrapper;
+    }
+    
+    public List<AdminOrdersHistoryWrapper> getOrdersHistory(String userMail)
+    {
+        List<AdminOrdersHistoryWrapper> adminOrdersHistoryWrappers = new ArrayList<>();
+        List<OrderHistory> orders = new ArrayList<>();
+        
+        try {
+            Connection connection = ConnectionPool.getInstance().getConnection();
+            orders = new OrderHistoryDAO(connection).getAllOrders(userMail);
+            for( int i = 0 ; i < orders.size() ; i++ )
+            {
+                List<Product> products = new ArrayList<>();
+                AdminOrdersHistoryWrapper adminOrdersHistoryWrapper = new AdminOrdersHistoryWrapper();
+                adminOrdersHistoryWrapper.setOrder(orders.get(i));
+                adminOrdersHistoryWrapper.setItems(new OrderHistoryItemsDAO(connection).getOrderItems(orders.get(i).getId()));
+                for( int j = 0 ;  j < adminOrdersHistoryWrapper.getItems().size() ; j++ )
+                {
+                    Product product = new Product();
+                    product = this.getProductData(adminOrdersHistoryWrapper.getItems().get(j).getBookID());
+                    products.add(product);
+                }
+                adminOrdersHistoryWrapper.setProducts(products);
+                adminOrdersHistoryWrappers.add(adminOrdersHistoryWrapper);
+            }
+            connection.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(AdminFacadeHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return adminOrdersHistoryWrappers;
     }
 
 }
