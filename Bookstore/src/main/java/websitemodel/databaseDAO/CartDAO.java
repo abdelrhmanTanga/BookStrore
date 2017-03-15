@@ -73,24 +73,6 @@ public class CartDAO {
         return false;
     }
 
-    public boolean delete(Cart cartItem) throws SQLException {
-
-        try {
-            PreparedStatement statement = connection.prepareStatement(SQL_DELETE);
-            statement.setInt(1, cartItem.getBookID());
-            statement.setString(2, cartItem.getEmail());
-            if (statement.executeUpdate() > 0) {
-                return true;
-            }
-            connection.commit();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            connection.close();
-        }
-        return false;
-    }
-
     public List<Cart> readAll(String Email) throws SQLException {
         List<Cart> cartList = null;
         try {
@@ -103,7 +85,7 @@ public class CartDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            connection.close();
+            //connection.close();
         }
         return cartList;
     }
@@ -118,6 +100,7 @@ public class CartDAO {
                     list = new ArrayList<>();
                 }
                 cartItem = new Cart();
+                cartItem.setBookID(result.getInt("id"));
                 cartItem.setQuantity(result.getInt("quantity"));
                 list.add(cartItem);
             }
@@ -176,6 +159,8 @@ public class CartDAO {
                 cart.setQuantity(rs.getInt(2));
                 cartList.add(cart);
             }
+            pst.close();
+            rs.close();
             return cartList;
         } catch (SQLException ex) {
             Logger.getLogger(CartDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -193,9 +178,68 @@ public class CartDAO {
             Logger.getLogger(CartDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-//////////////////////////abdelrhman
 
+    public boolean isAlreadyAdded(Cart cart) {
+        try {
+            PreparedStatement pst = connection.prepareStatement("select * from cart where email = ? and id = ?");
+            pst.setString(1, cart.getEmail());
+            pst.setInt(2, cart.getBookID());
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                pst.close();
+                rs.close();
+                return true;
+            } else {
+                pst.close();
+                rs.close();
+                return false;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CartDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+
+    }
+
+    public Integer getItemsCount(Cart cart) {
+        try {
+            PreparedStatement pst = connection.prepareStatement("select count(*) from cart where email = ?");
+            pst.setString(1, cart.getEmail());
+            ResultSet rs = pst.executeQuery();
+            Integer cartSize = null;
+            if (rs.next()) {
+                cartSize = rs.getInt(1);
+                return cartSize;
+            } else {
+                return null;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CartDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+
+    }
+
+//////////////////////////abdelrhman
 ////////////////////////omnia
+    public boolean delete(Cart cartItem) throws SQLException {
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(SQL_DELETE);
+            statement.setInt(1, cartItem.getBookID());
+            statement.setString(2, cartItem.getEmail());
+            if (statement.executeUpdate() > 0) {
+                return true;
+            }
+            connection.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            connection.close();
+        }
+        return false;
+    }
+
 ///////////////////////omnia
 ////////////////////////mohamed
 ///////////////////////mohamed

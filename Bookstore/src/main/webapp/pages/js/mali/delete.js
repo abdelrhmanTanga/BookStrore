@@ -5,6 +5,7 @@ function deleteProduct(id)
 	id = id.replace("delete","");
 	id = parseInt(id);
 	deleteFinalName[0].setAttribute('id',id);
+	alert(id);
 }
 
 

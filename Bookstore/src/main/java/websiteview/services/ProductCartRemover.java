@@ -5,30 +5,18 @@
  */
 package websiteview.services;
 
-import Facade.CartHandler;
 import java.io.IOException;
 import java.io.PrintWriter;
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import websiteview.model.AddToCartWrapper;
 
 /**
  *
  * @author abdelrhman galal
  */
-public class ProductCartAdder extends HttpServlet {
-
-    CartHandler cartHandler;
-
-    @Override
-    public void init(ServletConfig config) throws ServletException {
-        super.init(config); //To change body of generated methods, choose Tools | Templates.
-        cartHandler = new CartHandler();
-    }
+public class ProductCartRemover extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,27 +29,10 @@ public class ProductCartAdder extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String productAdd = request.getParameter("productid");
         PrintWriter out = response.getWriter();
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            String email = (String) session.getAttribute("loggedIn");
-            AddToCartWrapper order = new AddToCartWrapper();
-            order.setId(Integer.parseInt(productAdd));
-            order.setEmail(email);
-            if (cartHandler.addToCart(order)) {
-                ///////////////////////// bussiness for add product
-                out.print("true");
-                System.out.println("true");
-            } else {
-                ///////////////////////// bussieness for not so much
-                out.print("false");
-                System.out.println("false");
-            }
-        } else {
-            //////////////////// bussiness for add product for not a signed in client
-            out.print("false");
-        }
+        System.out.println(request.getParameter("productid"));
+        out.print("true");
+        out.close();
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

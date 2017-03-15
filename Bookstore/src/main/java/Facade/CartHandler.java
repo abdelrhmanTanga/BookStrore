@@ -89,9 +89,14 @@ public class CartHandler {
                 cart.setEmail(order.getEmail());
                 cart.setBookID(order.getId());
                 CartDAO cartHandler = new CartDAO(connection);
-                if (cartHandler.addToCart(cart)) {
-                    connection.close();
-                    return true;
+                if (!cartHandler.isAlreadyAdded(cart)) {
+                    if (cartHandler.addToCart(cart)) {
+                        connection.close();
+                        return true;
+                    } else {
+                        connection.close();
+                        return false;
+                    }
                 } else {
                     connection.close();
                     return false;
@@ -157,55 +162,53 @@ public class CartHandler {
 
     }
 //omnia 
+
     public List<CartDTO> getCart(String Email) throws SQLException {
         Connection connection = ConnectionPool.getInstance().getConnection();
         ProductDAO productDAO = new ProductDAO(connection);
-        CartDTO cartdto = new CartDTO();
-      //  Cart initialCart = new Cart();
-        List<Cart> initialCart = null ;
-        List<ProductModel> cartBooks=null;
-        List<CartDTO> theCart = null;
-        CartDAO cartDAO = new CartDAO(connection);
-            initialCart = cartDAO.readAll(Email);
-              
-            if (initialCart != null && !initialCart.isEmpty()) {
-//                Iterator<Cart> iteratorCart = initialCart.iterator();
-//
-//               cartBooks = new ProductDAO().getProductInfo(iteratorCart.getID());
-//                
+        Connection connection1 = ConnectionPool.getInstance().getConnection();
+        CartDAO cartDAO = new CartDAO(connection1);
+        List<Product> productsInfo = new ArrayList<>();
+        List<Cart> initialCart = cartDAO.readAll(Email);
+        System.out.println(initialCart.get(0).getEmail());
+        if (initialCart != null) {
+            for (int i = 0; i < initialCart.size(); i++) {
+                Product product = new Product();
+                product = productDAO.getProductInfo(initialCart.get(i).getBookID());
+                productsInfo.add(product);
+            }
+            List<CartDTO> cartItems = new ArrayList<>();
+            for (int i = 0; i < productsInfo.size(); i++) {
+                
+                CartDTO cartDTO = new CartDTO();
+                productsInfo.get(i);
+                cartDTO.setISBN(productsInfo.get(i).getISBN());
+                cartDTO.setId(productsInfo.get(i).getId());
+                cartDTO.setImage(productsInfo.get(i).getImage());
+                cartDTO.setItemQuantity(initialCart.get(i).getQuantity());
+                cartDTO.setName(productsInfo.get(i).getName());
+                cartDTO.setPrice(productsInfo.get(i).getPrice());
+                cartItems.add(cartDTO);
+            }
 
-                connection.close();
-//                for (Iterator<ProductModel> iterator = cartBooks.iterator(); iterator.hasNext();) {
-//                 theCart .setName(cartBooks.iterator().getName()); 
-//                 theCart .setName(cartBooks.iterator().getISBN()); 
-//                }
-                  int i = 0;
-		while (i < cartBooks.size()) {
-                    theCart = new ArrayList<CartDTO>(); 
-                 theCart.get(i).setName(cartBooks.get(i).getName()); 
-                 theCart.get(i).setISBN(cartBooks.get(i).getISBN()); 
-                 theCart.get(i).setPrice(cartBooks.get(i).getPrice()); 
-                  theCart.get(i).setImage(cartBooks.get(i).getImage()); 
-			i++;
-		}
-
-       
+            return cartItems;
+        } else {
+            return null;
+        }
     }
 
-             return theCart;
-             
-    }}
-//    public boolean freeCart(String Email) {
-//        boolean deleted = false;
-//        try {
-//            deleted = CartDAO.freeCartOfClient(Email);
-//
-//        } catch (SQLException ex) {
-//            ex.printStackTrace();
-//        }
-//        return deleted;
-//
-//    }
-
-
-
+    public Integer getCartItems(String email) {
+        try {
+            Connection connection = ConnectionPool.getInstance().getConnection();
+            CartDAO cartDAO = new CartDAO(connection);
+            Cart cart = new Cart();
+            cart.setEmail(email);
+            Integer cartSize = cartDAO.getItemsCount(cart);
+            connection.close();
+            return cartSize;
+        } catch (SQLException ex) {
+            Logger.getLogger(CartHandler.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+}

@@ -7,27 +7,25 @@ package adminpackage.adminview;
 
 import Facade.AdminFacadeHandler;
 import adminpackage.adminmodel.HomePageWrapper;
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import websitemodel.databaseDAO.CategoryDAO;
 
 /**
  *
  * @author TOSHIBA
  */
-@WebServlet(name = "HomeServletController", urlPatterns = {"/HomeServletController"})
-public class HomeServletController extends HttpServlet {
+@WebServlet(name = "SearchProductController", urlPatterns = {"/SearchProductController"})
+public class SearchProductController extends HttpServlet {
 
-    AdminFacadeHandler adminFacadeHandler;
-    
-    ServletContext context;
+     AdminFacadeHandler adminFacadeHandler;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -37,37 +35,39 @@ public class HomeServletController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    
-    @Override
-    public void init(ServletConfig config)
-            throws ServletException {
-        context = config.getServletContext();
-        super.init(config); //To change body of generated methods, choose Tools | Templates.
-        
-    }
-    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //response.setContentType("text/html;charset=UTF-8");
-       adminFacadeHandler = new AdminFacadeHandler();
-       HomePageWrapper homePageWrapper;
-       if( request.getParameter("page") == null )
-       {
-           homePageWrapper = adminFacadeHandler.adminHomePage(1);
-       }else
-       {
-            String paginationNumber = request.getParameter("page");
-            homePageWrapper = adminFacadeHandler.adminHomePage(Integer.parseInt(paginationNumber)); 
-       }
-      
-       
-       request.setAttribute("usersCount", homePageWrapper.getUsersCount() );
-       request.setAttribute("productsCount", homePageWrapper.getProductsCount() );
-       request.setAttribute("products", homePageWrapper.getProducts() );
-       request.setAttribute("categories", homePageWrapper.getCategories());
-       
-       RequestDispatcher rd = request.getRequestDispatcher("pages/Home.jsp");
-       rd.forward(request, response);
+        response.setContentType("application/json;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            adminFacadeHandler = new AdminFacadeHandler();
+            HomePageWrapper homePageWrapper;
+            if( request.getParameter("keyword") != null && !request.getParameter("keyword").equals("")  )
+            {
+                String keyword = request.getParameter("keyword");
+                System.out.println(keyword);
+                int paginationNumber = 1;
+                String categoryName = "";
+                                
+                if( request.getParameter("page") != null )
+                     paginationNumber = Integer.parseInt(request.getParameter("page"));
+                
+                if( request.getParameter("category") != null && !request.getParameter("category").equals("All Categories") )
+                     categoryName = request.getParameter("category");
+                
+                homePageWrapper = adminFacadeHandler.adminHomePageSearch(paginationNumber, keyword,categoryName ); 
+                System.out.println(homePageWrapper.getProducts().size());
+                //request.setAttribute("usersCount", homePageWrapper.getUsersCount() );
+                //request.setAttribute("productsCount", homePageWrapper.getProductsCount() );
+                //request.setAttribute("products", homePageWrapper.getProducts() );
+                //request.setAttribute("categories", homePageWrapper.getCategories());
+                Gson content = new Gson();
+                out.print(content.toJson(homePageWrapper));
+                System.out.println(content.toJson(homePageWrapper));
+            }
+                //RequestDispatcher rd = request.getRequestDispatcher("pages/Home.jsp");
+                //rd.forward(request, response);
+        }
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

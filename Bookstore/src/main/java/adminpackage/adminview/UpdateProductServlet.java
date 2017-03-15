@@ -7,15 +7,14 @@ package adminpackage.adminview;
 
 import Facade.AdminFacadeHandler;
 import adminpackage.adminmodel.AdminUpdateProductWrapper;
-import adminpackage.adminmodel.AdminViewProduct;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -65,7 +64,8 @@ public class UpdateProductServlet extends HttpServlet {
             PrintWriter out = response.getWriter();
        
             String value = "defa";
-            Product product = new Product();
+            AdminUpdateProductWrapper product = new AdminUpdateProductWrapper();
+            
             
             try {
                 DiskFileItemFactory factory = new DiskFileItemFactory();
@@ -98,7 +98,7 @@ public class UpdateProductServlet extends HttpServlet {
                                 product.setDescription(value);
                                 break;
                             case "category":
-                                product.setCategory(Integer.parseInt(value));
+                                product.setCategory(value);
                                 break;
                             case "price":
                                 product.setPrice(Integer.parseInt(value));
@@ -107,12 +107,14 @@ public class UpdateProductServlet extends HttpServlet {
                     } else {
                         
                         try {
-                            //response.setContentLength((int) item.getSize() + 1000);
-                            System.out.println(item.getName());
-                            item.write(new File(context.getRealPath("/pages/images/").replaceAll("\\\\target\\\\MavenOnlineShoping-1.0-SNAPSHOT", "\\\\src\\\\main\\\\webapp") + item.getName()));
-                            System.out.println(context.getRealPath("/pages/images/").replaceAll("\\\\target\\\\MavenOnlineShoping-1.0-SNAPSHOT", "\\\\src\\\\main\\\\webapp") + item.getName());
-                            url = context.getRealPath("/pages/images/").replaceAll("\\\\target\\\\MavenOnlineShoping-1.0-SNAPSHOT", "\\\\src\\\\main\\\\webapp") + item.getName();
-                            product.setImage(url);
+                            if( item.getName().length() > 0 )
+                            {
+                                item.write(new File(context.getRealPath("/pages/images/").replaceAll("\\\\target\\\\MavenOnlineShoping-1.0-SNAPSHOT", "\\\\src\\\\main\\\\webapp") + item.getName()));
+                                //System.out.println(context.getRealPath("/pages/images/").replaceAll("\\\\target\\\\MavenOnlineShoping-1.0-SNAPSHOT", "\\\\src\\\\main\\\\webapp") + item.getName());
+                                //url = context.getRealPath("/pages/images/").replaceAll("\\\\target\\\\MavenOnlineShoping-1.0-SNAPSHOT", "\\\\src\\\\main\\\\webapp") + item.getName();
+                                UUID idOne = UUID.randomUUID();
+                                product.setImage( idOne.toString()+  item.getName().substring(item.getName().length() - 4) );
+                            }
                         } catch (Exception ex) {
                             Logger.getLogger(UpdateProductServlet.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -122,9 +124,11 @@ public class UpdateProductServlet extends HttpServlet {
                 Logger.getLogger(UpdateProductServlet.class.getName()).log(Level.SEVERE, null, ex);
             }
             
+            System.out.println("adminpackage.adminview.UpdateProductServlet.processRequest()");
+            out.print(adminFacadeHandler.UpdateProduct(product));
             if( value != null )
             {
-                out.println(adminFacadeHandler.UpdateProduct(product));
+                
             }
             
         }

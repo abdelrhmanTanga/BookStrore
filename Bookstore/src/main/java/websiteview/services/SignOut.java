@@ -7,6 +7,8 @@ package websiteview.services;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -28,23 +30,36 @@ public class SignOut extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    ServletContext context;
+
+    @Override
+    public void init(ServletConfig config)
+            throws ServletException {
+        super.init(config); //To change body of generated methods, choose Tools | Templates.
+        context = config.getServletContext();
+    }
+
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         PrintWriter out = response.getWriter();
         HttpSession session = request.getSession(false);
         if (session != null) {
-            String status = (String) session.getAttribute("LoggedIn");
-            if (status.equals("true")) {
+            String status = (String) session.getAttribute("loggedIn");
+            if (status != null) {
                 session.invalidate();
+                context.removeAttribute(status);
                 //////// Save cart to database
+
                 ////////redirect to the home jsp with sign in option 
                 out.println("true");
+                response.sendRedirect("/BookStore/productviewer");
             } else {
                 ////////redirect to the home jsp with the sign in option
-                out.println("false");
+                response.sendRedirect("/BookStore/signinpage.jsp");
             }
         } else {
             //////// redirect to the home jsp witht the sign in option
+            response.sendRedirect("/BookStore/signinpage.jsp");
+
         }
     }
 

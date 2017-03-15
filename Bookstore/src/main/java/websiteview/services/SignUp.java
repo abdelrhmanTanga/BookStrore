@@ -8,6 +8,7 @@ package websiteview.services;
 import Facade.Session;
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -21,6 +22,8 @@ import websiteview.model.SignUpDTO;
  */
 @WebServlet(name = "SignUp", urlPatterns = {"/SignUp"})
 public class SignUp extends HttpServlet {
+
+    Session session;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -60,7 +63,7 @@ public class SignUp extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        System.out.println("in sign up");
     }
 
     /**
@@ -75,19 +78,53 @@ public class SignUp extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         SignUpDTO signupDTO = new SignUpDTO();
-        Session session = new Session();
-        signupDTO.setUserName(request.getParameter("name"));
-        signupDTO.setPassword(request.getParameter("password"));
-        signupDTO.setAddress(request.getParameter("address"));
-        signupDTO.setPhone(Integer.parseInt(request.getParameter("phone")));
-        signupDTO.setCountry(request.getParameter("country"));
-        signupDTO.setEmail(request.getParameter("email"));
-        signupDTO.setCreditCardLimits(Integer.parseInt(request.getParameter("creditcard")));
-        signupDTO.setBirthday(request.getParameter("BirthDay"));
-        signupDTO.setGender(request.getParameter("gender"));
-        signupDTO.setJob(request.getParameter("job"));
-        signupDTO.setFavouriteCategory(request.getParameter("favourite"));
-        session.signUp(signupDTO);
+        session = new Session();
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        String address = request.getParameter("address");
+        String phoneStr = request.getParameter("phone");
+        int phone = 0;
+        if (phoneStr != null && !phoneStr.equals("")) {
+            phone = Integer.parseInt(phoneStr);
+        }
+
+        String country = request.getParameter("country");
+        String email = request.getParameter("email");
+        String creditString = request.getParameter("credit");
+        int credit = 0;
+        if (creditString != null && !creditString.equals("")) {
+            credit = Integer.parseInt(creditString);
+        }
+
+        String birthday = request.getParameter("birthday");
+        String gender = request.getParameter("gender");
+        String job = request.getParameter("job");
+        String favorites = request.getParameter("favorites");
+        if (username != null && password != null && address != null && phone != 0 && country != null
+                && email != null && credit != 0 && birthday != null && gender != null && job != null && favorites != null) {
+            signupDTO.setUserName(username);
+            signupDTO.setPassword(password);
+            signupDTO.setAddress(address);
+            signupDTO.setPhone(phone);
+            signupDTO.setCountry(country);
+            signupDTO.setEmail(email);
+            signupDTO.setCreditCardLimits(credit);
+            signupDTO.setBirthday(birthday);
+            signupDTO.setGender(gender);
+            signupDTO.setJob(job);
+            signupDTO.setFavouriteCategory(favorites);
+            if (session.signUp(signupDTO)) {
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/pages/signinpage.jsp");
+                requestDispatcher.forward(request, response);
+
+            } else {
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/pages/signuppage.jsp");
+                requestDispatcher.forward(request, response);
+            }
+        } else {
+            PrintWriter out = response.getWriter();
+            response.sendRedirect("/BookStore/pages/signuppage.jsp");
+        }
     }
 
     /**

@@ -43,6 +43,10 @@
         <servlet-name>SearchByPrice</servlet-name>
         <servlet-class>websiteview.services.SearchByPrice</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ProductCartRemover</servlet-name>
+        <servlet-class>websiteview.services.ProductCartRemover</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SignIn</servlet-name>
         <url-pattern>/SignIn</url-pattern>
@@ -78,6 +82,10 @@
     <servlet-mapping>
         <servlet-name>SearchByPrice</servlet-name>
         <url-pattern>/SearchByPrice</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProductCartRemover</servlet-name>
+        <url-pattern>/removeitem</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
