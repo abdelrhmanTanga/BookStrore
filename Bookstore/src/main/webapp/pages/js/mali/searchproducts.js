@@ -23,18 +23,14 @@ function productSearch(s)
 				$("#productCount2").text(data.productsCount);
                 mytbody = document.getElementById("tbody");
 				mytbody.parentElement.removeChild(mytbody);
-			
-				var length = data.productsCount;
-				if( data.productsCount > 10 )
-					length = 10;
-					
+
 			
 				 var mytable = document.getElementById("mytable");
 				 var tbody = document.createElement("tbody");
 			     tbody.setAttribute('id','tbody');
 				 mytable.appendChild(tbody);
 			
-				for( var i = 0 ; i < length ; i++ )
+				for( var i = 0 ; i <  data.products.length ; i++ )
 				{
 				    pid =  data.products[i].id;
 					
