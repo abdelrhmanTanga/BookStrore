@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import websitemodel.databaseDTO.Category;
+import websitemodel.databaseDTO.Product;
 
 /**
  *
@@ -229,5 +231,49 @@ public class ClientDAO {
             Logger.getLogger(ClientDAO.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
+    }
+    
+    public int getUserCountBySearch(String keyword)
+    {
+        int number = 0;
+        PreparedStatement pst;
+        try {
+            pst = connection.prepareStatement("SELECT count(email) FROM client WHERE email LIKE '%" + keyword + "%'");
+            ResultSet rs = pst.executeQuery();
+            rs.next();
+            String count = rs.getString(1);
+            number = Integer.parseInt(count);
+            pst.close();
+            rs.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return number;
+    }
+    
+    public List<Client> searchForUsersByName(int paginationNumber,String keyword) {
+        List<Client> clients = new ArrayList<>();
+        try {
+            PreparedStatement pst;
+            pst = connection.prepareStatement("SELECT * FROM (select p.*, rownum r from client p where email like '%"+keyword+"%') where r > ? and r <= ?");
+            pst.setInt(1, (paginationNumber * 10) - 10);
+            pst.setInt(2, (paginationNumber * 10) );
+           
+            
+            ResultSet rs = pst.executeQuery();
+            
+            //rs.
+            while (rs.next()) {
+                Client client;
+                client = new Client(rs.getString("email"), rs.getString("name"), rs.getLong("credit"),
+                        rs.getString("password"), rs.getLong("phone"), rs.getString("address"), rs.getString("country"), rs.getString("gender"), rs.getString("dob"), rs.getString("job"));
+                clients.add(client);
+            }
+            pst.close();
+            rs.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return clients;
     }
 }

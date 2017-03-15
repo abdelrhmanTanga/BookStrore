@@ -6,7 +6,7 @@
 package adminpackage.adminview;
 
 import Facade.AdminFacadeHandler;
-import adminpackage.adminmodel.HomePageWrapper;
+import adminpackage.adminmodel.AdminViewUsersWrapper;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -16,15 +16,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import websitemodel.databaseDAO.CategoryDAO;
 
 /**
  *
  * @author TOSHIBA
  */
-@WebServlet(name = "SearchProductController", urlPatterns = {"/SearchProductController"})
-public class SearchProductController extends HttpServlet {
-
+@WebServlet(name = "SearchUsersController", urlPatterns = {"/SearchUsersController"})
+public class SearchUsersController extends HttpServlet {
      AdminFacadeHandler adminFacadeHandler;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,35 +37,21 @@ public class SearchProductController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("application/json;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
             adminFacadeHandler = new AdminFacadeHandler();
-            HomePageWrapper homePageWrapper;
-            if( request.getParameter("keyword") != null && !request.getParameter("keyword").equals("")  )
-            {
+            AdminViewUsersWrapper adminViewUsersWrapper;
+            if( request.getParameter("keyword") != null )
+            { 
                 String keyword = request.getParameter("keyword");
-                System.out.println(keyword);
-                int paginationNumber = 1;
-                String categoryName = "";
-                                
+                int page = 1;
                 if( request.getParameter("page") != null )
-                     paginationNumber = Integer.parseInt(request.getParameter("page"));
-                
-                if( request.getParameter("category") != null && !request.getParameter("category").equals("All Categories") )
-                     categoryName = request.getParameter("category");
-                
-                homePageWrapper = adminFacadeHandler.adminHomePageSearch(paginationNumber, keyword,categoryName ); 
-                System.out.println(homePageWrapper.getProducts().size());
-                //request.setAttribute("usersCount", homePageWrapper.getUsersCount() );
-                //request.setAttribute("productsCount", homePageWrapper.getProductsCount() );
-                //request.setAttribute("products", homePageWrapper.getProducts() );
-                //request.setAttribute("categories", homePageWrapper.getCategories());
-                Gson content = new Gson();
-                out.print(content.toJson(homePageWrapper));
-                System.out.println(content.toJson(homePageWrapper));
+                    page = Integer.parseInt(request.getParameter("page"));
+                adminViewUsersWrapper = adminFacadeHandler.adminViewUsersSearchPage(page,keyword);
+                Gson clients = new Gson();
+                System.out.println(clients.toJson(adminViewUsersWrapper));
+                out.print(clients.toJson(adminViewUsersWrapper));
             }
-               // RequestDispatcher rd = request.getRequestDispatcher("pages/ViewUsers.jsp");
-               // rd.forward(request, response);
         }
-        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

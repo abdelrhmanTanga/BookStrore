@@ -61,9 +61,6 @@
 
                             </form>
 
-
-
-
                         </li>                    
                     </ul>
 
@@ -118,7 +115,7 @@
                             </a>                                  
                         </li>
                         <li>                     
-                            <a class="" href="ViewUsers.jsp">
+                            <a class="" href="ViewUsersController">
                                 <i class="icon_group"></i>
                                 <span>View Customers</span>
                             </a>
@@ -430,7 +427,7 @@
                                 Licensing information: https://bootstrapmade.com/license/
                                 Purchase the pro version form: https://bootstrapmade.com/buy/?theme=NiceAdmin
                         -->
-                        <a href="https://bootstrapmade.com/free-business-bootstrap-themes-website-templates/">This Website Is made </a> by <a href="https://bootstrapmade.com/">The Forth Team</a>
+                        <a href="#">This Website Is made </a> by <a href="#">The Forth Team</a>
                     </div>
                 </div>
 

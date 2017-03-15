@@ -16,8 +16,10 @@ function makePagination(productsCount,check)
 		mya.innerHTML = i+1;
 		if( check == 1 )
 			mya.setAttribute('href','HomeServletController?page='+(i+1));
-		else
-			mya.setAttribute('href','javascript:productSearch('+i+')');
+		else if( check == 2 )
+			mya.setAttribute('href','javascript:productSearch('+(i+1)+')');
+		else if( check == 3 )
+			mya.setAttribute('href','javascript:searchUsers('+(i+1)+')');
 		myli.appendChild(mya);
 		pagination.appendChild(myli);
 	}
