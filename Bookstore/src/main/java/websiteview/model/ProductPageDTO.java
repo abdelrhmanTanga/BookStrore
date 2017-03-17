@@ -19,6 +19,8 @@ public class ProductPageDTO {
     private String reviews;
     private int price;
     private String image;
+    private int quantity;
+    private int id;
 
     public String getName() {
         return name;
@@ -82,6 +84,22 @@ public class ProductPageDTO {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
 }

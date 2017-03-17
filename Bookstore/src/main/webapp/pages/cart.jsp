@@ -73,8 +73,8 @@
                                     </td>
                                     <td class="cart_quantity">
                                         <div class="cart_quantity_button">
-                                            <input class="cart_quantity_input" id="${cartItem.id}text" type="text" name="quantity" readonly="" value="${cartItem.itemQuantity}" autocomplete="off" size="2">
-                                            <button class="btn btn-default" style="margin-left: 10%; width: 30%" onclick="updateEnable(${cartItem.id}, this)">edit</button>
+                                            <input class="cart_quantity_input" style="width: 10%" id="${cartItem.id}text" type="number" name="quantity" readonly="" value="${cartItem.itemQuantity}" autocomplete="off" size="2">
+                                            <button class="btn btn-default" style="margin-left: 10%; width: 15%" onclick="updateEnable(${cartItem.id}, this)">edit</button>
                                         </div>
                                     </td>
                                     <td class="cart_total">
@@ -92,6 +92,7 @@
                     </table>
                 </div>
                 <a class="btn btn-primary" onclick="doCheckOut()">Check out</a>
+                <div id="error"></div>
             </div>
         </section> <!--/#cart_items-->
         <script>
@@ -107,7 +108,7 @@
                         if (data == "true") {
                             document.getElementById(clicked_id).parentElement.removeChild(document.getElementById(clicked_id));
                         } else {
-                            ///////////// logic handle failure
+                            
                         }
                     }
                 });
@@ -121,31 +122,33 @@
                 console.log("here in quantity");
                 var elementText = document.getElementById(clicked_id + "text");
                 var quantity = elementText.value;
-                //var quantity = element2.value;
-                console.log(quantity);
-                $.ajax({
-                    url: "/BookStore/update",
-                    type: 'POST',
-                    data: "productid=" + clicked_id + "&quantity=" + quantity,
-                    dataType: 'text',
-                    success: function (data, textStatus, jqXHR) {
-                        if (data == "true") {
-                            elementText.setAttribute("readonly", "");
-                            element.setAttribute("onclick", "updateEnable(" + clicked_id + ", this)");
-                            element.innerHTML = "edit";
-                            var quantityElement = document.getElementById(clicked_id + "quantity");
-                            var productPrice = quantityElement.getAttribute("price");
-                            quantityElement.innerHTML = parseInt(quantity) * parseInt(productPrice);
-                        } else {
-                            ///////////// logic handle failure
+                if (quantity > 0) {
+                    //var quantity = element2.value;
+                    console.log(quantity);
+                    $.ajax({
+                        url: "/BookStore/update",
+                        type: 'POST',
+                        data: "productid=" + clicked_id + "&quantity=" + quantity,
+                        dataType: 'text',
+                        success: function (data, textStatus, jqXHR) {
+                            if (data == "true") {
+                                elementText.setAttribute("readonly", "");
+                                element.setAttribute("onclick", "updateEnable(" + clicked_id + ", this)");
+                                element.innerHTML = "edit";
+                                var quantityElement = document.getElementById(clicked_id + "quantity");
+                                var productPrice = quantityElement.getAttribute("price");
+                                quantityElement.innerHTML = parseInt(quantity) * parseInt(productPrice);
+                            } else {
+                                ///////////// logic handle failure
+                                var error = document.getElementById("error");
+                            error.innerHTML = "<div class='alert alert-danger alert-dismissable col-sm-3'><a href='#' class='close' data-dismiss='alert' aria-label='close'>×</a>There is not enough quantity of that product to purchase.";
+                            }
                         }
-                    }
-                });
-
-
-                elementText.setAttribute("readonly", "");
-                element.setAttribute("onclick", "updateEnable(" + clicked_id + ",this)");
-                element.innerHTML = "edit";
+                    });
+                } else {
+                    quantity = 1;
+                    elementText.value = quantity;
+                }
             }
 
             function updateEnable(clicked_id, element) {
@@ -164,11 +167,15 @@
                     url: "/BookStore/checkout",
                     type: 'POST',
                     success: function (data, textStatus, jqXHR) {
+                        console.log(data);
                         if (data == 'true') {
                             console.log(data);
                             window.location.href = "/BookStore/productviewer";
                         } else {
                             ///what ever
+                            var error = document.getElementById("error");
+                            error.innerHTML = "<div class='alert alert-danger alert-dismissable col-sm-3'><a href='#' class='close' data-dismiss='alert' aria-label='close'>×</a>There is not enough quantity of that product to purchase.";
+                            console.log(data);
                         }
 
                     }

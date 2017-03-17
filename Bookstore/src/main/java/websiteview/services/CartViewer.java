@@ -59,6 +59,7 @@ public class CartViewer extends HttpServlet {
             System.out.println("first");
             /////////// code to handle logged in clients
             List<CartDTO> items = cartHandler.getCart(email);
+            System.out.println("second");
             if (items != null){
                 request.setAttribute("cartlist", items);
                 //out.println("second");
