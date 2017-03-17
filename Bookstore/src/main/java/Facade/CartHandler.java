@@ -71,15 +71,25 @@ public class CartHandler {
 
                         ///////////////////// fill order info IN PROGRESS
                         orderInfo = fillOrderInfo(orderInfo, orderId, productList, client);
+                        connection.close();
+                        connection1.close();
+                        connection2.close();
                         return orderInfo;
                     } else {
+                        connection.close();
+                        connection1.close();
+                        connection2.close();
                         return null;
                     }
                 } else {
+                    connection.close();
+                    connection1.close();
+                    connection2.close();
                     return null;
                 }
 
             } else {
+                connection.close();
                 return null;
             }
         } catch (SQLException ex) {
@@ -160,20 +170,20 @@ public class CartHandler {
         }
         return 0;
     }
-
-    public void test() {
-        try {
-            Connection connection = ConnectionPool.getInstance().getConnection();
-            OrderHistoryDAO orderHistoryDAO = new OrderHistoryDAO(connection);
-            OrderHistory orderHistory = new OrderHistory();
-            orderHistory.setEmail("abdo@gmail.com");
-            orderHistoryDAO.addOrder(orderHistory);
-
-        } catch (SQLException ex) {
-            Logger.getLogger(CartHandler.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }
+//
+//    public void test() {
+//        try {
+//            Connection connection = ConnectionPool.getInstance().getConnection();
+//            OrderHistoryDAO orderHistoryDAO = new OrderHistoryDAO(connection);
+//            OrderHistory orderHistory = new OrderHistory();
+//            orderHistory.setEmail("abdo@gmail.com");
+//            orderHistoryDAO.addOrder(orderHistory);
+//
+//        } catch (SQLException ex) {
+//            Logger.getLogger(CartHandler.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//
+//    }
 //omnia 
 
     public List<CartDTO> getCart(String Email) throws SQLException {
@@ -200,9 +210,12 @@ public class CartHandler {
                 cartDTO.setPrice(productsInfo.get(i).getPrice());
                 cartItems.add(cartDTO);
             }
-
+            connection.close();
+            connection1.close();
             return cartItems;
         } else {
+            connection.close();
+            connection1.close();
             return null;
         }
     }
@@ -295,6 +308,6 @@ public class CartHandler {
         } catch (SQLException ex) {
             Logger.getLogger(CartHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
 }

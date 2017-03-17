@@ -103,6 +103,8 @@ public class ProductHandler {
                 productPageDTO.setName(product.getName());
                 productPageDTO.setPrice(product.getPrice());
                 productPageDTO.setReviews(product.getReviews());
+                productPageDTO.setQuantity(product.getQuantity());
+                productPageDTO.setId(product.getId());
                 connection.close();
                 return productPageDTO;
             } else {

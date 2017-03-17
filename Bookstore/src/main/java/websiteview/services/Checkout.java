@@ -44,6 +44,7 @@ public class Checkout extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
+        PrintWriter out = response.getWriter();
         if (session != null) {
             System.out.println("checking out");
             String email = (String) session.getAttribute("loggedIn");
@@ -56,12 +57,14 @@ public class Checkout extends HttpServlet {
                 System.out.println("checkout done");
                 System.out.println("orderInfo :" + orderInfo.getProducts().elementAt(0).getAuthor());
                 request.setAttribute("orderInfo", orderInfo);
-                RequestDispatcher dispatcher = request.getRequestDispatcher("");
-                dispatcher.include(request, response);
+                
+                out.print("true");
             } else {
+                out.print("false");
                 ///////////////// logic for not signed in
             }
         } else {
+            out.print("false");
             ////////////////////// logic for not signed in (redirect to sign in page)
         }
     }
