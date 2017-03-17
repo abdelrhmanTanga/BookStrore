@@ -113,7 +113,7 @@ public class ProductHandler {
 
             Connection conn = ConnectionPool.getInstance().getConnection();
             ProductDAO productDAO = new ProductDAO(conn);
-            List<Product> products = productDAO.search(search.getSearchKey());
+            List<Product> products = productDAO.search(search.getSearchKey(),search.getCategoryID());
             List<ProductModel> viewProducts = new ArrayList<>();
             for (int i = 0; i < products.size(); i++) {
                 ProductModel productView = new ProductModel();

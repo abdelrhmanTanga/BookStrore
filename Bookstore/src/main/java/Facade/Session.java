@@ -14,6 +14,7 @@ import websitemodel.databaseDAO.CartDAO;
 import websitemodel.databaseDAO.ClientDAO;
 import websitemodel.databaseDTO.Cart;
 import websitemodel.databaseDTO.Client;
+import websiteview.model.ClientDTO;
 import websiteview.model.SignInDTO;
 import websiteview.model.SignUpDTO;
 
@@ -134,4 +135,38 @@ public class Session {
     }
 
     /////////////////////////////////
+    public ClientDTO getProfileData(String email)
+    {
+        ClientDTO clientdto = null;
+        try {
+            Connection connection= ConnectionPool.getInstance().getConnection();
+            ClientDAO clientdao=new ClientDAO(connection);
+             clientdto= new ClientDTO();
+           Client client= clientdao.getClientInfo(email);
+           if(client!=null){
+           clientdto.setUserName(client.getName());
+           clientdto.setPassword(client.getPassword());
+           clientdto.setAddress(client.getAddress());
+           clientdto.setBirthDay(client.getBirthday());
+           clientdto.setCountry(client.getCountry());
+           clientdto.setCredit(client.getCredit());
+           clientdto.setJob(client.getJob());
+           clientdto.setGender(client.getGender());
+           clientdto.setPhone(client.getPhone());
+           connection.close();
+           return clientdto;
+           }
+           else{
+               connection.close();
+               return null;}
+        } catch (SQLException ex) {
+            Logger.getLogger(Session.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+     
+        }
+     
+    }
+    
+    //////////////////////////////////
+    
 }

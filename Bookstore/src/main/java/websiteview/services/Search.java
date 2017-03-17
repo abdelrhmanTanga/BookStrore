@@ -16,6 +16,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import websitemodel.databaseDTO.Product;
 import websiteview.model.HeaderCategories;
 import websiteview.model.ProductModel;
@@ -80,15 +81,31 @@ public class Search extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
         SearchDTO searchDTO = new SearchDTO();
         ProductHandler productHandler = new ProductHandler();
-        searchDTO.setSearchKey(request.getParameter("searchkey"));
-        List<ProductModel> products = productHandler.search(searchDTO);
-        request.setAttribute("products", products);
-        Vector<HeaderCategories> categories = productHandler.getCategories();
-        if (categories != null) {
-            request.setAttribute("categories", categories);
+        if (session != null) {
+            String selectedCategory = (String) session.getAttribute("selectedCategory");
+            if (selectedCategory != null && !selectedCategory.equals("")) {
+                searchDTO.setSearchKey(request.getParameter("searchkey"));
+                searchDTO.setCategoryID(Integer.parseInt(selectedCategory));
+                List<ProductModel> products = productHandler.search(searchDTO);
+                request.setAttribute("products", products);
+                Vector<HeaderCategories> categories = productHandler.getCategories();
+                if (categories != null) {
+                    request.setAttribute("categories", categories);
+                }
+            } else {
+                searchDTO.setSearchKey(request.getParameter("searchkey"));
+                List<ProductModel> products = productHandler.search(searchDTO);
+                request.setAttribute("products", products);
+                Vector<HeaderCategories> categories = productHandler.getCategories();
+                if (categories != null) {
+                    request.setAttribute("categories", categories);
+                }
+            }
         }
+
         RequestDispatcher dispatcher1 = request.getRequestDispatcher("/pages/navbar.jsp");
         dispatcher1.include(request, response);
         RequestDispatcher dispatcher2 = request.getRequestDispatcher("/pages/categoryBar.jsp");

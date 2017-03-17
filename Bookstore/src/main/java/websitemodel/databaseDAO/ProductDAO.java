@@ -356,17 +356,29 @@ public class ProductDAO {
 
     //mohamed ali end
     /////////////////////////search
-    public List<Product> search(String searchKey) {
+    public List<Product> search(String searchKey,int categoryID) {
         List<Product> products = new ArrayList();
 
+        ///searchkey & category
+        //Search key w bs
+        
         try {
             if (searchKey == null) {
                 pst = connection.prepareStatement("SELECT * FROM product");
 
-            } else {
+            } 
+            else if(categoryID==0&&!searchKey.isEmpty())
+            {
                 pst = connection.prepareStatement("SELECT * FROM product where name like ? UNION SELECT * FROM product where author like ?");
                 pst.setString(1, "%" + searchKey + "%");
                 pst.setString(2, "%" + searchKey + "%");
+            }
+            else  {
+                pst = connection.prepareStatement("SELECT * FROM product where name like ? and category=? UNION SELECT * FROM product where author like ? and category=?");
+                pst.setString(1, "%" + searchKey + "%");
+                pst.setInt(2, categoryID);
+                pst.setString(3, "%" + searchKey + "%");
+                pst.setInt(4,categoryID);
 
             }
 
