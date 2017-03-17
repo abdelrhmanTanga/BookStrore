@@ -98,7 +98,7 @@ public class ProductAddition extends HttpServlet {
                 //url = context.getRealPath("/pages/images/").replaceAll("\\\\target\\\\MavenOnlineShoping-1.0-SNAPSHOT", "\\\\src\\\\main\\\\webapp") + item.getName();
                 UUID idOne = UUID.randomUUID();
                 product.setImage( idOne.toString()+  item.getName().substring(item.getName().length() - 4) );
-                item.write(new File(context.getRealPath("/pages/images/").replaceAll("\\\\target\\\\MavenOnlineShoping-1.0-SNAPSHOT", "\\\\src\\\\main\\\\webapp") +  idOne.toString()+  item.getName().substring(item.getName().length() - 4)));
+                item.write(new File(context.getRealPath("/pages/images/").replaceAll("\\\\target\\\\MavenOnlineShoping-1.0-SNAPSHOT", "\\\\src\\\\main\\\\webapp") +  idOne.toString()+  item.getName().substring(item.getName().length() - 4)) );
             }
         }
         

@@ -26,19 +26,19 @@
         <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/ico/apple-touch-icon-114-precomposed.png">
         <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
         <link rel="apple-touch-icon-precomposed" href="images/ico/apple-touch-icon-57-precomposed.png">
-         <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+        <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
         <%-- <%@page import="Facade.CartHandler"%>
         <%-- <%@page import="websiteview.model.CartDTO"%>
        
         <%-- <jsp:useBean id="CartHandler" scope="page" class="" /> 
         <jsp:useBean id="email" scope="session" type="" />--%>
-       
+
 
         <c:set var="total" value="0"/>
     </head>
     <body>
         <section id="cart_items">
-            <div class="container">
+            <div class="container  col-sm-12">
                 <div class="breadcrumbs">
                     <ol class="breadcrumb">
                         <li><a href="#">Home</a></li>
@@ -58,11 +58,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <c:forEach items="${cartList}" var="cartItem">
+                            <c:forEach items="${cartlist}" var="cartItem">
 
-                                <tr>
+                                <tr id="${cartItem.id}">
                                     <td class="cart_product">
-                                        <a href=""><img src="${'/OnlineBookstore/imageloader?path='.concat(product.image)}" alt=""></a>
+                                        <a href="/BookStore/productpage?productid=${cartItem.id}"><img src="${pageContext.request.contextPath}/pages/images/${cartItem.image}" alt="" height="100" width="100"></a>
                                     </td>
                                     <td class="cart_description">
                                         <h4><a href="">${cartItem.name}</a></h4>
@@ -73,25 +73,108 @@
                                     </td>
                                     <td class="cart_quantity">
                                         <div class="cart_quantity_button">
-                                            <a class="cart_quantity_up" href=""> + </a>
-                                            <input class="cart_quantity_input" type="text" name="quantity" value="${cartItem.itemQuantity}" autocomplete="off" size="2">
-                                            <a class="cart_quantity_down" href=""> - </a>
+                                            <input class="cart_quantity_input" id="${cartItem.id}text" type="text" name="quantity" readonly="" value="${cartItem.itemQuantity}" autocomplete="off" size="2">
+                                            <button class="btn btn-default" style="margin-left: 10%; width: 30%" onclick="updateEnable(${cartItem.id}, this)">edit</button>
                                         </div>
                                     </td>
                                     <td class="cart_total">
-                                        <p class="cart_total_price">${cartItem.price * cartItem.itemQuantity}</p>
+                                        <p class="cart_total_price" price="${cartItem.price}" id="${cartItem.id}quantity">${cartItem.price * cartItem.itemQuantity}</p>
                                     </td>
                                     <td class="cart_delete">
-                                        <a class="cart_quantity_delete" href=""><i class="fa fa-times"></i></a>
+                                        <button class="cart_quantity_delete" onclick="deleteProduct(${cartItem.id})"><i class="fa fa-times"></i></button>
                                     </td>
+
                                 </tr>
 
-                                <c:set var="total" value="${cartItem.getCount()}"/>
+                                <c:set var="total" value="30"/>
                             </c:forEach>  
                         </tbody>
                     </table>
                 </div>
+                <a class="btn btn-primary" onclick="doCheckOut()">Check out</a>
             </div>
         </section> <!--/#cart_items-->
+        <script>
+            function deleteProduct(clicked_id) {
+                //alert(clicked_id);
+                $.ajax({
+                    url: '/BookStore/removeitem',
+                    type: 'GET',
+                    contentType: 'application/json',
+                    data: "productid=" + clicked_id,
+                    dataType: 'text',
+                    success: function (data, textStatus, jqXHR) {
+                        if (data == "true") {
+                            document.getElementById(clicked_id).parentElement.removeChild(document.getElementById(clicked_id));
+                        } else {
+                            ///////////// logic handle failure
+                        }
+                    }
+                });
+            }
+
+            function viewProduct(clicked_id) {
+                window.location.href = "/BookStore/productpage?productid=" + clicked_id;
+            }
+
+            function updateQuantity(clicked_id, element) {
+                console.log("here in quantity");
+                var elementText = document.getElementById(clicked_id + "text");
+                var quantity = elementText.value;
+                //var quantity = element2.value;
+                console.log(quantity);
+                $.ajax({
+                    url: "/BookStore/update",
+                    type: 'POST',
+                    data: "productid=" + clicked_id + "&quantity=" + quantity,
+                    dataType: 'text',
+                    success: function (data, textStatus, jqXHR) {
+                        if (data == "true") {
+                            elementText.setAttribute("readonly", "");
+                            element.setAttribute("onclick", "updateEnable(" + clicked_id + ", this)");
+                            element.innerHTML = "edit";
+                            var quantityElement = document.getElementById(clicked_id + "quantity");
+                            var productPrice = quantityElement.getAttribute("price");
+                            quantityElement.innerHTML = parseInt(quantity) * parseInt(productPrice);
+                        } else {
+                            ///////////// logic handle failure
+                        }
+                    }
+                });
+
+
+                elementText.setAttribute("readonly", "");
+                element.setAttribute("onclick", "updateEnable(" + clicked_id + ",this)");
+                element.innerHTML = "edit";
+            }
+
+            function updateEnable(clicked_id, element) {
+                console.log("here in updateEnabled");
+                //alert(element);
+                var elementText = document.getElementById(clicked_id + "text");
+                //alert(elementText);
+                //alert(elementText.value);
+                elementText.removeAttribute("readonly");
+                element.setAttribute("onclick", "updateQuantity(" + clicked_id + " , this)");
+                element.innerHTML = "Save";
+            }
+
+            function doCheckOut() {
+                $.ajax({
+                    url: "/BookStore/checkout",
+                    type: 'POST',
+                    success: function (data, textStatus, jqXHR) {
+                        if (data == 'true') {
+                            console.log(data);
+                            window.location.href = "/BookStore/productviewer";
+                        } else {
+                            ///what ever
+                        }
+
+                    }
+                });
+            }
+        </script>
     </body>
 </html>
+<!--updateQuantity(${cartItem.id} , this)-->

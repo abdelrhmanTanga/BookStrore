@@ -11,22 +11,23 @@ import java.io.PrintWriter;
 import java.util.List;
 import java.util.Vector;
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import websitemodel.databaseDTO.Product;
 import websiteview.model.HeaderCategories;
 import websiteview.model.ProductModel;
-import websiteview.model.SearchDTO;
 
 /**
  *
  * @author yasmeen
  */
-@WebServlet(name = "Search", urlPatterns = {"/Search"})
-public class Search extends HttpServlet {
+@WebServlet(name = "ProductsByCategory", urlPatterns = {"/ProductsByCategory"})
+public class ProductsByCategory extends HttpServlet {
+    
+    ProductHandler productHandler;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,18 +38,24 @@ public class Search extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    
+    @Override
+    public void init(ServletConfig config)
+            throws ServletException {
+productHandler= new ProductHandler();
+    }
+
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet Search</title>");
+            out.println("<title>Servlet ProductsByCategory</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet Search at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ProductsByCategory at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -66,7 +73,21 @@ public class Search extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String categoryID=request.getParameter("id");
+        
+        List<ProductModel> products = productHandler.searchByCategory(categoryID);
+        request.setAttribute("products", products);
+                Vector<HeaderCategories> categories = productHandler.getCategories();
+        if (categories != null) {
+            request.setAttribute("categories", categories);
+        }
+           RequestDispatcher dispatcher1 = request.getRequestDispatcher("/pages/navbar.jsp");
+        dispatcher1.include(request, response);
+        RequestDispatcher dispatcher2 = request.getRequestDispatcher("/pages/categoryBar.jsp");
+        dispatcher2.include(request, response);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/viewproducts.jsp");
+        dispatcher.include(request, response);
+        
     }
 
     /**
@@ -80,21 +101,7 @@ public class Search extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        SearchDTO searchDTO = new SearchDTO();
-        ProductHandler productHandler = new ProductHandler();
-        searchDTO.setSearchKey(request.getParameter("searchkey"));
-        List<ProductModel> products = productHandler.search(searchDTO);
-        request.setAttribute("products", products);
-        Vector<HeaderCategories> categories = productHandler.getCategories();
-        if (categories != null) {
-            request.setAttribute("categories", categories);
-        }
-        RequestDispatcher dispatcher1 = request.getRequestDispatcher("/pages/navbar.jsp");
-        dispatcher1.include(request, response);
-        RequestDispatcher dispatcher2 = request.getRequestDispatcher("/pages/categoryBar.jsp");
-        dispatcher2.include(request, response);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/viewproducts.jsp");
-        dispatcher.include(request, response);
+        processRequest(request, response);
     }
 
     /**

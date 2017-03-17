@@ -16,6 +16,7 @@ public class ProductModel {
     private long ISBN;
     private String image;
     private int id;
+    private boolean purchased;
 
     public String getName() {
         return name;
@@ -55,5 +56,13 @@ public class ProductModel {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public boolean isPurchased() {
+        return purchased;
+    }
+
+    public void setPurchased(boolean purchased) {
+        this.purchased = purchased;
     }
 }

@@ -60,7 +60,7 @@ public class CartViewer extends HttpServlet {
             /////////// code to handle logged in clients
             List<CartDTO> items = cartHandler.getCart(email);
             if (items != null){
-                request.setAttribute("CartItem", items);
+                request.setAttribute("cartlist", items);
                 //out.println("second");
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/navbar.jsp");
                 dispatcher.include(request, response);

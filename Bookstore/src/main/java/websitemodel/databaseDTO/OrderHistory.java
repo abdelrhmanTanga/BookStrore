@@ -10,8 +10,11 @@ package websitemodel.databaseDTO;
  * @author abdelrhman galal
  */
 public class OrderHistory {
+
     private int id;
     private String email;
+    private String address;
+    private long phone;
 
     public int getId() {
         return id;
@@ -28,14 +31,28 @@ public class OrderHistory {
     public void setEmail(String email) {
         this.email = email;
     }
-	
-	 public OrderHistory()
-     {
-     }
-     
-     public OrderHistory(int id,String email)
-     {
-         this.id = id;
-         this.email = email;
-     }
+
+    public OrderHistory() {
+    }
+
+    public OrderHistory(int id, String email) {
+        this.id = id;
+        this.email = email;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public long getPhone() {
+        return phone;
+    }
+
+    public void setPhone(long phone) {
+        this.phone = phone;
+    }
 }

@@ -3,37 +3,26 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package websitemodel.databaseDTO;
+package websiteview.model;
 
 /**
  *
  * @author abdelrhman galal
  */
-public class OrderHistoryItems {
-
-    private int id;
-    private int bookID;
-    private int quantity;
+public class ProductCheckout {
     private String name;
+    private int quantity;
     private String Author;
     private long isbn;
     private String image;
     private int price;
 
-    public int getId() {
-        return id;
+    public String getName() {
+        return name;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getBookID() {
-        return bookID;
-    }
-
-    public void setBookID(int bookID) {
-        this.bookID = bookID;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getQuantity() {
@@ -42,14 +31,6 @@ public class OrderHistoryItems {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getAuthor() {

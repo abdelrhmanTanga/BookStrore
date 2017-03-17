@@ -16,15 +16,36 @@
     <script src="js/respond.min.js"></script>
     <![endif]-->       
     <link rel="shortcut icon" href="images/ico/favicon.ico">
-<!--    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="images/ico/apple-touch-icon-144-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/ico/apple-touch-icon-114-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" href="images/ico/apple-touch-icon-57-precomposed.png">-->
+    <!--    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="images/ico/apple-touch-icon-144-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/ico/apple-touch-icon-114-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" href="images/ico/apple-touch-icon-57-precomposed.png">-->
+    <style>
+        body
+        {
+            background-image:url("${pageContext.request.contextPath}/pages/images/coffeebookshop.jpg");
+            background-position: center;
+            filter: blur(2px);
+            width:100%;
+            height:100%;
+            top:0;
+            left:0;
+            z-index:-1;
+        }
+        section.first {
+            opacity: 0.3;
+            filter: alpha(opacity=10); /* For IE8 and earlier */
+            background-color: white;
+
+
+        }
+
+    </style>
 </head><!--/head-->
 
 <body>
 
-    <section id="form"><!--form-->
+    <section id="form" class="first"><!--form-->
         <div class="container" style="text-align:center ; align-content:center; margin-left:28%">
             <div class="row">
                 <div class="col-sm-4 col-sm-offset-1" >

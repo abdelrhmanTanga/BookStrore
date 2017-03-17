@@ -36,6 +36,7 @@ public class ProductViewer extends HttpServlet {
      */
     ProductHandler productHandler;
     CartHandler cartHandler;
+
     @Override
     public void init(ServletConfig config)
             throws ServletException {
@@ -48,30 +49,38 @@ public class ProductViewer extends HttpServlet {
         //////////////header loader
         Vector<HeaderCategories> categories = productHandler.getCategories();
         Integer cartSize = 0;
+        String email = null;
         HttpSession session = request.getSession(false);
         if (session != null) {
-            String email = (String) session.getAttribute("loggedIn");
+            email = (String) session.getAttribute("loggedIn");
             if (email != null && !email.equals("")) {
                 cartSize = cartHandler.getCartItems(email);
-                request.setAttribute("cartSize", cartSize);
+                session.setAttribute("loggedCart", cartSize);
+
             }
         }
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/navbar.jsp");
+        dispatcher.include(request, response);
         if (categories != null) {
             request.setAttribute("categories", categories);
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/navbar.jsp");
-            dispatcher.include(request, response);
+            RequestDispatcher dispatcher2 = request.getRequestDispatcher("/pages/categoryBar.jsp");
+            dispatcher2.include(request, response);
         } else {
             //////////////////////// what to do if errors 
         }
 
         /////////////// products loader
         Vector<ProductModel> products = productHandler.getProducts();
+        if (email != null) {
+            cartHandler.checkAdded(email,products);
+        } else {
+            /////////// logic for offline users
+        }
         //ProductModel[] products = (ProductModel[]) products2.toArray();
         request.setAttribute("products", products);
         System.out.println("after get product");
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/viewproducts.jsp");
-        dispatcher.include(request, response);
-
+        RequestDispatcher dispatcher3 = request.getRequestDispatcher("/pages/viewproducts.jsp");
+        dispatcher3.include(request, response);
         //////////// footer loader
     }
 
