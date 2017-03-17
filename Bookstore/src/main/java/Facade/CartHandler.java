@@ -30,6 +30,7 @@ import websiteview.model.CheckoutDTO;
 import websiteview.model.CartDTO;
 import websiteview.model.ProductCheckout;
 import websiteview.model.ProductModel;
+import websiteview.model.UpdateQuantityDTO;
 
 /**
  *
@@ -37,7 +38,7 @@ import websiteview.model.ProductModel;
  */
 public class CartHandler {
 
-    public CheckoutDTO doCheckout(String email) {
+    public synchronized CheckoutDTO doCheckout(String email) {
         try {
             Connection connection = ConnectionPool.getInstance().getConnection();
             CheckoutDTO orderInfo = new CheckoutDTO();
@@ -261,5 +262,39 @@ public class CartHandler {
             return false;
         }
 
+    }
+
+    public boolean updateQuantity(UpdateQuantityDTO updateQuantityDTO) {
+        try {
+            Connection connection = ConnectionPool.getInstance().getConnection();
+            CartDAO cartDAO = new CartDAO(connection);
+            Cart cart = new Cart();
+            cart.setEmail(updateQuantityDTO.getEmail());
+            cart.setBookID(updateQuantityDTO.getProductId());
+            cart.setQuantity(updateQuantityDTO.getQuantity());
+            if (cartDAO.updateQuantity(cart)) {
+                connection.close();
+                return true;
+            } else {
+                connection.close();
+                return false;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CartHandler.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+
+    }
+
+    public void checkAdded(String email, Vector<ProductModel> products) {
+        try {
+            Connection connection = ConnectionPool.getInstance().getConnection();
+            CartDAO cartDAO = new CartDAO(connection);
+            cartDAO.checkAdded(email, products);
+            connection.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(CartHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
 }

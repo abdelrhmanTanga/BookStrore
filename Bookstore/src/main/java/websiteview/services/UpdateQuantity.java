@@ -8,21 +8,19 @@ package websiteview.services;
 import Facade.CartHandler;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Vector;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import websiteview.model.CheckoutDTO;
+import websiteview.model.UpdateQuantityDTO;
 
 /**
  *
  * @author abdelrhman galal
  */
-public class Checkout extends HttpServlet {
+public class UpdateQuantity extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,34 +34,9 @@ public class Checkout extends HttpServlet {
     CartHandler cartHandler;
 
     @Override
-    public void init(ServletConfig config)
-            throws ServletException {
+    public void init(ServletConfig config) throws ServletException {
         super.init(config); //To change body of generated methods, choose Tools | Templates.
         cartHandler = new CartHandler();
-    }
-
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            System.out.println("checking out");
-            String email = (String) session.getAttribute("loggedIn");
-            System.out.println("email is : " + email);
-            CheckoutDTO orderInfo = cartHandler.doCheckout(email);
-            if (orderInfo != null) {
-                Integer cartSize = (Integer) session.getAttribute("loggedCart");
-                cartSize = 0;
-                session.setAttribute("loggedCart", cartSize);
-                System.out.println("checkout done");
-                System.out.println("orderInfo :" + orderInfo.getProducts().elementAt(0).getAuthor());
-                request.setAttribute("orderInfo", orderInfo);
-                RequestDispatcher dispatcher = request.getRequestDispatcher("");
-                dispatcher.include(request, response);
-            } else {
-                ///////////////// logic for not signed in
-            }
-        } else {
-            ////////////////////// logic for not signed in (redirect to sign in page)
-        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -78,7 +51,7 @@ public class Checkout extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        response.sendRedirect("/BookStore/cart");
     }
 
     /**
@@ -92,7 +65,28 @@ public class Checkout extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        HttpSession session = request.getSession();
+        if (session != null) {
+            String email = (String) session.getAttribute("loggedIn");
+            if (email != null && !email.equals("")) {
+                int productid = Integer.parseInt(request.getParameter("productid"));
+                int quantity = Integer.parseInt(request.getParameter("quantity"));
+                UpdateQuantityDTO updateQuantityDTO = new UpdateQuantityDTO();
+                updateQuantityDTO.setEmail(email);
+                updateQuantityDTO.setProductId(productid);
+                updateQuantityDTO.setQuantity(quantity);
+                PrintWriter out = response.getWriter();
+                if (cartHandler.updateQuantity(updateQuantityDTO)) {
+                    out.print("true");
+                } else {
+                    out.print("false");
+                }
+            } else {
+                ///////////////// not signed in
+            }
+        } else {
+///////////////// no session
+        }
     }
 
     /**

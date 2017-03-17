@@ -54,15 +54,26 @@
                                         <img src="${pageContext.request.contextPath}/pages/images/${product.image}" alt="" height="300"/>
                                         <h2>${product.price}</h2>
                                         <p>${product.name}</p>
-                                        <button id="${product.id}" onclick="addToCart(this.id, this)" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
-                                        <button id="${product.id}" onclick="viewProduct(this.id)" class="btn btn-default add-to-cart"><i class="glyphicon glyphicon-search"></i>View product</button>
+                                        <c:if test="${!product.purchased}">
+                                            <button id="${product.id}" onclick="addToCart(${product.id}, this)" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
+                                            <button  onclick="viewProduct(${product.id})" class="btn btn-default add-to-cart"><i class="glyphicon glyphicon-search"></i>View product</button>
+                                        </c:if>
+                                        <c:if test="${product.purchased}">
+                                            <button onclick="removeFromCart(${product.id}, this)" class="btn btn-default add-to-cart"><i class='fa fa-shopping-cart'></i>Remove Item</button>
+                                            <button onclick="viewProduct(${product.id})" class="btn btn-default add-to-cart"><i class="glyphicon glyphicon-search"></i>View product</button>
+                                        </c:if>
                                     </div>
                                     <div class="product-overlay">
                                         <div class="overlay-content">
                                             <h2>${product.price}</h2>
                                             <p>${product.name}</p>
-                                            <button id="${product.id}" onclick="addToCart(this.id, this)" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
-                                            <button id="${product.id}" onclick="viewProduct(this.id)" class="btn btn-default add-to-cart"><i class="glyphicon glyphicon-search"></i>View product</button>
+                                            <c:if test="${!product.purchased}">
+                                                <button id="${product.id}" onclick="addToCart(${product.id}, this)" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
+                                            </c:if>
+                                            <c:if test="${product.purchased}">
+                                                <button onclick="addToCart(${product.id}, this)" class="btn btn-default add-to-cart"><i class='fa fa-shopping-cart'></i>Remove Item</button>
+                                            </c:if>
+                                            <button onclick="viewProduct(${product.id})" class="btn btn-default add-to-cart"><i class="glyphicon glyphicon-search"></i>View product</button>
                                         </div>
                                     </div>
                                 </div>
@@ -73,7 +84,6 @@
 
             </div>
         </div>
-    </div>
     <script>
         function addToCart(clicked_id, element) {
             var xhttp = new XMLHttpRequest();
@@ -81,15 +91,23 @@
                 if (this.readyState == 4 && this.status == 200) {
                     if (this.responseText == "true") {
                         element.innerHTML = "<i class='fa fa-shopping-cart'></i>Remove Item";
-                        element.setAttribute("onclick", "removeFromCart(this.id , this)");
-                        $(clicked_id).html("Remove Item");
+                        element.setAttribute("onclick", "removeFromCart(" + clicked_id + ", this)");
+                        //$(clicked_id).html("Remove Item");
+                        var element2 = document.getElementById(clicked_id);
+                        element2.innerHTML = "<i class='fa fa-shopping-cart'></i>Remove Item";
+                        element2.setAttribute("onclick", "removeFromCart(" + clicked_id + ", this)")
+                        var loggedCart = document.getElementById("loggedCart");
+                        loggedCart.innerHTML = parseInt(loggedCart.innerHTML) + 1;
                         console.log(clicked_id);
                         console.log(this.responseText);
                     } else {
                         element.innerHTML = "<i class='fa fa-shopping-cart'></i>Remove Item";
-                        element.setAttribute("onclick", "removeFromCart(this.id , this)");
+                        element.setAttribute("onclick", "removeFromCart(" + clicked_id + " , this)");
+                        var element2 = document.getElementById(clicked_id);
+                        element2.innerHTML = "<i class='fa fa-shopping-cart'></i>Remove Item";
+                        element2.setAttribute("onclick", "removeFromCart(" + clicked_id + ", this)")
                         console.log(this.responseText);
-                        $(clicked_id).html("Remove Item");
+                        //$(clicked_id).html("Remove Item");
                     }
                 }
             };
@@ -108,6 +126,11 @@
                     if (data == "true") {
                         element.innerHTML = "<i class='fa fa-shopping-cart'></i>Add to cart";
                         element.setAttribute("onclick", "addToCart(this.id, this)");
+                        var element2 = document.getElementById(clicked_id);
+                        element2.innerHTML = "<i class='fa fa-shopping-cart'></i>Remove Item";
+                        element2.setAttribute("onclick", "removeFromCart(" + clicked_id + ", this)")
+                        var loggedCart = document.getElementById("loggedCart");
+                        loggedCart.innerHTML = parseInt(loggedCart.innerHTML) - 1;
                     } else {
                         ///////////// logic handle failure
                     }

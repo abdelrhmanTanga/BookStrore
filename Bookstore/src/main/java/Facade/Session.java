@@ -134,4 +134,26 @@ public class Session {
     }
 
     /////////////////////////////////
+
+    public void logout(String email) {
+        try {
+            Connection connection = ConnectionPool.getInstance().getConnection();
+            ClientDAO clientDAO = new ClientDAO(connection);
+            clientDAO.logout(email);
+            connection.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Session.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void clearAll() {
+        try {
+            Connection connection = ConnectionPool.getInstance().getConnection();
+            ClientDAO clientDAO = new ClientDAO(connection);
+            clientDAO.clearAll();
+            connection.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Session.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

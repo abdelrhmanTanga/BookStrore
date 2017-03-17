@@ -5,6 +5,8 @@
  */
 package websiteview;
 
+import Facade.Session;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
@@ -14,7 +16,10 @@ import javax.servlet.http.HttpSessionListener;
  * @author abdelrhman galal
  */
 public class SessionListener implements HttpSessionListener {
-
+    Session session;
+    public SessionListener(){
+        session = new Session();
+    }
     @Override
     public void sessionCreated(HttpSessionEvent hse) {
         System.out.println("session created");
@@ -22,6 +27,12 @@ public class SessionListener implements HttpSessionListener {
 
     @Override
     public void sessionDestroyed(HttpSessionEvent hse) {
-        System.out.println("session destroyed");
+        HttpSession info = hse.getSession();
+        if (info != null){
+            String email = (String) info.getAttribute("loggedIn");
+            if (email != null){
+                session.logout(email);
+            }
+        }
     }
 }

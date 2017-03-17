@@ -13,8 +13,10 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import websitemodel.ConnectionPool;
+import websitemodel.databaseDAO.CartDAO;
 import websitemodel.databaseDAO.CategoryDAO;
 import websitemodel.databaseDAO.ProductDAO;
+import websitemodel.databaseDTO.Cart;
 import websitemodel.databaseDTO.Category;
 import websitemodel.databaseDTO.Product;
 import websiteview.model.HeaderCategories;
@@ -34,7 +36,14 @@ public class ProductHandler {
             Connection connection = ConnectionPool.getInstance().getConnection();
             ProductDAO productDAO = new ProductDAO(connection);
             Vector<Product> products = productDAO.getProducts();
-            connection.close();
+            /*Vector<Cart> cartVector = new Vector<Cart>();
+            for (int i = 0; i < products.size(); i++){
+                Cart cart = new Cart();
+                cart.setBookID(i);
+            }
+            CartDAO cartDAO = new CartDAO(connection);
+            cartDAO.checkAdded(products);*/
+            //connection.close();
             Vector<ProductModel> productsResponse = new Vector<>();
             if (products != null) {
                 for (int i = 0; i < products.size(); i++) {

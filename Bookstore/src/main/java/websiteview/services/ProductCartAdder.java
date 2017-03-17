@@ -44,13 +44,16 @@ public class ProductCartAdder extends HttpServlet {
         String productAdd = request.getParameter("productid");
         PrintWriter out = response.getWriter();
         HttpSession session = request.getSession(false);
-        if (session != null) {
+        if (session != null && productAdd != null) {
             String email = (String) session.getAttribute("loggedIn");
             AddToCartWrapper order = new AddToCartWrapper();
             order.setId(Integer.parseInt(productAdd));
             order.setEmail(email);
             if (cartHandler.addToCart(order)) {
                 ///////////////////////// bussiness for add product
+                Integer cartSize = (Integer) session.getAttribute("loggedCart") + 1;
+                System.out.println(cartSize);
+                session.setAttribute("loggedCart", cartSize);
                 out.print("true");
                 System.out.println("true");
             } else {

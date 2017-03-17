@@ -31,29 +31,28 @@ public class ProductCartRemover extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     CartHandler cartHandler;
-    
+
     @Override
     public void init(ServletConfig config)
             throws ServletException {
         super.init(config); //To change body of generated methods, choose Tools | Templates.
         cartHandler = new CartHandler();
     }
-    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("in setvlet");
         HttpSession session = request.getSession(false);
         PrintWriter out = response.getWriter();
         if (session != null) {
             String email = (String) session.getAttribute("loggedIn");
-            System.out.println("has session");
             if (email != null && !email.equals("")) {
                 String productId = (String) request.getParameter("productid");
-                System.out.println("logged in email :" + email + " product ID :"+ productId);
                 if (productId != null) {
                     int product = Integer.parseInt(productId);
-                    System.out.println("legal access");
                     if (cartHandler.removeFromCart(product, email)) {
-                        System.out.println("item removed");
+                        Integer cartSize = (Integer) session.getAttribute("loggedCart") - 1;
+                        System.out.println(cartSize);
+                        session.setAttribute("loggedCart", cartSize);
                         out.print("true");
                         out.close();
                     } else {
@@ -72,12 +71,12 @@ public class ProductCartRemover extends HttpServlet {
             ////////////////// have no session
         }
     }
-    
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         processRequest(req, resp); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         processRequest(req, resp); //To change body of generated methods, choose Tools | Templates.

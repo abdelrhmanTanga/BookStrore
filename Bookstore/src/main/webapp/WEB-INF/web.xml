@@ -24,8 +24,20 @@
         <listener-class>websiteview.SessionListener</listener-class>
     </listener>
     <servlet>
+        <servlet-name>CartViewer</servlet-name>
+        <servlet-class>websiteview.services.CartViewer</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>SignIn</servlet-name>
         <servlet-class>websiteview.services.SignIn</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Checkout</servlet-name>
+        <servlet-class>websiteview.services.Checkout</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>signout</servlet-name>
+        <servlet-class>websiteview.services.SignOut</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ProductViewer</servlet-name>
@@ -63,9 +75,17 @@
         <servlet-name>ProductCartRemover</servlet-name>
         <servlet-class>websiteview.services.ProductCartRemover</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>UpdateQuantity</servlet-name>
+        <servlet-class>websiteview.services.UpdateQuantity</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SignIn</servlet-name>
         <url-pattern>/SignIn</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>signout</servlet-name>
+        <url-pattern>/signout</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ProductViewer</servlet-name>
@@ -74,6 +94,10 @@
     <servlet-mapping>
         <servlet-name>ImageLoader</servlet-name>
         <url-pattern>/imageloader</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Checkout</servlet-name>
+        <url-pattern>/checkout</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>CssLoader</servlet-name>
@@ -86,6 +110,10 @@
     <servlet-mapping>
         <servlet-name>Header</servlet-name>
         <url-pattern>/header</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CartViewer</servlet-name>
+        <url-pattern>/cart</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ProductCartAdder</servlet-name>
@@ -102,6 +130,10 @@
     <servlet-mapping>
         <servlet-name>ProductCartRemover</servlet-name>
         <url-pattern>/removeitem</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateQuantity</servlet-name>
+        <url-pattern>/update</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

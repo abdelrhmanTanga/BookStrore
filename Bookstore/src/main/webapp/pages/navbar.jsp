@@ -81,7 +81,7 @@
                                         <!-- <li><a href="#"><i class="fa fa-user"></i> Account</a></li> -->
 
                                         <li><a href="/BookStore/productviewer"><i class="fa fa-lock"></i> home</a></li>
-                                        <li><a href="/BookStore/CartViewer" class="notif"><i class="fa fa-shopping-cart"><span class="num">2</span></i> Cart</a></li> 
+                                        <li><a href="/BookStore/cart" class="notif"><i class="fa fa-shopping-cart"><span class="num">2</span></i> Cart</a></li> 
                                         <li><a href="${pageContext.request.contextPath}/pages/signinpage.jsp"><i class="fa fa-lock"></i> Login</a></li>
                                         <li><a href="${pageContext.request.contextPath}/pages/signup.jsp"><i class="fa fa-lock"></i> Signup</a></li>
                                     </ul>
@@ -102,7 +102,7 @@
                         <div class="row">
                             <div class="col-sm-3">
                                 <div class="logo pull-left">
-                                    <a href="/productviewer"><img src="${pageContext.request.contextPath}/pages/images/logo.png" alt="" /></a>
+                                    <a href="/BookStore/productviewer"><img src="${pageContext.request.contextPath}/pages/images/logo.png" alt="" /></a>
                                 </div>
 
                             </div>
@@ -124,7 +124,7 @@
                                     <ul class="nav navbar-nav">
 
                                         <li><a href="#"><i class="fa fa-user"></i>${loggedIn}</a></li> 
-                                        <li><a href="/BookStore/CartViewer"><i class="fa fa-shopping-cart"></i> Cart</a></li> 
+                                        <li><a href="/BookStore/cart"><i class="fa fa-shopping-cart"><span class="num" id="loggedCart">${loggedCart}</span></i> Cart</a></li> 
                                         <li><a href="/BookStore/signout"><i class="fa fa-lock"></i> Logout</a></li>
 
                                         <!-- <li><a href="login.html"><i class="fa fa-lock"></i> Signup</a></li>-->
