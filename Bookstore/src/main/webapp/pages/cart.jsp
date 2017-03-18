@@ -92,7 +92,7 @@
                     </table>
                 </div>
                 <a class="btn btn-primary" onclick="doCheckOut()">Check out</a>
-                <div id="error"></div>
+                <div id="error" class="col-sm-10"></div>
             </div>
         </section> <!--/#cart_items-->
         <script>
@@ -107,8 +107,10 @@
                     success: function (data, textStatus, jqXHR) {
                         if (data == "true") {
                             document.getElementById(clicked_id).parentElement.removeChild(document.getElementById(clicked_id));
+                            var loggedCart = document.getElementById("loggedCart");
+                            loggedCart.innerHTML = parseInt(loggedCart.innerHTML) - 1;
                         } else {
-                            
+
                         }
                     }
                 });
@@ -141,7 +143,7 @@
                             } else {
                                 ///////////// logic handle failure
                                 var error = document.getElementById("error");
-                            error.innerHTML = "<div class='alert alert-danger alert-dismissable col-sm-3'><a href='#' class='close' data-dismiss='alert' aria-label='close'>×</a>There is not enough quantity of that product to purchase.";
+                                error.innerHTML = "<div class='alert alert-danger alert-dismissable col-sm-3'><a href='#' class='close' data-dismiss='alert' aria-label='close'>×</a>Check out not available , Check your credit limit and product quantities.";
                             }
                         }
                     });
@@ -164,13 +166,13 @@
 
             function doCheckOut() {
                 $.ajax({
-                    url: "/BookStore/checkout",
+                    url: "/BookStore/checkoutcheckers",
                     type: 'POST',
                     success: function (data, textStatus, jqXHR) {
                         console.log(data);
                         if (data == 'true') {
                             console.log(data);
-                            window.location.href = "/BookStore/productviewer";
+                            window.location.href = "/BookStore/checkout";
                         } else {
                             ///what ever
                             var error = document.getElementById("error");

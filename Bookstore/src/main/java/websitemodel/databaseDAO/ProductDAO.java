@@ -161,8 +161,8 @@ public class ProductDAO {
         List<Product> products = new ArrayList<>();
         try {
             PreparedStatement pst = connection.prepareStatement("SELECT * FROM (select p.*, rownum r from product p) where r > ? and r <= ?");
-            pst.setInt(1, (pageNumber * 10) - 10);
-            pst.setInt(2, (pageNumber * 10));
+            pst.setInt(1, (pageNumber * 12) - 12);
+            pst.setInt(2, (pageNumber * 12));
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 Product product;

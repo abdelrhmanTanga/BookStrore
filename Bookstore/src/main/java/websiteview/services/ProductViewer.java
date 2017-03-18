@@ -70,7 +70,17 @@ public class ProductViewer extends HttpServlet {
         }
 
         /////////////// products loader
-        Vector<ProductModel> products = productHandler.getProducts();
+        String pageString = request.getParameter("page");
+        if (pageString == null){
+            pageString = "1";
+        }
+        Integer pages = productHandler.getPagesCount();
+        request.setAttribute("pages", pages);
+        
+        Integer pageNumber = Integer.parseInt(pageString);
+        request.setAttribute("choosen", pageNumber);
+        
+        Vector<ProductModel> products = productHandler.getProducts(pageNumber);
         if (email != null) {
             cartHandler.checkAdded(email,products);
         } else {

@@ -31,11 +31,11 @@ import websiteview.services.ProductViewer;
  */
 public class ProductHandler {
 
-    public Vector<ProductModel> getProducts() {
+    public Vector<ProductModel> getProducts(int pageNumber) {
         try {
             Connection connection = ConnectionPool.getInstance().getConnection();
             ProductDAO productDAO = new ProductDAO(connection);
-            Vector<Product> products = productDAO.getProducts();
+            List<Product> products = productDAO.getAllProducts(pageNumber);
             /*Vector<Cart> cartVector = new Vector<Cart>();
             for (int i = 0; i < products.size(); i++){
                 Cart cart = new Cart();
@@ -48,11 +48,11 @@ public class ProductHandler {
             if (products != null) {
                 for (int i = 0; i < products.size(); i++) {
                     ProductModel product = new ProductModel();
-                    product.setName(products.elementAt(i).getName());
-                    product.setPrice(products.elementAt(i).getPrice());
-                    product.setISBN(products.elementAt(i).getISBN());
-                    product.setImage(products.elementAt(i).getImage());
-                    product.setId(products.elementAt(i).getId());
+                    product.setName(products.get(i).getName());
+                    product.setPrice(products.get(i).getPrice());
+                    product.setISBN(products.get(i).getISBN());
+                    product.setImage(products.get(i).getImage());
+                    product.setId(products.get(i).getId());
                     productsResponse.add(product);
                 }
                 connection.close();
@@ -175,4 +175,17 @@ public class ProductHandler {
     }
 
     //////////////
+
+    public int getPagesCount() {
+        try {
+            Connection connection = ConnectionPool.getInstance().getConnection();
+            ProductDAO productDAO = new ProductDAO(connection);
+            int pages = productDAO.getProductsCount();
+            pages = (pages / 12) + 1;
+            return pages;
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductHandler.class.getName()).log(Level.SEVERE, null, ex);
+            return 0;
+        }
+    }
 }

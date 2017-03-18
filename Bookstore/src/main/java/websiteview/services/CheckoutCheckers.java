@@ -8,21 +8,20 @@ package websiteview.services;
 import Facade.CartHandler;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Vector;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import websiteview.model.CheckoutDTO;
 
 /**
  *
  * @author abdelrhman galal
  */
-public class Checkout extends HttpServlet {
+public class CheckoutCheckers extends HttpServlet {
+
+    CartHandler cartHandler;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,41 +32,35 @@ public class Checkout extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    CartHandler cartHandler;
-
-    @Override
-    public void init(ServletConfig config)
-            throws ServletException {
-        super.init(config); //To change body of generated methods, choose Tools | Templates.
-        cartHandler = new CartHandler();
-    }
-
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession(false);
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        ////// 
         PrintWriter out = response.getWriter();
+        HttpSession session = request.getSession(false);
         if (session != null) {
-            System.out.println("checking out");
+            System.out.println("has session in checkers");
             String email = (String) session.getAttribute("loggedIn");
-            System.out.println("email is : " + email);
-            CheckoutDTO orderInfo = cartHandler.doCheckout(email);
-            if (orderInfo != null) {
-                Integer cartSize = (Integer) session.getAttribute("loggedCart");
-                cartSize = 0;
-                session.setAttribute("loggedCart", cartSize);
-                System.out.println("checkout done");
-                System.out.println("orderInfo :" + orderInfo.getProducts().elementAt(0).getAuthor());
-                request.setAttribute("orderInfo", orderInfo);
-                
-                RequestDispatcher dispatcher = request.getRequestDispatcher("");
-                dispatcher.forward(request, response);
+            if (email != null) {
+                System.out.println("has email in checkers");
+                if (cartHandler.doCheckoutChecks(email)) {
+                    System.out.println("true");
+                    out.print("true");
+                } else {
+                    out.print("false");
+                }
             } else {
                 out.print("false");
-                ///////////////// logic for not signed in
             }
         } else {
             out.print("false");
-            ////////////////////// logic for not signed in (redirect to sign in page)
         }
+        //if (cartHandler.doCheckoutChecks())
+    }
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config); //To change body of generated methods, choose Tools | Templates.
+        cartHandler = new CartHandler();
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
