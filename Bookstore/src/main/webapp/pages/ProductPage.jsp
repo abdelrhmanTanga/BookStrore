@@ -151,5 +151,25 @@
             xhttp.open("GET", "/BookStore/addtocart?productid=" + clicked_id, true);
             xhttp.send();
         }
+        
+        function removeFromCart(clicked_id, element) {
+            $.ajax({
+                url: '/BookStore/removeitem',
+                type: 'GET',
+                contentType: 'application/json',
+                data: "productid=" + clicked_id,
+                dataType: 'text',
+                success: function (data, textStatus, jqXHR) {
+                    if (data == "true") {
+                        element.innerHTML = "<i class='fa fa-shopping-cart'></i>Add to cart";
+                        element.setAttribute("onclick", "addToCart(this.id, this)");
+                        var loggedCart = document.getElementById("loggedCart");
+                        loggedCart.innerHTML = parseInt(loggedCart.innerHTML) - 1;
+                    } else {
+                        ///////////// logic handle failure
+                    }
+                }
+            });
+        }
     </script>
 </html>

@@ -57,11 +57,12 @@ public class Checkout extends HttpServlet {
                 session.setAttribute("loggedCart", cartSize);
                 System.out.println("checkout done");
                 System.out.println("orderInfo :" + orderInfo.getProducts().elementAt(0).getAuthor());
-                //request.setAttribute("orderInfo", orderInfo);
-                Gson g = new Gson();
-                String data = g.toJson(orderInfo);
-                System.out.println(data);
-                out.print(data);
+
+                request.setAttribute("orderInfo", orderInfo);
+                
+                RequestDispatcher dispatcher = request.getRequestDispatcher("");
+                dispatcher.forward(request, response);
+
             } else {
                 out.print("false");
                 ///////////////// logic for not signed in

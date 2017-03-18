@@ -8,16 +8,20 @@ package websiteview.services;
 import Facade.CartHandler;
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author abdelrhman galal
  */
-public class test extends HttpServlet {
+public class CheckoutCheckers extends HttpServlet {
+
+    CartHandler cartHandler;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -30,12 +34,33 @@ public class test extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        ////// 
+        PrintWriter out = response.getWriter();
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            System.out.println("has session in checkers");
+            String email = (String) session.getAttribute("loggedIn");
+            if (email != null) {
+                System.out.println("has email in checkers");
+                if (cartHandler.doCheckoutChecks(email)) {
+                    System.out.println("true");
+                    out.print("true");
+                } else {
+                    out.print("false");
+                }
+            } else {
+                out.print("false");
+            }
+        } else {
+            out.print("false");
+        }
+        //if (cartHandler.doCheckoutChecks())
+    }
 
-//        CartHandler cartHandler = new CartHandler();
-//        cartHandler.test();
-//        PrintWriter out = response.getWriter();
-//        out.println("true");
-
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config); //To change body of generated methods, choose Tools | Templates.
+        cartHandler = new CartHandler();
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
