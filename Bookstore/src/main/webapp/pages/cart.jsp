@@ -168,9 +168,9 @@
                     type: 'POST',
                     success: function (data, textStatus, jqXHR) {
                         console.log(data);
-                        if (data == 'true') {
+                        if (data != 'false') {
                             console.log(data);
-                            window.location.href = "/BookStore/productviewer";
+                            window.location.href = "/BookStore/pages/checkout.jsp?orderInfo?"+encodeURIComponent(data);
                         } else {
                             ///what ever
                             var error = document.getElementById("error");

@@ -31,7 +31,7 @@ public class test extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         CartHandler cartHandler = new CartHandler();
-        cartHandler.test();
+    //    cartHandler.test();
         PrintWriter out = response.getWriter();
         out.println("true");
     }
