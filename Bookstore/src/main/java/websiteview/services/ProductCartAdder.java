@@ -49,6 +49,7 @@ public class ProductCartAdder extends HttpServlet {
             AddToCartWrapper order = new AddToCartWrapper();
             order.setId(Integer.parseInt(productAdd));
             order.setEmail(email);
+            System.out.println("before add to cart");
             if (cartHandler.addToCart(order)) {
                 ///////////////////////// bussiness for add product
                 Integer cartSize = (Integer) session.getAttribute("loggedCart") + 1;

@@ -12,6 +12,7 @@ import java.util.Vector;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -47,18 +48,25 @@ public class ProductViewer extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //////////////header loader
+        System.out.println("before product handler get categories");
         Vector<HeaderCategories> categories = productHandler.getCategories();
         Integer cartSize = 0;
         String email = null;
         HttpSession session = request.getSession(false);
+
         if (session != null) {
             email = (String) session.getAttribute("loggedIn");
             if (email != null && !email.equals("")) {
+                System.out.println("before get cart items");
                 cartSize = cartHandler.getCartItems(email);
-                session.setAttribute("loggedCart", cartSize);
 
+            } else {
+                cartSize = offlineUser(request);
             }
+        } else {
+            cartSize = offlineUser(request);
         }
+        session.setAttribute("loggedCart", cartSize);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/navbar.jsp");
         dispatcher.include(request, response);
         if (categories != null) {
@@ -71,20 +79,23 @@ public class ProductViewer extends HttpServlet {
 
         /////////////// products loader
         String pageString = request.getParameter("page");
-        if (pageString == null){
+        if (pageString == null) {
             pageString = "1";
         }
+        System.out.println("before get pages count");
         Integer pages = productHandler.getPagesCount();
         request.setAttribute("pages", pages);
-        
+
         Integer pageNumber = Integer.parseInt(pageString);
         request.setAttribute("choosen", pageNumber);
-        
+        System.out.println("before get products by number");
         Vector<ProductModel> products = productHandler.getProducts(pageNumber);
         if (email != null) {
-            cartHandler.checkAdded(email,products);
+            System.out.println("before check added");
+            cartHandler.checkAdded(email, products);
         } else {
             /////////// logic for offline users
+            checkAdded(products);
         }
         //ProductModel[] products = (ProductModel[]) products2.toArray();
         request.setAttribute("products", products);
@@ -132,5 +143,27 @@ public class ProductViewer extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    private int offlineUser(HttpServletRequest request) {
+        Cookie[] cookies = null;
+        Cookie cookie = null;
+
+        cookies = request.getCookies();
+        if (cookies != null) {
+            cookie = cookies[0];
+            String products = cookie.getValue();
+            String[] productIds = products.split(",");
+            return productIds.length;
+        } else {
+            cookie = new Cookie("products", "null");
+            return 0;
+        }
+    }
+
+    private void checkAdded(Vector<ProductModel> products) {
+        Cookie cookie = null;
+        Cookie cookies = null;
+        
+    }
 
 }
