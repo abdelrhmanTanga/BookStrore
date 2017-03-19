@@ -52,7 +52,7 @@ public class ProductViewer extends HttpServlet {
         Vector<HeaderCategories> categories = productHandler.getCategories();
         Integer cartSize = 0;
         String email = null;
-        HttpSession session = request.getSession(false);
+        HttpSession session = request.getSession(true);
 
         if (session != null) {
             email = (String) session.getAttribute("loggedIn");
@@ -61,10 +61,10 @@ public class ProductViewer extends HttpServlet {
                 cartSize = cartHandler.getCartItems(email);
 
             } else {
-                cartSize = offlineUser(request);
+                cartSize = offlineUser(request, response);
             }
         } else {
-            cartSize = offlineUser(request);
+            cartSize = offlineUser(request, response);
         }
         session.setAttribute("loggedCart", cartSize);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/navbar.jsp");
@@ -95,7 +95,7 @@ public class ProductViewer extends HttpServlet {
             cartHandler.checkAdded(email, products);
         } else {
             /////////// logic for offline users
-            checkAdded(products);
+            checkAdded(products, request);
         }
         //ProductModel[] products = (ProductModel[]) products2.toArray();
         request.setAttribute("products", products);
@@ -144,26 +144,57 @@ public class ProductViewer extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    private int offlineUser(HttpServletRequest request) {
+    private int offlineUser(HttpServletRequest request, HttpServletResponse response) {
         Cookie[] cookies = null;
         Cookie cookie = null;
 
         cookies = request.getCookies();
         if (cookies != null) {
-            cookie = cookies[0];
-            String products = cookie.getValue();
-            String[] productIds = products.split(",");
-            return productIds.length;
+            for (Cookie cookieName : cookies) {
+                if (cookieName.equals(cookie)) {
+                    cookie = cookieName;
+                }
+            }
+            if (cookie != null) {
+                String products = cookie.getValue();
+                String[] productIds = products.split(",");
+                return productIds.length;
+            } else {
+                cookie = new Cookie("products", "null");
+                response.addCookie(cookie);
+                return 0;
+            }
         } else {
             cookie = new Cookie("products", "null");
+            response.addCookie(cookie);
             return 0;
         }
     }
 
-    private void checkAdded(Vector<ProductModel> products) {
+    private void checkAdded(Vector<ProductModel> products, HttpServletRequest request) {
         Cookie cookie = null;
-        Cookie cookies = null;
-        
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookieName : cookies) {
+            if (cookieName.getName().equals("products")) {
+                cookie = cookieName;
+            }
+        }
+        if (cookie != null) {
+            String[] productIds = cookie.getValue().split(",");
+            for (ProductModel productCheck : products) {
+                for (String str : productIds) {
+                    System.out.println(str);
+                    int productId = Integer.parseInt(str);
+                    if (productId == productCheck.getId()) {
+                        System.out.println(str);
+                        productCheck.setPurchased(true);
+                    }
+                }
+            }
+        } else {
+
+        }
+
     }
 
 }
