@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Date;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -37,6 +38,10 @@ public class ViewFilter implements Filter {
         if (debug) {
             log("ViewFilter:DoBeforeProcessing");
         }
+        
+         String ipAddress = request.getRemoteAddr();
+         System.out.println("IP "+ ipAddress + ", Time "
+                                       + new Date().toString());
 
         // Write code here to process the request and/or response before
         // the rest of the filter chain is invoked.

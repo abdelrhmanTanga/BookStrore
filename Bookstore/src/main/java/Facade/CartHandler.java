@@ -203,7 +203,6 @@ public class CartHandler {
             }
             List<CartDTO> cartItems = new ArrayList<>();
             for (int i = 0; i < productsInfo.size(); i++) {
-
                 CartDTO cartDTO = new CartDTO();
                 cartDTO.setISBN(productsInfo.get(i).getISBN());
                 cartDTO.setId(productsInfo.get(i).getId());

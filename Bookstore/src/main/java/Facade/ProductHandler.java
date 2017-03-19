@@ -182,6 +182,7 @@ public class ProductHandler {
             ProductDAO productDAO = new ProductDAO(connection);
             int pages = productDAO.getProductsCount();
             pages = (pages / 12) + 1;
+            connection.close();
             return pages;
         } catch (SQLException ex) {
             Logger.getLogger(ProductHandler.class.getName()).log(Level.SEVERE, null, ex);
