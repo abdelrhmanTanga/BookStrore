@@ -170,7 +170,7 @@
                     type: 'POST',
                     success: function (data, textStatus, jqXHR) {
                         console.log(data);
-                        if (data == 'true') {
+                        if (data != 'false') {
                             console.log(data);
                             window.location.href = "/BookStore/checkout";
                         } else {

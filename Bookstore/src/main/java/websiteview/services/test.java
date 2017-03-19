@@ -30,10 +30,12 @@ public class test extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
 //        CartHandler cartHandler = new CartHandler();
 //        cartHandler.test();
 //        PrintWriter out = response.getWriter();
 //        out.println("true");
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

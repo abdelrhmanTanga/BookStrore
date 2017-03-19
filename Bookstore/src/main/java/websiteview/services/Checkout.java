@@ -6,6 +6,7 @@
 package websiteview.services;
 
 import Facade.CartHandler;
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Vector;
@@ -56,10 +57,12 @@ public class Checkout extends HttpServlet {
                 session.setAttribute("loggedCart", cartSize);
                 System.out.println("checkout done");
                 System.out.println("orderInfo :" + orderInfo.getProducts().elementAt(0).getAuthor());
+
                 request.setAttribute("orderInfo", orderInfo);
                 
                 RequestDispatcher dispatcher = request.getRequestDispatcher("");
                 dispatcher.forward(request, response);
+
             } else {
                 out.print("false");
                 ///////////////// logic for not signed in
