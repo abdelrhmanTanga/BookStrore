@@ -5,6 +5,7 @@
  */
 package websiteview;
 
+import Facade.Session;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
@@ -15,13 +16,19 @@ import javax.servlet.ServletContextListener;
  */
 public class ContextListener implements ServletContextListener {
 
+    Session session = new Session();
+
+    public ContextListener() {
+        
+    }
+
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        System.out.println("context init");
+        session.clearAll();
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        System.out.println("context destroyed");
+        session.clearAll();
     }
 }

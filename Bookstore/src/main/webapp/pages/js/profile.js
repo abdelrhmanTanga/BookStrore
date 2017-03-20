@@ -1,18 +1,17 @@
 $(document).ready(function () {
-    var pw = $("#pw").val();
-
-
     $(".editlink").on("click", function (e) {
         e.preventDefault();
-        var dataset = $(this).prev(".datainfo");
+        var dataset1 = $(this).prev(".datainfo");
         var savebtn = $(this).next(".savebtn");
-        var theid = dataset.attr("id");
-        var newid = "#" + theid;
-        var name = $(newid).attr("name");
-        var value = $(newid).attr("value");
-        $(newid).prop("readonly", false);
-        var currval = dataset.text();
-        dataset.empty();
+        var theid = dataset1.attr("id");
+        var newid1 = "#" + theid;
+        var name1 = $(newid1).attr("name");
+
+        var value1 = $(newid1).attr("value");
+        $(newid1).prop("readonly", false);
+        $(newid1).focus();
+        var currval = dataset1.text();
+        dataset1.empty();
 
         $(this).css("display", "none");
         savebtn.css("display", "block");
@@ -20,28 +19,52 @@ $(document).ready(function () {
     });
     $(".savebtn").on("click", function (e) {
         e.preventDefault();
-        var elink = $(this).prev(".editlink");
-        var dataset = elink.prev(".datainfo");
-        var newid = dataset.attr("id");
-        var cinput = "#" + newid;
-        var name = $(cinput).attr("name");
-        var value = $(cinput).attr("value");
-        /*        var fieldName = newid + "-form";
-         var einput = $(cinput);
-         var newval = einput.attr("value");
-         var newid2 = "#" + newid;*/
-        $(cinput).prop("readonly", true);
-        $(this).css("display", "none");
-        dataset.html(value);
-        elink.css("display", "block");
-       $.ajax({
-            url:'ProfileEditor',
-            data:{name:value},
-            type:'post',
-            success:function(data){
-               //$('#somediv').text(saved); 
-            }
-         }
-    );
+        elink = $(this).prev(".editlink");
+        dataset = elink.prev(".datainfo");
+        newid = dataset.attr("id");
+        cinput = "#" + newid;
+        einput = $(cinput);
+        name = einput.attr("name");
+        newvalue = einput.val();
+        req = null;
+        if (window.XMLHttpRequest)
+            req = new XMLHttpRequest();
+        else if (window.ActiveXobject)
+            req = new ActiveXobject(Microsoft.XMLHTTP);
+        req.onreadystatechange = handleReq;
+
+
+        req.open("GET", "/BookStore/ProfileEditor?fieldname=" + name + "&newvalue=" + newvalue + "&Date =" + new Date(), true);
+        req.send(null);
+
     });
 });
+function handleReq()
+{
+    if (req.readyState == 4)
+    {
+        if (req.status == 200)
+        {
+
+            console.log(req.responseText);
+            if (req.responseText == "true")
+            {
+                einput.prop("readonly", true);
+                $(".savebtn").css("display", "none");
+                dataset.html(newvalue);
+                elink.css("display", "block");
+                $('#msg').text(name +" is Saved");
+                $('#msg').delay(500).fadeIn();
+                $('#msg').delay(1000).fadeOut();
+            } else
+            {
+ $('#msg').text("not valid data");
+ $('#msg').delay(1000).fadeIn();
+ $('#msg').delay(1000).fadeOut();
+            }
+        } else {
+            //$('#textfield1').val("Error Code : " + req.status);
+        }
+    }
+
+}

@@ -5,31 +5,22 @@
  */
 package websiteview.services;
 
-import Facade.Session;
+import Facade.CartHandler;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import websiteview.model.ClientDTO;
+import websiteview.model.UpdateQuantityDTO;
 
 /**
  *
- * @author yasmeen
+ * @author abdelrhman galal
  */
-@WebServlet(name = "ProfileEditor", urlPatterns = {"/ProfileEditor"})
-public class ProfileEditor extends HttpServlet {
-
-    Session session;
-
-    @Override
-    public void init(ServletConfig config) throws ServletException {
-        session = new Session();
-    }
+public class UpdateQuantity extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,27 +31,12 @@ public class ProfileEditor extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-      response.setContentType("text");
-        String updatedField = request.getParameter("fieldname");
-        PrintWriter out = response.getWriter();
-        String newValue = request.getParameter("newvalue");
-        HttpSession httpSession = request.getSession(false);
-        if (httpSession != null) {
-            String email = (String) httpSession.getAttribute("loggedIn");
-            if (email != null && updatedField != null && newValue != null) {
-                if (session.editProfile(email, updatedField, newValue)) {
-                    System.out.println("updated");
-                    out.print("true");
-                    out.close();
-                } else {
-                    System.out.println("not updated");
-                    out.print("false");
-                    out.close();
-                }
-            }
-        }
+    CartHandler cartHandler;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config); //To change body of generated methods, choose Tools | Templates.
+        cartHandler = new CartHandler();
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -75,7 +51,7 @@ public class ProfileEditor extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        response.sendRedirect("/BookStore/cart");
     }
 
     /**
@@ -89,7 +65,28 @@ public class ProfileEditor extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        HttpSession session = request.getSession();
+        if (session != null) {
+            String email = (String) session.getAttribute("loggedIn");
+            if (email != null && !email.equals("")) {
+                int productid = Integer.parseInt(request.getParameter("productid"));
+                int quantity = Integer.parseInt(request.getParameter("quantity"));
+                UpdateQuantityDTO updateQuantityDTO = new UpdateQuantityDTO();
+                updateQuantityDTO.setEmail(email);
+                updateQuantityDTO.setProductId(productid);
+                updateQuantityDTO.setQuantity(quantity);
+                PrintWriter out = response.getWriter();
+                if (cartHandler.updateQuantity(updateQuantityDTO)) {
+                    out.print("true");
+                } else {
+                    out.print("false");
+                }
+            } else {
+                ///////////////// not signed in
+            }
+        } else {
+///////////////// no session
+        }
     }
 
     /**

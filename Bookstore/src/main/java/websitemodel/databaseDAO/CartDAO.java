@@ -15,6 +15,8 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import websitemodel.databaseDTO.Cart;
+import websitemodel.databaseDTO.Product;
+import websiteview.model.ProductModel;
 
 /**
  *
@@ -79,7 +81,7 @@ public class CartDAO {
             pst.setString(1, Email);
             ResultSet rs = pst.executeQuery();
             List<Cart> cartList = new ArrayList<>();
-            while (rs.next()){
+            while (rs.next()) {
                 Cart cart = new Cart();
                 cart.setBookID(rs.getInt(2));
                 cart.setEmail(Email);
@@ -130,8 +132,8 @@ public class CartDAO {
         }
         return isDeleted;
     }
-    
-    public synchronized boolean removeFromCart(Cart cart){
+
+    public synchronized boolean removeFromCart(Cart cart) {
         try {
             PreparedStatement pst = connection.prepareStatement("delete from cart where email = ? and id = ?");
             pst.setString(1, cart.getEmail());
@@ -142,6 +144,22 @@ public class CartDAO {
             Logger.getLogger(CartDAO.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
+    }
+
+    public synchronized boolean updateQuantity(Cart cart) {
+        try {
+            PreparedStatement pst = connection.prepareStatement("update cart set quantity = ? where email = ? and id = ?");
+            pst.setInt(1, cart.getQuantity());
+            pst.setString(2, cart.getEmail());
+            pst.setInt(3, cart.getBookID());
+            pst.executeUpdate();
+            pst.close();
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(CartDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+
     }
 
     //////////////////////// abdelrhman 
@@ -235,6 +253,22 @@ public class CartDAO {
         }
 
     }
+    
+    public void checkAdded(String email, Vector<ProductModel> products) {
+        try {
+            for (ProductModel product : products) {
+                PreparedStatement pst = connection.prepareStatement("select * from cart where id = ?");
+                pst.setInt(1, product.getId());
+                ResultSet rs = pst.executeQuery();
+                if (rs.next()){
+                    product.setPurchased(true);
+                }
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(CartDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
 //////////////////////////abdelrhman
 ////////////////////////omnia
@@ -263,4 +297,8 @@ public class CartDAO {
 /////////////////////////yasmin
 ////////////////////////heba
 ///////////////////////heba
+
+    
+
+    
 }

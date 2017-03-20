@@ -8,7 +8,7 @@ and open the template in the editor.
 <html lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <title>FB-Style Inline Edit Fields</title>
+        <title>Profile</title>
         <meta name="author" content="Jake Rocheleau">
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/pages/css/Userprofilestyle.css">
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
@@ -22,10 +22,11 @@ and open the template in the editor.
         <section id="core" style="height: 100%;">
 
 
-            <div class="profileinfo">	
-                <div class="gear">
+            <div class="profileinfo" >	
+                <div class="gear" style="margin-top: 10px;">
                     <label> E-Mail</label>
                     <span id="pemail" class="datainfo" >${loggedIn}</span>
+                    <span id="msg" style="text-align: center;margin-left: 30px;"></span>
 
                 </div>
 
@@ -40,7 +41,7 @@ and open the template in the editor.
 
                 <div class="gear">
                     <label>password</label>
-                    <input id="pw" class="datainfo" type="password" value="${clientData.password}" readonly name="pw"/>
+                    <input id="pw" class="datainfo" type="password" value="${clientData.password}" readonly name="pw" pattern=".{8,}"/>
                     <a href="#" class="editlink"><span class="glyphicon glyphicon-pencil"></span>Edit Info</a>
                     <a class="savebtn">Save</a>
                 </div>
@@ -57,7 +58,8 @@ and open the template in the editor.
 
                 <div class="gear">
                     <label>Birthday:</label>
-                    <input type="text" id="birthday" class="datainfo" name="dob" readonly value="${clientData.birthDay}">
+                    <input type="text" id="birthday" class="datainfo" name="dob" readonly pattern="(0[1-9]|1[0-9]|2[0-9]|3[01])-(0[1-9]|1[012])-[0-9]{4}" value="${clientData.birthDay}">
+                    
                     <a href="#" class="editlink"><span class="glyphicon glyphicon-pencil"></span>Edit Info</a>
                     <a class="savebtn">Save</a>
                 </div>
@@ -71,7 +73,7 @@ and open the template in the editor.
 
                 <div class="gear">
                     <label>Phone</label>
-                    <input type="tel" id="phonenum" class="datainfo" name="phone" value="${clientData.phone}" readonly/>
+                    <input type="tel" id="phonenum" class="datainfo" name="phone" value="${clientData.phone}" readonly pattern="^01(0|1|2){1}[0-9]{8}$"/>
                     <a href="#" class="editlink"><span class="glyphicon glyphicon-pencil"></span>Edit Info</a>
                     <a class="savebtn">Save</a>
                 </div>
@@ -98,8 +100,9 @@ and open the template in the editor.
                     <a href="#" class="editlink"><span class="glyphicon glyphicon-pencil"></span>Edit Info</a>
                     <a class="savebtn">Save</a>
                 </div>
-
-
+                    <div style="text-align: center;">
+                    
+</div>
             </div>
         </section>
 

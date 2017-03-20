@@ -50,6 +50,9 @@ public class Checkout extends HttpServlet {
             System.out.println("email is : " + email);
             CheckoutDTO orderInfo = cartHandler.doCheckout(email);
             if (orderInfo != null) {
+                Integer cartSize = (Integer) session.getAttribute("loggedCart");
+                cartSize = 0;
+                session.setAttribute("loggedCart", cartSize);
                 System.out.println("checkout done");
                 System.out.println("orderInfo :" + orderInfo.getProducts().elementAt(0).getAuthor());
                 request.setAttribute("orderInfo", orderInfo);

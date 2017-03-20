@@ -135,38 +135,186 @@ public class Session {
     }
 
     /////////////////////////////////
-    public ClientDTO getProfileData(String email)
-    {
+    public ClientDTO getProfileData(String email) {
         ClientDTO clientdto = null;
         try {
-            Connection connection= ConnectionPool.getInstance().getConnection();
-            ClientDAO clientdao=new ClientDAO(connection);
-             clientdto= new ClientDTO();
-           Client client= clientdao.getClientInfo(email);
-           if(client!=null){
-           clientdto.setUserName(client.getName());
-           clientdto.setPassword(client.getPassword());
-           clientdto.setAddress(client.getAddress());
-           clientdto.setBirthDay(client.getBirthday());
-           clientdto.setCountry(client.getCountry());
-           clientdto.setCredit(client.getCredit());
-           clientdto.setJob(client.getJob());
-           clientdto.setGender(client.getGender());
-           clientdto.setPhone(client.getPhone());
-           connection.close();
-           return clientdto;
-           }
-           else{
-               connection.close();
-               return null;}
+            Connection connection = ConnectionPool.getInstance().getConnection();
+            ClientDAO clientdao = new ClientDAO(connection);
+            clientdto = new ClientDTO();
+            Client client = clientdao.getClientInfo(email);
+            if (client != null) {
+                clientdto.setUserName(client.getName());
+                clientdto.setPassword(client.getPassword());
+                clientdto.setAddress(client.getAddress());
+                clientdto.setBirthDay(client.getBirthday());
+                clientdto.setCountry(client.getCountry());
+                clientdto.setCredit(client.getCredit());
+                clientdto.setJob(client.getJob());
+                if (client.getGender().equals("f")) {
+                    clientdto.setGender("female");
+                } else {
+                    clientdto.setGender("male");
+                }
+                clientdto.setPhone(client.getPhone());
+                connection.close();
+                return clientdto;
+            } else {
+                connection.close();
+                return null;
+            }
         } catch (SQLException ex) {
             Logger.getLogger(Session.class.getName()).log(Level.SEVERE, null, ex);
             return null;
-     
+
         }
-     
+
     }
-    
+
     //////////////////////////////////
-    
+    public void logout(String email) {
+        try {
+            Connection connection = ConnectionPool.getInstance().getConnection();
+            ClientDAO clientDAO = new ClientDAO(connection);
+            clientDAO.logout(email);
+            connection.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Session.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void clearAll() {
+        try {
+            Connection connection = ConnectionPool.getInstance().getConnection();
+            ClientDAO clientDAO = new ClientDAO(connection);
+            clientDAO.clearAll();
+            connection.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Session.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    //////////////////////////////////////////////////
+    public boolean updateProfileData(ClientDTO clientDTO) {
+        try {
+            Connection connection = ConnectionPool.getInstance().getConnection();
+            ClientDAO clientDAO = new ClientDAO(connection);
+            Client client = new Client();
+
+            if (clientDAO.updateClient(client)) {
+                System.out.println("Client Data Was updated");
+                connection.close();
+                return true;
+            } else {
+                connection.close();
+                return false;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Session.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+
+    }
+    /////////////////////////////////////////////////////
+
+    public boolean editProfile(String email, String updatedField, String newValue) {
+        try {
+            Connection connection = ConnectionPool.getInstance().getConnection();
+            ClientDAO clientDAO = new ClientDAO(connection);
+            switch (updatedField) {
+                case "uname": {
+                    if (clientDAO.updateClientName(newValue, email)) {
+                        connection.close();
+                        return true;
+                    } else {
+                        connection.close();
+                        return false;
+                    }
+                }
+                case "pw": {
+                    if (clientDAO.updateClientPassword(newValue, email)) {
+                        connection.close();
+                        return true;
+                    } else {
+                        connection.close();
+                        return false;
+                    }
+                }
+                case "credit": {
+                    long newcredit = Long.parseLong(newValue);
+                    if (clientDAO.updateClientCredit(newcredit, email)) {
+                        connection.close();
+                        return true;
+                    } else {
+                        connection.close();
+                        return false;
+                    }
+
+                }
+                case "dob": {
+                    if (clientDAO.updateClientBirthDay(newValue, email)) {
+                        connection.close();
+                        return true;
+                    } else {
+                        connection.close();
+                        return false;
+                    }
+                }
+                case "country": {
+                    if (clientDAO.updateClientCountry(newValue, email)) {
+                        connection.close();
+                        return true;
+                    } else {
+                        connection.close();
+                        return false;
+                    }
+
+                }
+                case "phone": {
+                    long newPhone = Long.parseLong(newValue);
+                    if (clientDAO.updateClientPhone(newPhone, email)) {
+                        connection.close();
+                        return true;
+                    } else {
+                        connection.close();
+                        return false;
+                    }
+                }
+                case "job": {
+                    if (clientDAO.updateClientjob(newValue, email)) {
+                        connection.close();
+                        return true;
+                    } else {
+                        connection.close();
+                        return false;
+                    }
+                }
+                case "address": {
+                    if (clientDAO.updateClientAddress(newValue, email)) {
+                        connection.close();
+                        return true;
+                    } else {
+                        connection.close();
+                        return false;
+                    }
+                }
+                case "gender": {
+                    if (clientDAO.updateClientGender(newValue, email)) {
+                        connection.close();
+                        return true;
+                    } else {
+                        connection.close();
+                        return false;
+                    }
+                }
+                default: {
+                    connection.close();
+                    return false;
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Session.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+
+    }
 }
