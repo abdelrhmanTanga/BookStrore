@@ -52,7 +52,7 @@ public class ProductViewer extends HttpServlet {
         Vector<HeaderCategories> categories = productHandler.getCategories();
         Integer cartSize = 0;
         String email = null;
-        HttpSession session = request.getSession(false);
+        HttpSession session = request.getSession(true);
 
         if (session != null) {
             email = (String) session.getAttribute("loggedIn");
