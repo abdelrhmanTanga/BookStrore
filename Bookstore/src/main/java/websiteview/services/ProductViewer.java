@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import websiteview.model.CategoriesCount;
+//import websiteview.model.CategoriesCount;
 import websiteview.model.HeaderCategories;
 import websiteview.model.ProductModel;
 
@@ -52,7 +52,7 @@ public class ProductViewer extends HttpServlet {
         //////////////header loader
         System.out.println("before product handler get categories");
         Vector<HeaderCategories> categories = productHandler.getCategories();
-        List<CategoriesCount> categoriesCount=productHandler.getProductsperCategory();
+        //List<CategoriesCount> categoriesCount=productHandler.getProductsperCategory();
         Integer cartSize = 0;
         String email = null;
         HttpSession session = request.getSession(true);

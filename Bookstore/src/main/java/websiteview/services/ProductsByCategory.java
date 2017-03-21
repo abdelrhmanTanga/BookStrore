@@ -5,6 +5,7 @@
  */
 package websiteview.services;
 
+import Facade.CartHandler;
 import Facade.ProductHandler;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -14,6 +15,7 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,6 +31,7 @@ import websiteview.model.ProductModel;
 public class ProductsByCategory extends HttpServlet {
 
     ProductHandler productHandler;
+    CartHandler cartHandler;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -43,6 +46,7 @@ public class ProductsByCategory extends HttpServlet {
     public void init(ServletConfig config)
             throws ServletException {
         productHandler = new ProductHandler();
+        cartHandler = new CartHandler();
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -76,12 +80,30 @@ public class ProductsByCategory extends HttpServlet {
         String categoryID = request.getParameter("id");
 
         List<ProductModel> products = productHandler.searchByCategory(categoryID);
+        Vector<ProductModel> products1 = new Vector<>();
+        for (int i = 0; i < products.size(); i++) {
+            ProductModel productTemp = new ProductModel();
+            productTemp = products.get(i);
+            products1.add(productTemp);
+        }
+        String email = null;
+        HttpSession session = request.getSession();
+        if (session != null) {
+            email = (String) session.getAttribute("loggedIn");
+        }
+        if (email != null) {
+            System.out.println("before check added");
+            cartHandler.checkAdded(email, products1);
+        } else {
+            /////////// logic for offline users
+            checkAdded(products1, request);
+        }
         request.setAttribute("products", products);
         Vector<HeaderCategories> categories = productHandler.getCategories();
         if (categories != null) {
             request.setAttribute("categories", categories);
         }
-        HttpSession session= request.getSession(true);
+        session = request.getSession(true);
         session.setAttribute("selectedCategory", categoryID);
         RequestDispatcher dispatcher1 = request.getRequestDispatcher("/pages/navbar.jsp");
         dispatcher1.include(request, response);
@@ -116,4 +138,31 @@ public class ProductsByCategory extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+    private void checkAdded(Vector<ProductModel> products, HttpServletRequest request) {
+        Cookie cookie = null;
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookieName : cookies) {
+            if (cookieName.getName().equals("products")) {
+                cookie = cookieName;
+            }
+        }
+        if (cookie != null) {
+            String[] productIds = cookie.getValue().split(",");
+            for (ProductModel productCheck : products) {
+                for (String str : productIds) {
+                    System.out.println(str);
+                    if (!str.equals("0")) {
+                        int productId = Integer.parseInt(str);
+                        if (productId == productCheck.getId()) {
+                            System.out.println(str);
+                            productCheck.setPurchased(true);
+                        }
+                    }
+                }
+            }
+        } else {
+
+        }
+
+    }
 }

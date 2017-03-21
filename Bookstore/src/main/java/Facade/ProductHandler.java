@@ -19,7 +19,7 @@ import websitemodel.databaseDAO.ProductDAO;
 import websitemodel.databaseDTO.Cart;
 import websitemodel.databaseDTO.Category;
 import websitemodel.databaseDTO.Product;
-import websiteview.model.CategoriesCount;
+//import websiteview.model.CategoriesCount;
 import websiteview.model.HeaderCategories;
 import websiteview.model.ProductModel;
 import websiteview.model.ProductPageDTO;
@@ -190,7 +190,7 @@ public class ProductHandler {
             return 0;
         }
     }
-    public List<CategoriesCount> getProductsperCategory()
+    /*public List<CategoriesCount> getProductsperCategory()
     {
         try {
             Connection connection=ConnectionPool.getInstance().getConnection();
@@ -204,5 +204,5 @@ public class ProductHandler {
             Logger.getLogger(ProductHandler.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
-    }
+    }*/
 }

@@ -142,6 +142,7 @@ public class ClientDAO {
             pps.setString(8, client.getGender());
             pps.setString(9, client.getBirthday());
             pps.setString(10, client.getJob());
+            pps.setString(11, "f");
             int rs = pps.executeUpdate();
 
             pps.close();

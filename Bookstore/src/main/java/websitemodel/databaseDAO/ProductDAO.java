@@ -17,7 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import websitemodel.databaseDTO.Category;
 import websitemodel.databaseDTO.Product;
-import websiteview.model.CategoriesCount;
+//import websiteview.model.CategoriesCount;
 
 /**
  *
@@ -419,6 +419,7 @@ public class ProductDAO {
                 product.setPrice(rs.getInt(8));
                 product.setReviews(rs.getString(7));
                 product.setImage(rs.getString(10));
+                product.setId(rs.getInt(1));
                 products.add(product);
             }
             rs.close();
@@ -464,6 +465,7 @@ public class ProductDAO {
                 product.setPrice(rs.getInt(8));
                 product.setReviews(rs.getString(7));
                 product.setImage(rs.getString(10));
+                product.setId(rs.getInt(1));
                 products.add(product);
             }
             rs.close();
@@ -476,7 +478,7 @@ public class ProductDAO {
     }
 
     ///////////////////////////////////////////
-    public List<CategoriesCount> categoryCounter() {
+    /*public List<CategoriesCount> categoryCounter() {
         CategoriesCount categoriescount = new CategoriesCount();
         List<CategoriesCount> categoriesCount;
         try {
@@ -500,5 +502,5 @@ public class ProductDAO {
 
         }
 
-    }
+    }*/
 }
