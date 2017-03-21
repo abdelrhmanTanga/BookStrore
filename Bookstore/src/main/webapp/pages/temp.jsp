@@ -13,6 +13,7 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/pages/css/style_1.css">
         <script src="${pageContext.request.contextPath}/pages/js/registration.js"></script>
         <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+        
     </head>
     <body>
         <div class="container">
@@ -328,7 +329,7 @@
                                 <br> <br>
                                 <p> 
                                     <label for="passwordsignup_confirm" class="youpasswd" > Address</label>
-                                    <input name="address" placeholder="Address" id="form-address" required="required" type="password" />
+                                    <input name="address" placeholder="Address" id="form-address" required="required" type="text" />
                                 </p>
 
 
@@ -375,14 +376,12 @@
 
                                 <p>
                                     <label  for="emailsignup" class="youmail"  >credit limit</label>
-                                    <input type="number" name="credit" placeholder="Creadet Cared limits "  id="form-gender"> 
+                                    <input type="number" name="credit" placeholder="Creadet Cared limits "  id="form-gender" required="true"> 
                                 </p>
 
                                 <p class="signin button"> 
-                                    <input id="signupbtn" type="submit" value="Sign up"/> 
+                                    <input id="signupbtn" type="submit" value="Sign up" onclick="validate"/> 
                                 </p>
-
-
 
                                 <p class="change_link">  
                                     Already a member ?
