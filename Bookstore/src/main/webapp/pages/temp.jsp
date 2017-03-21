@@ -11,7 +11,9 @@
         <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/pages/css/style_1.css">
+        <script src="${pageContext.request.contextPath}/pages/js/registration.js"></script>
         <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+        
     </head>
     <body>
         <div class="container">
@@ -71,7 +73,7 @@
                                     <p>
 
 
-                                        <select id="country" name="country">
+                                        <select id="country" name="country" required="true">
                                             <option value="">Country...</option>
                                             <option value="AF">Afghanistan</option>
                                             <option value="AL">Albania</option>
@@ -327,7 +329,7 @@
                                 <br> <br>
                                 <p> 
                                     <label for="passwordsignup_confirm" class="youpasswd" > Address</label>
-                                    <input name="address" placeholder="Address" id="form-address" required="required" type="password" />
+                                    <input name="address" placeholder="Address" id="form-address" required="required" type="text" />
                                 </p>
 
 
@@ -362,26 +364,24 @@
                                 <br> <br>
                                 <p>
                                     <label  for="emailsignup" class="youmail" >Date of birth</label>
-                                    <input type="date" name="birthday"  class="youmail" placeholder="DOB"  id="form-DOB">  
+                                    <input type="date" name="birthday"  class="youmail" placeholder="DOB"  id="form-DOB" required="true">  
 
                                 </p>
 
 
                                 <p>
                                     <label  for="emailsignup" class="youmail" >Phone</label>
-                                    <input type="number" name="phone"  class="youmail" placeholder="Phone Number"  id="form-phone">  
+                                    <input type="number" name="phone" pattern="^01(0|1|2){1}[0-9]{8}$" class="youmail" placeholder="Phone Number"  id="form-phone" required="true">  
                                 </p>
 
                                 <p>
                                     <label  for="emailsignup" class="youmail"  >credit limit</label>
-                                    <input type="number" name="credit" placeholder="Creadet Cared limits "  id="form-gender"> 
+                                    <input type="number" name="credit" placeholder="Creadet Cared limits "  id="form-gender" required="true"> 
                                 </p>
 
                                 <p class="signin button"> 
-                                    <input type="submit" value="Sign up"/> 
+                                    <input id="signupbtn" type="submit" value="Sign up" onclick="validate"/> 
                                 </p>
-
-
 
                                 <p class="change_link">  
                                     Already a member ?

@@ -121,7 +121,7 @@
                             <div class="col-sm-4">
                                 <div class="shop-menu pull-right">
                                     <ul class="nav navbar-nav">
-                                        <li><a href="/BookStore/productviewer"><i class="fa fa-lock"></i> home</a></li>
+                                        <!--<li><a href="/BookStore/productviewer"><i class="fa fa-lock"></i> home</a></li>-->
                                         <li><a href="/BookStore/ProfileViewer"><i class="fa fa-user"></i>${loggedIn}</a></li> 
                                         <li><a href="/BookStore/cart"><i class="fa fa-shopping-cart"><span class="num" id="loggedCart">${loggedCart}</span></i> Cart</a></li> 
                                         <li><a href="/BookStore/signout"><i class="fa fa-lock"></i> Logout</a></li>

@@ -419,6 +419,7 @@ public class ProductDAO {
                 product.setPrice(rs.getInt(8));
                 product.setReviews(rs.getString(7));
                 product.setImage(rs.getString(10));
+                product.setId(rs.getInt(1));
                 products.add(product);
             }
             rs.close();
@@ -464,6 +465,7 @@ public class ProductDAO {
                 product.setPrice(rs.getInt(8));
                 product.setReviews(rs.getString(7));
                 product.setImage(rs.getString(10));
+                product.setId(rs.getInt(1));
                 products.add(product);
             }
             rs.close();
@@ -475,9 +477,9 @@ public class ProductDAO {
         }
     }
 
-    /*///////////////////////////////////////////
-    public List<CategoriesCount> categoryCounter() {
-       CategoriesCount categoriescount = new CategoriesCount();
+    ///////////////////////////////////////////
+    /*public List<CategoriesCount> categoryCounter() {
+        CategoriesCount categoriescount = new CategoriesCount();
         List<CategoriesCount> categoriesCount;
         try {
             categoriesCount = new ArrayList<>();
