@@ -100,6 +100,7 @@ public class SignUp extends HttpServlet {
         String gender = request.getParameter("gender");
         String job = request.getParameter("job");
         String favorites = request.getParameter("favorites");
+        
         if (username != null && password != null && address != null && phone != 0 && country != null
                 && email != null && credit != 0 && birthday != null && gender != null && job != null ) {
             signupDTO.setUserName(username);

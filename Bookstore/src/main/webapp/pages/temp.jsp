@@ -11,9 +11,11 @@
         <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/pages/css/style_1.css">
-        <script src="${pageContext.request.contextPath}/pages/js/registration.js"></script>
-        <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!--        <script src="${pageContext.request.contextPath}/pages/js/registration.js"></script>-->
         
+    <script src="${pageContext.request.contextPath}/pages/js/signinValidation.js"></script>
+    
+        <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     </head>
     <body>
         <div class="container">
@@ -33,18 +35,20 @@
                                 <h1>Log in</h1> 
                                 <p> 
                                     <label for="username" class="uname" > Your email or username </label>
-                                    <input  required="required" type="text" name="email" id="email" placeholder="Email "  />
+                                    <input  required="required" type="text" name="email" id="email" placeholder="Email" onblur="validateEmail()"/>
+                                    <p id="invalidMsg" style="color:red"></p>
                                 </p>
                                 <p> 
                                     <label for="password" class="youpasswd"> Your password </label>
-                                    <input id="password"  required="required" type="password"    name="password"  placeholder="Password"  /> 
+                                    <input id="password"  required="required" type="password"    name="password"  placeholder="Password" onblur="valPass()" />
+                                    <p id="passMsg" style="color:red"></p>
                                 </p>
                                 <p class="keeplogin"> 
                                     <input type="checkbox" name="loginkeeping" id="loginkeeping" value="loginkeeping" /> 
                                     <label for="loginkeeping">Keep me logged in</label>
                                 </p>
                                 <p class="login button"> 
-                                    <input type="submit" value="Login" /> 
+                                    <input type="submit" value="Login" onclick="submitLogin()"/> 
                                 </p>
                                 <p class="change_link">
                                     Not a member yet ?
@@ -62,11 +66,13 @@
                                 </p>
                                 <p> 
                                     <label for="emailsignup" class="youmail"  > Your email</label>
-                                    <input  required="required" type="email" name="email" placeholder="Email"  id="form-email" >
+                                    <input  required="required" type="email" name="email" placeholder="Email"  id="form-email" onblur="validateEmailSignup()"/>
+                                    <p id="invalidMsg2" style="color:red"></p>
                                 </p>
                                 <p> 
                                     <label for="passwordsignup" class="youpasswd" >Your password </label>
-                                    <input name="password" placeholder="Password"  id="signup-password" required="required" type="password" />
+                                    <input name="password" placeholder="Password"  id="signup-password" required="required" type="password" onblur="valPassSignup()"/>
+                                    <p id="passMsg2" style="color:red"></p>
                                 </p>
                                 <label for="emailsignup" class="youmail">Select Country</label><br>
                                 <div class="styled-select slate">
@@ -371,17 +377,20 @@
 
                                 <p>
                                     <label  for="emailsignup" class="youmail" >Phone</label>
-                                    <input type="number" name="phone" pattern="^01(0|1|2){1}[0-9]{8}$" class="youmail" placeholder="Phone Number"  id="form-phone" required="true">  
+                                    <input type="number" name="phone" pattern="^01(0|1|2){1}[0-9]{8}$" class="youmail" placeholder="Phone Number"  id="form-phone" required="true" onblur="validateMobile()"/>
+                                    <p id="invalidMob" style="color:red"></p>
                                 </p>
 
                                 <p>
-                                    <label  for="emailsignup" class="youmail"  >credit limit</label>
+                                    <label  for="emailsignup" class="youmail"  >Credit Limit</label>
                                     <input type="number" name="credit" placeholder="Creadet Cared limits "  id="form-gender" required="true"> 
                                 </p>
 
                                 <p class="signin button"> 
-                                    <input id="signupbtn" type="submit" value="Sign up" onclick="validate"/> 
+                                    <input id="signupbtn" type="submit" value="Sign up" onclick="submitSignup()"/> 
                                 </p>
+
+
 
                                 <p class="change_link">  
                                     Already a member ?
