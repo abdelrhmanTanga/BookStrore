@@ -9,7 +9,7 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,
 	padding:0;
 }
 html,body {
-	margin:0;
+	margin:5%;
 	padding:0;
 	height: 100%;
 }
@@ -46,7 +46,9 @@ footer, header, hgroup, menu, nav, section {
 /* General Demo Style */
 body{
 	font-family: Cambria, Palatino, "Palatino Linotype", "Palatino LT STD", Georgia, serif;
-	background: #fff url(../images/bg.jpg) repeat top left;
+	background:  #fff url(../images/library.jpg) no-repeat ;
+        background-position: center center;
+        background-size: 100% 100%;
 	font-weight: 400;
 	font-size: 15px;
 	color: #1d3c41;
@@ -158,7 +160,7 @@ a{
 
 /* remove codrops styles and reset the whole thing */
 @import url('https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i');
-body{background:url(http://www.businessnewsdaily.com/images/i/000/007/874/original/free-business-plan-templates.jpg);
+body{
 background-attachment:fixed;
 background-size:cover;
 }
@@ -181,6 +183,7 @@ a.hiddenanchor{
 	margin: 0px auto;	
 	width: 500px;
 	position: relative;	
+        opacity: 0.8;
 }
 /**** Styling the form elements **/
 
@@ -202,12 +205,9 @@ a.hiddenanchor{
 /** For the moment only webkit supports the background-clip:text; */
 #wrapper h1{
     background: -webkit-repeating-linear-gradient(-45deg, 
-	rgb(18, 83, 93) , 
-	rgb(18, 83, 93) 20px, 
-	rgb(64, 111, 118) 20px, 
-	rgb(64, 111, 118) 40px, 
-	rgb(18, 83, 93) 40px);
-	-webkit-text-fill-color: transparent;
+	rgb(161, 97, 69) , rgb(254, 254, 254) 20px, #eee 20px, rgb(158, 95, 62) 40px, rgba(255,255,255,0.8) 40px);
+    -webkit-text-fill-color: transparent;
+    
 	-webkit-background-clip: text;
 }
 #wrapper h1:after{
@@ -231,8 +231,9 @@ a.hiddenanchor{
 	margin: 0px;
 }
 #wrapper label{
-	color: rgb(64, 92, 96);
+	color: #dfc5a5;
 	position: relative;
+        font-size: large;
 }
 
 /**** advanced input styling ****/
@@ -295,12 +296,12 @@ input {
 #wrapper p.button input{
 	width: 30%;
 	cursor: pointer;	
-	background: rgb(61, 157, 179);
+	background: rgb(117, 94, 80);
 	padding: 8px 5px;
 	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
 	color: #fff;
 	font-size: 24px;	
-	border: 1px solid rgb(28, 108, 122);	
+	border: 1px solid rgb(117, 94, 80);	
 	margin-bottom: 10px;	
 	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
 	-webkit-border-radius: 3px;
@@ -321,7 +322,7 @@ input {
 	        transition: all 0.2s linear;
 }
 #wrapper p.button input:hover{
-	background: rgb(74, 179, 198);
+	background: #dfc5a5;
 }
 #wrapper p.button input:active,
 #wrapper p.button input:focus{
@@ -364,8 +365,8 @@ p.change_link{
 	position: absolute;
 	color: rgb(127, 124, 124);
 	left: 0px;
-	height: 20px;
-	width: 438px;
+	
+	width: 87%;
 	padding: 17px 30px 20px 30px;
 	font-size: 16px	;
 	text-align: right;
@@ -373,42 +374,15 @@ p.change_link{
 	-webkit-border-radius: 0 0  5px 5px;
 	   -moz-border-radius: 0 0  5px 5px;
 	        border-radius: 0 0  5px 5px;
-	background: rgb(225, 234, 235);
-	background: -moz-repeating-linear-gradient(-45deg, 
-	rgb(247, 247, 247) , 
-	rgb(247, 247, 247) 15px, 
-	rgb(225, 234, 235) 15px, 
-	rgb(225, 234, 235) 30px, 
-	rgb(247, 247, 247) 30px
-	);
-	background: -webkit-repeating-linear-gradient(-45deg, 
-	rgb(247, 247, 247) , 
-	rgb(247, 247, 247) 15px, 
-	rgb(225, 234, 235) 15px, 
-	rgb(225, 234, 235) 30px, 
-	rgb(247, 247, 247) 30px
-	);
-	background: -o-repeating-linear-gradient(-45deg, 
-	rgb(247, 247, 247) , 
-	rgb(247, 247, 247) 15px, 
-	rgb(225, 234, 235) 15px, 
-	rgb(225, 234, 235) 30px, 
-	rgb(247, 247, 247) 30px
-	);
-	background: repeating-linear-gradient(-45deg, 
-	rgb(247, 247, 247) , 
-	rgb(247, 247, 247) 15px, 
-	rgb(225, 234, 235) 15px, 
-	rgb(225, 234, 235) 30px, 
-	rgb(247, 247, 247) 30px
-	);
+	background: #dfc5a5;
+
 }
 #wrapper p.change_link a {
 	display: inline-block;
 	font-weight: bold;
 	background: rgb(247, 248, 241);
 	padding: 2px 6px;
-	color: rgb(29, 162, 193);
+	color: brown;
 	margin-left: 10px;
 	text-decoration: none;
 	-webkit-border-radius: 4px;
@@ -422,9 +396,9 @@ p.change_link{
 	transition: all 0.4s  linear;
 }
 #wrapper p.change_link a:hover {
-	color: rgb(57, 191, 215);
+	color:tan;
 	background: rgb(247, 247, 247);
-	border: 1px solid rgb(74, 179, 198);
+	border: 1px solid chocolate;
 }
 #wrapper p.change_link a:active{
 	position: relative;
@@ -435,10 +409,10 @@ p.change_link{
 #login{
 	position: absolute;
 	top: 0px;
-	width: 88%;	
+	width: 80%;	
 	padding: 18px 6% 60px 6%;
-	margin:0  35px;
-	background: rgb(247, 247, 247);
+
+	background: rgb(57, 39, 25);
 	border: 1px solid rgba(147, 184, 189,0.8);
 	-webkit-box-shadow: 0pt 2px 5px rgba(105, 108, 109,  0.7),	0px 0px 8px 5px rgba(208, 223, 226, 0.4) inset;
 	   -moz-box-shadow: 0pt 2px 5px rgba(105, 108, 109,  0.7),	0px 0px 8px 5px rgba(208, 223, 226, 0.4) inset;
@@ -4473,11 +4447,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 }
 
 
-   background: url(http://i62.tinypic.com/15xvbd5.png) no-repeat 96% 0;
-   height: 29px;
-   overflow: hidden;
-   width: 240px;
-}
+ 
 
 /* -------------------- Page Styles (not required) */
 div { margin: 20px; }

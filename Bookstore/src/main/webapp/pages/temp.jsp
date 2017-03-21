@@ -17,8 +17,8 @@
         <div class="container">
 
             <header>
-                <h1>Login and Registration Form</h1>
-
+               
+				
             </header>
             <section>				
                 <div id="container_demo" >
@@ -335,17 +335,18 @@
                                     <label for="emailsignup" class="youmail"  > Your Job</label>
                                     <input  required="required" type="text" name="job" placeholder="Job" id="form-job" >
                                 </p>
-
-                                <label  for="emailsignup" class="youmail" >Favorite Category</label>
-                                <div class="styled-select slate">
-                                    <p>
-
-                                        <select name="favourites"  class="youmail"  id="form-category">
-                                            <c:forEach items="${categories}" var="category">
-                                                <option>${category.name}</option>
-                                            </c:forEach>
-                                        </select>
-                                    </p>
+                            
+                            <label  for="emailsignup" class="youmail" >Favorite Category</label>
+                                 <div class="styled-select slate">
+                                <p>
+                                
+                                    
+                                      <c:forEach items="${categories}" var="category">
+                                          <input name="favourite" type="checkbox" class="youmail"  id="form-category" value="${category.name}">
+                                    
+                                       </c:forEach>
+                             
+                                </p>
                                 </div>
                                 <br> <br>
                                 <label  for="emailsignup" class="youmail" >Gender</label>

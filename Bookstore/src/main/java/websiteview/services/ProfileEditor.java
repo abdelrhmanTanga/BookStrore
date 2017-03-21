@@ -5,12 +5,9 @@
  */
 package websiteview.services;
 
-import Facade.ProductHandler;
+import Facade.Session;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
-import java.util.Vector;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,17 +15,21 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import websiteview.model.HeaderCategories;
-import websiteview.model.ProductModel;
+import websiteview.model.ClientDTO;
 
 /**
  *
  * @author yasmeen
  */
-@WebServlet(name = "ProductsByCategory", urlPatterns = {"/ProductsByCategory"})
-public class ProductsByCategory extends HttpServlet {
+@WebServlet(name = "ProfileEditor", urlPatterns = {"/ProfileEditor"})
+public class ProfileEditor extends HttpServlet {
 
-    ProductHandler productHandler;
+    Session session;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        session = new Session();
+    }
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,25 +40,26 @@ public class ProductsByCategory extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @Override
-    public void init(ServletConfig config)
-            throws ServletException {
-        productHandler = new ProductHandler();
-    }
-
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ProductsByCategory</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ProductsByCategory at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+      response.setContentType("text");
+        String updatedField = request.getParameter("fieldname");
+        PrintWriter out = response.getWriter();
+        String newValue = request.getParameter("newvalue");
+        HttpSession httpSession = request.getSession(false);
+        if (httpSession != null) {
+            String email = (String) httpSession.getAttribute("loggedIn");
+            if (email != null && updatedField != null && newValue != null) {
+                if (session.editProfile(email, updatedField, newValue)) {
+                    System.out.println("updated");
+                    out.print("true");
+                    out.close();
+                } else {
+                    System.out.println("not updated");
+                    out.print("false");
+                    out.close();
+                }
+            }
         }
     }
 
@@ -73,23 +75,7 @@ public class ProductsByCategory extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String categoryID = request.getParameter("id");
-
-        List<ProductModel> products = productHandler.searchByCategory(categoryID);
-        request.setAttribute("products", products);
-        Vector<HeaderCategories> categories = productHandler.getCategories();
-        if (categories != null) {
-            request.setAttribute("categories", categories);
-        }
-        HttpSession session= request.getSession(true);
-        session.setAttribute("selectedCategory", categoryID);
-        RequestDispatcher dispatcher1 = request.getRequestDispatcher("/pages/navbar.jsp");
-        dispatcher1.include(request, response);
-        RequestDispatcher dispatcher2 = request.getRequestDispatcher("/pages/categoryBar.jsp");
-        dispatcher2.include(request, response);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/viewproducts.jsp");
-        dispatcher.include(request, response);
-
+        processRequest(request, response);
     }
 
     /**

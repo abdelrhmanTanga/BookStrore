@@ -8,6 +8,7 @@ package websiteview.services;
 import Facade.CartHandler;
 import Facade.ProductHandler;
 import java.io.IOException;
+import java.util.List;
 import java.util.Vector;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import websiteview.model.CategoriesCount;
 import websiteview.model.HeaderCategories;
 import websiteview.model.ProductModel;
 
@@ -50,11 +52,13 @@ public class ProductViewer extends HttpServlet {
         //////////////header loader
         System.out.println("before product handler get categories");
         Vector<HeaderCategories> categories = productHandler.getCategories();
+        List<CategoriesCount> categoriesCount=productHandler.getProductsperCategory();
         Integer cartSize = 0;
         String email = null;
         HttpSession session = request.getSession(true);
 
         if (session != null) {
+            session.setAttribute("selectedCategory", "0");
             email = (String) session.getAttribute("loggedIn");
             if (email != null && !email.equals("")) {
                 System.out.println("before get cart items");
@@ -69,6 +73,9 @@ public class ProductViewer extends HttpServlet {
         session.setAttribute("loggedCart", cartSize);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/navbar.jsp");
         dispatcher.include(request, response);
+        RequestDispatcher sliderDispatcher = request.getRequestDispatcher("/pages/Slider.jsp");
+        sliderDispatcher.include(request, response);
+        
         if (categories != null) {
             request.setAttribute("categories", categories);
             RequestDispatcher dispatcher2 = request.getRequestDispatcher("/pages/categoryBar.jsp");
