@@ -71,7 +71,7 @@
                                                 <button id="${product.id}" onclick="addToCart(${product.id}, this)" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
                                             </c:if>
                                             <c:if test="${product.purchased}">
-                                                <button onclick="addToCart(${product.id}, this)" class="btn btn-default add-to-cart"><i class='fa fa-shopping-cart'></i>Remove Item</button>
+                                                <button onclick="removeFromCart(${product.id}, this)" class="btn btn-default add-to-cart"><i class='fa fa-shopping-cart'></i>Remove Item</button>
                                             </c:if>
                                             <button onclick="viewProduct(${product.id})" class="btn btn-default add-to-cart"><i class="glyphicon glyphicon-search"></i>View product</button>
                                         </div>
@@ -79,69 +79,89 @@
                                 </div>
                             </div>
                         </div>
-                    </c:forEach>
+                    </c:forEach><br>
+
                 </div>
 
             </div>
+            <div class="text-center">
+                <ul class="pagination">
+                    <c:if test="${choosen > 1}">
+                        <li><a href="/BookStore/productviewer?product=${choosen - 1}">&laquo;</a></li>
+                        </c:if>
+                        <c:forEach begin="1" end="${pages}" varStatus="loop">
+                            <c:if test="${choosen == loop.index}">
+                            <li class="active"><a href="/BookStore?productviewer?page=${loop.index}">${loop.index}</a></li>
+                            </c:if>
+                            <c:if test="${choosen != loop.index}">
+                            <li><a href="/BookStore/productviewer?page=${loop.index}">${loop.index}</a></li>
+                            </c:if>
+                        </c:forEach>
+                        <c:if test="${choosen < pages}">
+                        <li><a href="/BookStore/productviewer?product=${choosen + 1}">&raquo;</a></li>
+                        </c:if>
+                </ul>
+            </div>
         </div>
-    <script>
-        function addToCart(clicked_id, element) {
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
-                    if (this.responseText == "true") {
-                        element.innerHTML = "<i class='fa fa-shopping-cart'></i>Remove Item";
-                        element.setAttribute("onclick", "removeFromCart(" + clicked_id + ", this)");
-                        //$(clicked_id).html("Remove Item");
-                        var element2 = document.getElementById(clicked_id);
-                        element2.innerHTML = "<i class='fa fa-shopping-cart'></i>Remove Item";
-                        element2.setAttribute("onclick", "removeFromCart(" + clicked_id + ", this)")
-                        var loggedCart = document.getElementById("loggedCart");
-                        loggedCart.innerHTML = parseInt(loggedCart.innerHTML) + 1;
-                        console.log(clicked_id);
-                        console.log(this.responseText);
-                    } else {
-                        element.innerHTML = "<i class='fa fa-shopping-cart'></i>Remove Item";
-                        element.setAttribute("onclick", "removeFromCart(" + clicked_id + " , this)");
-                        var element2 = document.getElementById(clicked_id);
-                        element2.innerHTML = "<i class='fa fa-shopping-cart'></i>Remove Item";
-                        element2.setAttribute("onclick", "removeFromCart(" + clicked_id + ", this)")
-                        console.log(this.responseText);
-                        //$(clicked_id).html("Remove Item");
+
+        <script>
+            function addToCart(clicked_id, element) {
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        if (this.responseText == "true") {
+                            element.innerHTML = "<i class='fa fa-shopping-cart'></i>Remove Item";
+                            element.setAttribute("onclick", "removeFromCart(" + clicked_id + ", this)");
+                            //$(clicked_id).html("Remove Item");
+                            var element2 = document.getElementById(clicked_id);
+                            element2.innerHTML = "<i class='fa fa-shopping-cart'></i>Remove Item";
+                            element2.setAttribute("onclick", "removeFromCart(" + clicked_id + ", this)")
+                            var loggedCart = document.getElementById("loggedCart");
+                            loggedCart.innerHTML = parseInt(loggedCart.innerHTML) + 1;
+                            console.log(clicked_id);
+                            console.log(this.responseText);
+                        } else {
+                            element.innerHTML = "<i class='fa fa-shopping-cart'></i>Remove Item";
+                            element.setAttribute("onclick", "removeFromCart(" + clicked_id + " , this)");
+                            var element2 = document.getElementById(clicked_id);
+                            element2.innerHTML = "<i class='fa fa-shopping-cart'></i>Remove Item";
+                            element2.setAttribute("onclick", "removeFromCart(" + clicked_id + ", this)")
+                            console.log(this.responseText);
+                            //$(clicked_id).html("Remove Item");
+                        }
                     }
-                }
-            };
-            xhttp.open("GET", "/BookStore/addtocart?productid=" + clicked_id, true);
-            xhttp.send();
-        }
+                };
+                xhttp.open("GET", "/BookStore/addtocart?productid=" + clicked_id, true);
+                xhttp.send();
+            }
 
-        function removeFromCart(clicked_id, element) {
-            $.ajax({
-                url: '/BookStore/removeitem',
-                type: 'GET',
-                contentType: 'application/json',
-                data: "productid=" + clicked_id,
-                dataType: 'text',
-                success: function (data, textStatus, jqXHR) {
-                    if (data == "true") {
-                        element.innerHTML = "<i class='fa fa-shopping-cart'></i>Add to cart";
-                        element.setAttribute("onclick", "addToCart(this.id, this)");
-                        var element2 = document.getElementById(clicked_id);
-                        element2.innerHTML = "<i class='fa fa-shopping-cart'></i>Remove Item";
-                        element2.setAttribute("onclick", "removeFromCart(" + clicked_id + ", this)")
-                        var loggedCart = document.getElementById("loggedCart");
-                        loggedCart.innerHTML = parseInt(loggedCart.innerHTML) - 1;
-                    } else {
-                        ///////////// logic handle failure
+            function removeFromCart(clicked_id, element) {
+                $.ajax({
+                    url: '/BookStore/removeitem',
+                    type: 'GET',
+                    contentType: 'application/json',
+                    data: "productid=" + clicked_id,
+                    dataType: 'text',
+                    success: function (data, textStatus, jqXHR) {
+                        if (data == "true") {
+                            element.innerHTML = "<i class='fa fa-shopping-cart'></i>Add to cart";
+                            element.setAttribute("onclick", "addToCart(this.id, this)");
+                            var element2 = document.getElementById(clicked_id);
+                            element2.innerHTML = "<i class='fa fa-shopping-cart'></i>Remove Item";
+                            element2.setAttribute("onclick", "removeFromCart(" + clicked_id + ", this)")
+                            var loggedCart = document.getElementById("loggedCart");
+                            loggedCart.innerHTML = parseInt(loggedCart.innerHTML) - 1;
+                        } else {
+                            ///////////// logic handle failure
+                        }
                     }
-                }
-            });
-        }
+                });
+            }
 
 
-        function viewProduct(clicked_id) {
-            window.location.href = "/BookStore/productpage?productid=" + clicked_id;
-        }
-    </script>
-</body>
+            function viewProduct(clicked_id) {
+                window.location.href = "/BookStore/productpage?productid=" + clicked_id;
+            }
+        </script>
+    </body>
 </html>

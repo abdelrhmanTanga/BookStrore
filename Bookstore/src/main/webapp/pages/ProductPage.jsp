@@ -109,8 +109,8 @@
                             <span>
                                 <span>US $${productInfo.price}</span>
                                 <label>Quantity:</label>
-                                <input type="text" value="3" />
-                                <button type="button" class="btn btn-fefault cart">
+                                <input type="text" value="${productInfo.quantity}" readonly=""/>
+                                <button type="button" class="btn btn-fefault cart" onclick="addToCart(${productInfo.id}, this)">
                                     <i class="fa fa-shopping-cart"></i>
                                     Add to cart
                                 </button>
@@ -125,10 +125,51 @@
             </div>
         </div>
     </div>
-                        <script>
-                            function test(){
-                                
-                                document.write(document.getElementById("").value);
-                            }
-                        </script>
+    <script>
+        function addToCart(clicked_id, element) {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    if (this.responseText == "true") {
+                        element.innerHTML = "<i class='fa fa-shopping-cart'></i>Remove Item";
+                        element.setAttribute("onclick", "removeFromCart(" + clicked_id + ", this)");
+                        //$(clicked_id).html("Remove Item");
+
+                        var loggedCart = document.getElementById("loggedCart");
+                        loggedCart.innerHTML = parseInt(loggedCart.innerHTML) + 1;
+                        console.log(clicked_id);
+                        console.log(this.responseText);
+                    } else {
+                        element.innerHTML = "<i class='fa fa-shopping-cart'></i>Remove Item";
+                        element.setAttribute("onclick", "removeFromCart(" + clicked_id + " , this)");
+
+                        console.log(this.responseText);
+                        //$(clicked_id).html("Remove Item");
+                    }
+                }
+            };
+            xhttp.open("GET", "/BookStore/addtocart?productid=" + clicked_id, true);
+            xhttp.send();
+        }
+        
+        function removeFromCart(clicked_id, element) {
+            $.ajax({
+                url: '/BookStore/removeitem',
+                type: 'GET',
+                contentType: 'application/json',
+                data: "productid=" + clicked_id,
+                dataType: 'text',
+                success: function (data, textStatus, jqXHR) {
+                    if (data == "true") {
+                        element.innerHTML = "<i class='fa fa-shopping-cart'></i>Add to cart";
+                        element.setAttribute("onclick", "addToCart(this.id, this)");
+                        var loggedCart = document.getElementById("loggedCart");
+                        loggedCart.innerHTML = parseInt(loggedCart.innerHTML) - 1;
+                    } else {
+                        ///////////// logic handle failure
+                    }
+                }
+            });
+        }
+    </script>
 </html>

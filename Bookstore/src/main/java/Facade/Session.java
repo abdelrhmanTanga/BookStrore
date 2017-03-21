@@ -50,6 +50,7 @@ public class Session {
                     connection.close();
                     return true;
                 } else {
+                    connection.close();
                     return false;
                 }
             } else {
@@ -117,9 +118,10 @@ public class Session {
                     signInDTO.setName(client.getName());
                     connection1.close();
                     connection.close();
-                    connection.close();
                     return true;
                 } else {
+                    connection.close();
+                    connection1.close();
                     return true;
                 }
             } else {
@@ -192,6 +194,8 @@ public class Session {
             Logger.getLogger(Session.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+     
 
     //////////////////////////////////////////////////
     public boolean updateProfileData(ClientDTO clientDTO) {
@@ -316,5 +320,7 @@ public class Session {
             return false;
         }
 
-    }
+
+ 
+}
 }

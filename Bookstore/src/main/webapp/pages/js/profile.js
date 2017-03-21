@@ -1,5 +1,6 @@
 $(document).ready(function () {
     $(".editlink").on("click", function (e) {
+        
         e.preventDefault();
         var dataset1 = $(this).prev(".datainfo");
         var savebtn = $(this).next(".savebtn");
@@ -13,8 +14,13 @@ $(document).ready(function () {
         var currval = dataset1.text();
         dataset1.empty();
 
+        $(".editlink").css("display", "none");
+
         $(this).css("display", "none");
         savebtn.css("display", "block");
+        
+        
+        
 
     });
     $(".savebtn").on("click", function (e) {
@@ -32,7 +38,6 @@ $(document).ready(function () {
         else if (window.ActiveXobject)
             req = new ActiveXobject(Microsoft.XMLHTTP);
         req.onreadystatechange = handleReq;
-
 
         req.open("GET", "/BookStore/ProfileEditor?fieldname=" + name + "&newvalue=" + newvalue + "&Date =" + new Date(), true);
         req.send(null);
@@ -53,6 +58,7 @@ function handleReq()
                 $(".savebtn").css("display", "none");
                 dataset.html(newvalue);
                 elink.css("display", "block");
+                $(".editlink").css("display", "block");
                 $('#msg').text(name +" is Saved");
                 $('#msg').delay(500).fadeIn();
                 $('#msg').delay(1000).fadeOut();

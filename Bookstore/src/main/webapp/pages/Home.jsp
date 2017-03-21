@@ -6,7 +6,7 @@
         <meta name="description" content="Admin Website Online Book Store" />
         <meta name="author" content="ForthTeam" />
         <meta name="keyword" content="Creative, Dashboard, Admin,Book, Theme, Bootstrap, Responsive,Store " />
-        <link rel="shortcut icon" href="img/favicon.png" />
+        <link rel="shortcut icon" href="${pageContext.request.contextPath}/pages/img/favicon.png" />
 
         <title> Admin Panel </title>
 

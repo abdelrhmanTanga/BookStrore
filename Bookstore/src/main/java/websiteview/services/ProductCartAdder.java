@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -46,23 +47,29 @@ public class ProductCartAdder extends HttpServlet {
         HttpSession session = request.getSession(false);
         if (session != null && productAdd != null) {
             String email = (String) session.getAttribute("loggedIn");
-            AddToCartWrapper order = new AddToCartWrapper();
-            order.setId(Integer.parseInt(productAdd));
-            order.setEmail(email);
-            if (cartHandler.addToCart(order)) {
-                ///////////////////////// bussiness for add product
-                Integer cartSize = (Integer) session.getAttribute("loggedCart") + 1;
-                System.out.println(cartSize);
-                session.setAttribute("loggedCart", cartSize);
-                out.print("true");
-                System.out.println("true");
+            if (email != null) {
+                AddToCartWrapper order = new AddToCartWrapper();
+                order.setId(Integer.parseInt(productAdd));
+                order.setEmail(email);
+                System.out.println("before add to cart");
+                if (cartHandler.addToCart(order)) {
+                    ///////////////////////// bussiness for add product
+                    Integer cartSize = (Integer) session.getAttribute("loggedCart") + 1;
+                    System.out.println(cartSize);
+                    session.setAttribute("loggedCart", cartSize);
+                    out.print("true");
+                    System.out.println("true");
+                } else {
+                    ///////////////////////// bussieness for not so much
+                    out.print("false");
+                    System.out.println("false");
+                }
             } else {
-                ///////////////////////// bussieness for not so much
-                out.print("false");
-                System.out.println("false");
+                addToCart(request, response, productAdd);
             }
         } else {
             //////////////////// bussiness for add product for not a signed in client
+            addToCart(request, response, productAdd);
             out.print("false");
         }
     }
@@ -105,5 +112,54 @@ public class ProductCartAdder extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    private boolean addToCart(HttpServletRequest request, HttpServletResponse response, String productAdd) {
+        Cookie cookie = null;
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookieName : cookies) {
+                if (cookieName.getName().equals("products")) {
+                    cookie = cookieName;
+                }
+            }
+            if (cookie != null) {
+                String productsString = cookie.getValue();
+                String[] productsAdded = productsString.split(",");
+                if (checkExists(productsAdded, productAdd)) {
+                    return false;
+                } else {
+                    int stringLegnth = productsAdded.length;
+                    System.out.println(stringLegnth);
+                    if (stringLegnth <= 1) {
+                        productsString = productAdd + ",0";
+                        System.out.println(productsString);
+                    } else {
+                        productsString = productsString.concat(productAdd +",");
+                        System.out.println(productsString);
+                        System.out.println(productAdd);
+                    }
+                    cookie.setValue(productsString);
+                    response.addCookie(cookie);
+                    return true;
+                }
+            } else {
+                cookie = new Cookie("products", productAdd);
+                return true;
+            }
+
+        } else {
+            cookie = new Cookie("products", productAdd);
+            return true;
+        }
+    }
+
+    private boolean checkExists(String[] productsAdded, String productAdd) {
+        for (String product : productsAdded) {
+            if (product.equals(productAdd)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 }

@@ -65,21 +65,32 @@ public class CartHandler {
                 if (clientDAO.validateCredit(email, totalPrice)) {
                     System.out.println("valid for checkout");
                     Client client = clientDAO.getClientInfo(email);
+                    System.out.println("after client info");
                     int orderId = updateDatabase(fullCart, totalPrice, productList, client);
                     if (orderId > 0) {
                         System.out.println("after order update");
 
                         ///////////////////// fill order info IN PROGRESS
                         orderInfo = fillOrderInfo(orderInfo, orderId, productList, client);
+                        connection.close();
+                        connection1.close();
+                        connection2.close();
                         return orderInfo;
                     } else {
+                        connection.close();
+                        connection1.close();
+                        connection2.close();
                         return null;
                     }
                 } else {
+                    connection.close();
+                    connection1.close();
+                    connection2.close();
                     return null;
                 }
 
             } else {
+                connection.close();
                 return null;
             }
         } catch (SQLException ex) {
@@ -125,6 +136,7 @@ public class CartHandler {
 
     private synchronized int updateDatabase(Vector<Cart> fullCart, int totalPrice, Vector<Product> productList, Client client) {
         try {
+            System.out.println("in update database CartHandler");
             Connection connection = ConnectionPool.getInstance().getConnection();
             Connection connection1 = ConnectionPool.getInstance().getConnection();
             Connection connection2 = ConnectionPool.getInstance().getConnection();
@@ -160,23 +172,24 @@ public class CartHandler {
         }
         return 0;
     }
-
-    public void test() {
-        try {
-            Connection connection = ConnectionPool.getInstance().getConnection();
-            OrderHistoryDAO orderHistoryDAO = new OrderHistoryDAO(connection);
-            OrderHistory orderHistory = new OrderHistory();
-            orderHistory.setEmail("abdo@gmail.com");
-            orderHistoryDAO.addOrder(orderHistory);
-
-        } catch (SQLException ex) {
-            Logger.getLogger(CartHandler.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }
+//
+//    public void test() {
+//        try {
+//            Connection connection = ConnectionPool.getInstance().getConnection();
+//            OrderHistoryDAO orderHistoryDAO = new OrderHistoryDAO(connection);
+//            OrderHistory orderHistory = new OrderHistory();
+//            orderHistory.setEmail("abdo@gmail.com");
+//            orderHistoryDAO.addOrder(orderHistory);
+//
+//        } catch (SQLException ex) {
+//            Logger.getLogger(CartHandler.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//
+//    }
 //omnia 
 
     public List<CartDTO> getCart(String Email) throws SQLException {
+        System.out.println("before connection in get cart CartHandler");
         Connection connection = ConnectionPool.getInstance().getConnection();
         ProductDAO productDAO = new ProductDAO(connection);
         Connection connection1 = ConnectionPool.getInstance().getConnection();
@@ -190,7 +203,6 @@ public class CartHandler {
             }
             List<CartDTO> cartItems = new ArrayList<>();
             for (int i = 0; i < productsInfo.size(); i++) {
-
                 CartDTO cartDTO = new CartDTO();
                 cartDTO.setISBN(productsInfo.get(i).getISBN());
                 cartDTO.setId(productsInfo.get(i).getId());
@@ -200,9 +212,12 @@ public class CartHandler {
                 cartDTO.setPrice(productsInfo.get(i).getPrice());
                 cartItems.add(cartDTO);
             }
-
+            connection.close();
+            connection1.close();
             return cartItems;
         } else {
+            connection.close();
+            connection1.close();
             return null;
         }
     }
@@ -295,6 +310,49 @@ public class CartHandler {
         } catch (SQLException ex) {
             Logger.getLogger(CartHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
+    }
+
+    public boolean doCheckoutChecks(String email) {
+        try {
+            Connection connection = ConnectionPool.getInstance().getConnection();
+            CheckoutDTO orderInfo = new CheckoutDTO();
+            CartDAO cartDAO = new CartDAO(connection);
+            System.out.println("created connection and making checks");
+            if (cartDAO.cartIsEmpty(email)) {
+                System.out.println("cart not empty");
+                Vector<Cart> fullCart = cartDAO.getCart(email);
+                Vector<Product> productList = new Vector<>();
+                Connection connection1 = ConnectionPool.getInstance().getConnection();
+                ProductDAO productDAO = new ProductDAO(connection1);
+                for (int i = 0; i < fullCart.size(); i++) {
+                    productList.add(productDAO.getProductData(fullCart.elementAt(i).getBookID()));
+                }
+                int totalPrice = 0;
+                for (int i = 0; i < productList.size(); i++) {
+
+                    totalPrice += productList.elementAt(i).getPrice() * fullCart.elementAt(i).getQuantity();
+                }
+                Connection connection2 = ConnectionPool.getInstance().getConnection();
+                ClientDAO clientDAO = new ClientDAO(connection2);
+                if (clientDAO.validateCredit(email, totalPrice)) {
+                    connection.close();
+                    connection1.close();
+                    connection2.close();
+                    return true;
+                } else {
+                    connection.close();
+                    connection1.close();
+                    connection2.close();
+                    return false;
+                }
+            } else {
+                connection.close();
+                return false;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CartHandler.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
     }
 }

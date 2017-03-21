@@ -73,8 +73,8 @@
                                     </td>
                                     <td class="cart_quantity">
                                         <div class="cart_quantity_button">
-                                            <input class="cart_quantity_input" id="${cartItem.id}text" type="text" name="quantity" readonly="" value="${cartItem.itemQuantity}" autocomplete="off" size="2">
-                                            <button class="btn btn-default" style="margin-left: 10%; width: 30%" onclick="updateEnable(${cartItem.id}, this)">edit</button>
+                                            <input class="cart_quantity_input" style="width: 10%" id="${cartItem.id}text" type="number" name="quantity" readonly="" value="${cartItem.itemQuantity}" autocomplete="off" size="2">
+                                            <button class="btn btn-default" style="margin-left: 10%; width: 15%" onclick="updateEnable(${cartItem.id}, this)">edit</button>
                                         </div>
                                     </td>
                                     <td class="cart_total">
@@ -91,7 +91,14 @@
                         </tbody>
                     </table>
                 </div>
-                <a class="btn btn-primary" onclick="doCheckOut()">Check out</a>
+                <c:if test="${loggedIn != null}">
+                    <a class="btn btn-primary" onclick="doCheckOut()">Check out</a>
+                    <div id="error" class="col-sm-10"></div>
+                </c:if>
+                <c:if test="${loggedIn == null}">
+                    <a class="btn btn-primary" href="/BookStore/pages/signinpage.jsp">Check out</a>
+                    <div id="error" class="col-sm-10"></div>
+                </c:if>
             </div>
         </section> <!--/#cart_items-->
         <script>
@@ -106,8 +113,10 @@
                     success: function (data, textStatus, jqXHR) {
                         if (data == "true") {
                             document.getElementById(clicked_id).parentElement.removeChild(document.getElementById(clicked_id));
+                            var loggedCart = document.getElementById("loggedCart");
+                            loggedCart.innerHTML = parseInt(loggedCart.innerHTML) - 1;
                         } else {
-                            ///////////// logic handle failure
+
                         }
                     }
                 });
@@ -121,31 +130,33 @@
                 console.log("here in quantity");
                 var elementText = document.getElementById(clicked_id + "text");
                 var quantity = elementText.value;
-                //var quantity = element2.value;
-                console.log(quantity);
-                $.ajax({
-                    url: "/BookStore/update",
-                    type: 'POST',
-                    data: "productid=" + clicked_id + "&quantity=" + quantity,
-                    dataType: 'text',
-                    success: function (data, textStatus, jqXHR) {
-                        if (data == "true") {
-                            elementText.setAttribute("readonly", "");
-                            element.setAttribute("onclick", "updateEnable(" + clicked_id + ", this)");
-                            element.innerHTML = "edit";
-                            var quantityElement = document.getElementById(clicked_id + "quantity");
-                            var productPrice = quantityElement.getAttribute("price");
-                            quantityElement.innerHTML = parseInt(quantity) * parseInt(productPrice);
-                        } else {
-                            ///////////// logic handle failure
+                if (quantity > 0) {
+                    //var quantity = element2.value;
+                    console.log(quantity);
+                    $.ajax({
+                        url: "/BookStore/update",
+                        type: 'POST',
+                        data: "productid=" + clicked_id + "&quantity=" + quantity,
+                        dataType: 'text',
+                        success: function (data, textStatus, jqXHR) {
+                            if (data == "true") {
+                                elementText.setAttribute("readonly", "");
+                                element.setAttribute("onclick", "updateEnable(" + clicked_id + ", this)");
+                                element.innerHTML = "edit";
+                                var quantityElement = document.getElementById(clicked_id + "quantity");
+                                var productPrice = quantityElement.getAttribute("price");
+                                quantityElement.innerHTML = parseInt(quantity) * parseInt(productPrice);
+                            } else {
+                                ///////////// logic handle failure
+                                var error = document.getElementById("error");
+                                error.innerHTML = "<div class='alert alert-danger alert-dismissable col-sm-3'><a href='#' class='close' data-dismiss='alert' aria-label='close'>×</a>Check out not available , Check your credit limit and product quantities.";
+                            }
                         }
-                    }
-                });
-
-
-                elementText.setAttribute("readonly", "");
-                element.setAttribute("onclick", "updateEnable(" + clicked_id + ",this)");
-                element.innerHTML = "edit";
+                    });
+                } else {
+                    quantity = 1;
+                    elementText.value = quantity;
+                }
             }
 
             function updateEnable(clicked_id, element) {
@@ -161,14 +172,18 @@
 
             function doCheckOut() {
                 $.ajax({
-                    url: "/BookStore/checkout",
+                    url: "/BookStore/checkoutcheckers",
                     type: 'POST',
                     success: function (data, textStatus, jqXHR) {
-                        if (data == 'true') {
+                        console.log(data);
+                        if (data != 'false') {
                             console.log(data);
-                            window.location.href = "/BookStore/productviewer";
+                            window.location.href = "/BookStore/checkout";
                         } else {
                             ///what ever
+                            var error = document.getElementById("error");
+                            error.innerHTML = "<div class='alert alert-danger alert-dismissable col-sm-3'><a href='#' class='close' data-dismiss='alert' aria-label='close'>×</a>There is not enough quantity of that product to purchase.";
+                            console.log(data);
                         }
 
                     }

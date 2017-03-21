@@ -22,7 +22,7 @@ and open the template in the editor.
         <section id="core" style="height: 100%;">
 
 
-            <div class="profileinfo" >	
+            <div class="profileinfo" style="margin-top: 7%;margin-bottom: 2%;" >	
                 <div class="gear" style="margin-top: 10px;">
                     <label> E-Mail</label>
                     <span id="pemail" class="datainfo" >${loggedIn}</span>
@@ -94,12 +94,12 @@ and open the template in the editor.
                     <a class="savebtn">Save</a>
                 </div>
 
-                <div class="gear">
+               <!-- <div class="gear">
                     <label>Gender</label>
                     <input type="text" id="gender" class="datainfo" name="gender" value="${clientData.gender}" readonly />
                     <a href="#" class="editlink"><span class="glyphicon glyphicon-pencil"></span>Edit Info</a>
                     <a class="savebtn">Save</a>
-                </div>
+                </div> -->
                     <div style="text-align: center;">
                     
 </div>
