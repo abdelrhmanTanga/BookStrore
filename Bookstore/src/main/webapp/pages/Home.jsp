@@ -11,7 +11,7 @@
         <title> Admin Panel </title>
 
         <!-- Bootstrap CSS -->    
-        <link href="${pageContext.request.contextPath}/pages/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="${pageContext.request.contextPath}/pages/css/bootstrap.min1.css" rel="stylesheet" />
         <!-- bootstrap theme -->
         <link href="${pageContext.request.contextPath}/pages/css/bootstrap-theme.css" rel="stylesheet" />
         <!--external css-->
@@ -81,14 +81,9 @@
                                     <img alt="" width='40' height='40' src="${(pageContext.request.contextPath).concat('/pages/img/admin1.png')}">
                                 </span>
                                 <span class="username">Admin</span>
-                                <b class="caret"></b>
+                               
                             </a>
-                            <ul class="dropdown-menu extended logout">
-                                <div class="log-arrow-up"></div>
-                                <li>
-                                    <a href="login.html"><i class="icon_key_alt"></i> Log Out</a>
-                                </li>
-                            </ul>
+                            
                         </li>
                         <!-- user login dropdown end -->
                     </ul>
@@ -179,7 +174,7 @@
                         <div class="container">
                             <div class="row">
 
-                                <div class="alert alert-success" style="display:none;" id="alert-product-add">
+                                <div class="alert alert-success" style="display:none; " id="alert-product-add">
                                     <button type="button" class="close" data-dismiss="alert">x</button>
                                     <strong>The Product Added Successfully! </strong>
                                     the product added to db.
@@ -366,7 +361,7 @@
                         </div>        
 
 
-                        <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+                        <div class="modal fade" id="delete" tabindex="1" role="dialog" aria-labelledby="edit" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">

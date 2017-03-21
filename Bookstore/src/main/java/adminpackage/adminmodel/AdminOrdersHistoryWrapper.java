@@ -19,7 +19,7 @@ public class AdminOrdersHistoryWrapper {
     OrderHistory order;
     List<OrderHistoryItems> items;
     List<Product> products;
-
+    
     public List<Product> getProducts() {
         return products;
     }
