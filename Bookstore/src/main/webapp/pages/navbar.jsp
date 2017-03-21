@@ -81,9 +81,9 @@
                                         <!-- <li><a href="#"><i class="fa fa-user"></i> Account</a></li> -->
 
                                         <li><a href="/BookStore/productviewer"><i class="fa fa-lock"></i> home</a></li>
-                                        <!--<li><a href="/BookStore/cart" class="notif"><i class="fa fa-shopping-cart"><span class="num">2</span></i> Cart</a></li>--> 
-                                        <li><a href="${pageContext.request.contextPath}/pages/signinpage.jsp"><i class="fa fa-lock"></i> Login</a></li>
-                                        <li><a href="${pageContext.request.contextPath}/pages/signuppage.jsp"><i class="fa fa-lock"></i> Signup</a></li>
+                                        <li><a href="/BookStore/cart"><i class="fa fa-shopping-cart"><span class="num" id="loggedCart">${loggedCart}</span></i> Cart</a></li>
+                                        <li><a href="${pageContext.request.contextPath}/pages/temp.jsp"><i class="fa fa-lock"></i> Login</a></li>
+                                        <!--<li><a href="${pageContext.request.contextPath}/pages/temp.jsp"><i class="fa fa-lock"></i> Signup</a></li>-->
                                     </ul>
                                 </div>
                             </div>
@@ -122,7 +122,7 @@
                             <div class="col-sm-4">
                                 <div class="shop-menu pull-right">
                                     <ul class="nav navbar-nav">
-
+                                        <li><a href="/BookStore/productviewer"><i class="fa fa-lock"></i> home</a></li>
                                         <li><a href="#"><i class="fa fa-user"></i>${loggedIn}</a></li> 
                                         <li><a href="/BookStore/cart"><i class="fa fa-shopping-cart"><span class="num" id="loggedCart">${loggedCart}</span></i> Cart</a></li> 
                                         <li><a href="/BookStore/signout"><i class="fa fa-lock"></i> Logout</a></li>

@@ -21,6 +21,7 @@ public class ProductPageDTO {
     private String image;
     private int quantity;
     private int id;
+    private boolean purchased;
 
     public String getName() {
         return name;
@@ -100,6 +101,14 @@ public class ProductPageDTO {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public boolean isPurchased() {
+        return purchased;
+    }
+
+    public void setPurchased(boolean purchased) {
+        this.purchased = purchased;
     }
 
 }

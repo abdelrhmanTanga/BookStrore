@@ -61,10 +61,10 @@ public class ProductViewer extends HttpServlet {
                 cartSize = cartHandler.getCartItems(email);
 
             } else {
-                cartSize = offlineUser(request, response);
+                cartSize = offlineUser(request, response) - 1;
             }
         } else {
-            cartSize = offlineUser(request, response);
+            cartSize = offlineUser(request, response) - 1;
         }
         session.setAttribute("loggedCart", cartSize);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/navbar.jsp");
@@ -151,7 +151,7 @@ public class ProductViewer extends HttpServlet {
         cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookieName : cookies) {
-                if (cookieName.equals(cookie)) {
+                if (cookieName.getName().equals("products")) {
                     cookie = cookieName;
                 }
             }
@@ -160,14 +160,16 @@ public class ProductViewer extends HttpServlet {
                 String[] productIds = products.split(",");
                 return productIds.length;
             } else {
-                cookie = new Cookie("products", "null");
+                cookie = new Cookie("products", "0,");
+                cookie.setMaxAge(Integer.MAX_VALUE);
                 response.addCookie(cookie);
-                return 0;
+                return 1;
             }
         } else {
-            cookie = new Cookie("products", "null");
+            cookie = new Cookie("products", "0,");
+            cookie.setMaxAge(Integer.MAX_VALUE);
             response.addCookie(cookie);
-            return 0;
+            return 1;
         }
     }
 
@@ -184,10 +186,12 @@ public class ProductViewer extends HttpServlet {
             for (ProductModel productCheck : products) {
                 for (String str : productIds) {
                     System.out.println(str);
-                    int productId = Integer.parseInt(str);
-                    if (productId == productCheck.getId()) {
-                        System.out.println(str);
-                        productCheck.setPurchased(true);
+                    if (!str.equals("0")) {
+                        int productId = Integer.parseInt(str);
+                        if (productId == productCheck.getId()) {
+                            System.out.println(str);
+                            productCheck.setPurchased(true);
+                        }
                     }
                 }
             }

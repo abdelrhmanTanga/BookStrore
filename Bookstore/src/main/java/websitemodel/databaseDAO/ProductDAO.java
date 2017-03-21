@@ -112,6 +112,33 @@ public class ProductDAO {
         }
 
     }
+    
+    public boolean checkQuantity(int id , int quantity) {
+        try {
+            PreparedStatement pst = connection.prepareStatement("select quantity from product where id = ?");
+            pst.setInt(1, id);
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                if (rs.getInt(1) > quantity) {
+                    pst.close();
+                    rs.close();
+                    return true;
+                } else {
+                    pst.close();
+                    rs.close();
+                    return false;
+                }
+            } else {
+                pst.close();
+                rs.close();
+                return false;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+
+    }
 
     public Product getProductInfo(int productid) {
         try {

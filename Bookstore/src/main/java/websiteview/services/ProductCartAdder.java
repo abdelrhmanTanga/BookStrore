@@ -65,12 +65,29 @@ public class ProductCartAdder extends HttpServlet {
                     System.out.println("false");
                 }
             } else {
-                addToCart(request, response, productAdd);
+                if (addToCart(request, response, productAdd)) {
+                    Integer cartSize = (Integer) session.getAttribute("loggedCart") + 1;
+                    System.out.println("cart size :" + cartSize);
+                    session.setAttribute("loggedCart", cartSize);
+                    out.print("true");
+                    System.out.println("true");
+                } else {
+                    out.print("false");
+                    System.out.println("false");
+                }
             }
         } else {
             //////////////////// bussiness for add product for not a signed in client
-            addToCart(request, response, productAdd);
-            out.print("false");
+            if (addToCart(request, response, productAdd)) {
+                Integer cartSize = (Integer) session.getAttribute("loggedCart") + 1;
+                System.out.println("cart size :" + cartSize);
+                session.setAttribute("loggedCart", cartSize);
+                out.print("true");
+                System.out.println("true");
+            } else {
+                out.print("false");
+                System.out.println("false");
+            }
         }
     }
 
@@ -130,25 +147,26 @@ public class ProductCartAdder extends HttpServlet {
                 } else {
                     int stringLegnth = productsAdded.length;
                     System.out.println(stringLegnth);
-                    if (stringLegnth <= 1) {
-                        productsString = productAdd + ",0";
-                        System.out.println(productsString);
-                    } else {
-                        productsString = productsString.concat(productAdd +",");
-                        System.out.println(productsString);
-                        System.out.println(productAdd);
-                    }
+
+//                        productsString = productAdd + ",0";
+//                        System.out.println(productsString);
+                    productsString = productsString.concat(productAdd + ",");
+                    System.out.println(productsString);
+                    System.out.println(productAdd);
+
                     cookie.setValue(productsString);
                     response.addCookie(cookie);
                     return true;
                 }
             } else {
                 cookie = new Cookie("products", productAdd);
+                cookie.setMaxAge(Integer.MAX_VALUE);
                 return true;
             }
 
         } else {
             cookie = new Cookie("products", productAdd);
+            cookie.setMaxAge(Integer.MAX_VALUE);
             return true;
         }
     }

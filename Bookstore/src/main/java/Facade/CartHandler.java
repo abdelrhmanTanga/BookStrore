@@ -50,6 +50,15 @@ public class CartHandler {
                 Vector<Product> productList = new Vector<>();
                 Connection connection1 = ConnectionPool.getInstance().getConnection();
                 ProductDAO productDAO = new ProductDAO(connection1);
+                System.out.println("checking quantity");
+                for (int i = 0; i < fullCart.size(); i++) {
+                    if (!productDAO.checkQuantity(fullCart.elementAt(i).getBookID(), fullCart.elementAt(i).getQuantity())) {
+                        connection.close();
+                        connection1.close();
+                        return null;
+                    }
+                }
+                System.out.println("quantity available");
                 for (int i = 0; i < fullCart.size(); i++) {
                     productList.add(productDAO.getProductData(fullCart.elementAt(i).getBookID()));
                 }
@@ -71,7 +80,7 @@ public class CartHandler {
                         System.out.println("after order update");
 
                         ///////////////////// fill order info IN PROGRESS
-                        orderInfo = fillOrderInfo(orderInfo, orderId, productList, client);
+                        orderInfo = fillOrderInfo(orderInfo, orderId, productList, client, fullCart);
                         connection.close();
                         connection1.close();
                         connection2.close();
@@ -237,7 +246,7 @@ public class CartHandler {
         }
     }
 
-    private CheckoutDTO fillOrderInfo(CheckoutDTO orderInfo, int orderId, Vector<Product> productList, Client client) {
+    private CheckoutDTO fillOrderInfo(CheckoutDTO orderInfo, int orderId, Vector<Product> productList, Client client, Vector<Cart> fullcart) {
         Vector<ProductCheckout> orderProducts = orderInfo.getProducts();
         for (int i = 0; i < productList.size(); i++) {
             ProductCheckout product = new ProductCheckout();
@@ -246,7 +255,7 @@ public class CartHandler {
             product.setIsbn(productList.elementAt(i).getISBN());
             product.setName(productList.elementAt(i).getName());
             product.setPrice(productList.elementAt(i).getPrice());
-            product.setQuantity(productList.elementAt(i).getQuantity());
+            product.setQuantity(fullcart.elementAt(i).getQuantity());
             orderProducts.add(product);
 
         }
@@ -282,18 +291,25 @@ public class CartHandler {
     public boolean updateQuantity(UpdateQuantityDTO updateQuantityDTO) {
         try {
             Connection connection = ConnectionPool.getInstance().getConnection();
-            CartDAO cartDAO = new CartDAO(connection);
-            Cart cart = new Cart();
-            cart.setEmail(updateQuantityDTO.getEmail());
-            cart.setBookID(updateQuantityDTO.getProductId());
-            cart.setQuantity(updateQuantityDTO.getQuantity());
-            if (cartDAO.updateQuantity(cart)) {
-                connection.close();
-                return true;
+            ProductDAO productDAO = new ProductDAO(connection);
+            if (productDAO.checkQuantity(updateQuantityDTO.getProductId(), updateQuantityDTO.getQuantity())) {
+                CartDAO cartDAO = new CartDAO(connection);
+                Cart cart = new Cart();
+                cart.setEmail(updateQuantityDTO.getEmail());
+                cart.setBookID(updateQuantityDTO.getProductId());
+                cart.setQuantity(updateQuantityDTO.getQuantity());
+                if (cartDAO.updateQuantity(cart)) {
+                    connection.close();
+                    return true;
+                } else {
+                    connection.close();
+                    return false;
+                }
             } else {
                 connection.close();
                 return false;
             }
+
         } catch (SQLException ex) {
             Logger.getLogger(CartHandler.class.getName()).log(Level.SEVERE, null, ex);
             return false;
@@ -325,6 +341,15 @@ public class CartHandler {
                 Vector<Product> productList = new Vector<>();
                 Connection connection1 = ConnectionPool.getInstance().getConnection();
                 ProductDAO productDAO = new ProductDAO(connection1);
+                System.out.println("checking quantity");
+                for (int i = 0; i < fullCart.size(); i++) {
+                    if (!productDAO.checkQuantity(fullCart.elementAt(i).getBookID(), fullCart.elementAt(i).getQuantity())) {
+                        connection.close();
+                        connection1.close();
+                        return false;
+                    }
+                }
+                System.out.println("quantity available");
                 for (int i = 0; i < fullCart.size(); i++) {
                     productList.add(productDAO.getProductData(fullCart.elementAt(i).getBookID()));
                 }
@@ -354,5 +379,27 @@ public class CartHandler {
             Logger.getLogger(CartHandler.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
+    }
+
+    public boolean checkPurchased(String email, String productId) {
+        try {
+            Connection connection = ConnectionPool.getInstance().getConnection();
+            Cart cart = new Cart();
+            cart.setBookID(Integer.parseInt(productId));
+            cart.setEmail(email);
+            CartDAO cartDAO = new CartDAO(connection);
+            if (cartDAO.isAlreadyAdded(cart)) {
+                connection.close();
+                return true;
+            } else {
+                connection.close();
+                return false;
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(CartHandler.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+
     }
 }

@@ -5,6 +5,7 @@
  */
 package websiteview.services;
 
+import Facade.CartHandler;
 import Facade.ProductHandler;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,9 +13,11 @@ import java.util.Vector;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import websiteview.model.HeaderCategories;
 import websiteview.model.ProductPageDTO;
 
@@ -34,11 +37,13 @@ public class ProductPage extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     ProductHandler productHandler;
+    CartHandler cartHandler;
 
     @Override
     public void init(ServletConfig config)
             throws ServletException {
         productHandler = new ProductHandler();
+        cartHandler = new CartHandler();
         super.init(config); //To change body of generated methods, choose Tools | Templates.
 
     }
@@ -57,6 +62,31 @@ public class ProductPage extends HttpServlet {
                     dispatcher.include(request, response);
                 } else {
                     //////////////////////// what to do if errors 
+                }
+                HttpSession session = request.getSession();
+                if (session != null) {
+                    String email = (String) session.getAttribute("loggedIn");
+                    if (email != null) {
+                        if (cartHandler.checkPurchased(email, productId)) {
+                            productInfo.setPurchased(true);
+                        } else {
+                            productInfo.setPurchased(false);
+                        }
+                    } else {
+                        /////////////// offline user 
+                        if (checkPurchased(productId, request, response)) {
+                            productInfo.setPurchased(true);
+                        } else {
+                            productInfo.setPurchased(false);
+                        }
+                    }
+                } else {
+                    /////////////// offline user 
+                    if (checkPurchased(productId, request, response)) {
+                        productInfo.setPurchased(true);
+                    } else {
+                        productInfo.setPurchased(false);
+                    }
                 }
                 request.setAttribute("productInfo", productInfo);
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/ProductPage.jsp");
@@ -111,5 +141,30 @@ public class ProductPage extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    private boolean checkPurchased(String productId, HttpServletRequest request, HttpServletResponse response) {
+        Cookie[] cookies = request.getCookies();
+        Cookie cookie = null;
+        if (cookies != null) {
+            for (Cookie cookieName : cookies) {
+                if (cookieName.getName().equals("products")) {
+                    cookie = cookieName;
+                }
+            }
+            if (cookie != null) {
+                String cookieString = cookie.getValue();
+                String[] productIds = cookieString.split(",");
+                int productInt = Integer.parseInt(productId);
+                for (String test : productIds) {
+                    int temp = Integer.parseInt(test);
+                    if (temp == productInt) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
+        return false;
+    }
 
 }
