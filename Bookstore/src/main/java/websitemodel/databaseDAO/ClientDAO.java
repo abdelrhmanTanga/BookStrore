@@ -131,7 +131,7 @@ public class ClientDAO {
     public boolean addClient(Client client) {
         PreparedStatement pps;
         try {
-            pps = connection.prepareStatement("insert into client(email,name,credit,password,phone,address,country,gender,dob,job)values(?,?,?,?,?,?,?,?,?,?)");
+            pps = connection.prepareStatement("insert into client(email,name,credit,password,phone,address,country,gender,dob,job,logged)values(?,?,?,?,?,?,?,?,?,?,?)");
             pps.setString(1, client.getEmail());
             pps.setString(2, client.getName());
             pps.setLong(3, client.getCredit());
