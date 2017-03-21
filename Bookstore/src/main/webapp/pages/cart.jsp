@@ -91,8 +91,14 @@
                         </tbody>
                     </table>
                 </div>
-                <a class="btn btn-primary" onclick="doCheckOut()">Check out</a>
-                <div id="error" class="col-sm-10"></div>
+                <c:if test="${loggedIn != null}">
+                    <a class="btn btn-primary" onclick="doCheckOut()">Check out</a>
+                    <div id="error" class="col-sm-10"></div>
+                </c:if>
+                <c:if test="${loggedIn == null}">
+                    <a class="btn btn-primary" href="/BookStore/pages/signinpage.jsp">Check out</a>
+                    <div id="error" class="col-sm-10"></div>
+                </c:if>
             </div>
         </section> <!--/#cart_items-->
         <script>

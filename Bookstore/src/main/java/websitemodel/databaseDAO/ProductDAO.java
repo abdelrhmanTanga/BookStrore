@@ -17,6 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import websitemodel.databaseDTO.Category;
 import websitemodel.databaseDTO.Product;
+//import websiteview.model.CategoriesCount;
 
 /**
  *
@@ -93,6 +94,33 @@ public class ProductDAO {
             ResultSet rs = pst.executeQuery();
             if (rs.next()) {
                 if (rs.getInt(1) > 0) {
+                    pst.close();
+                    rs.close();
+                    return true;
+                } else {
+                    pst.close();
+                    rs.close();
+                    return false;
+                }
+            } else {
+                pst.close();
+                rs.close();
+                return false;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+
+    }
+    
+    public boolean checkQuantity(int id , int quantity) {
+        try {
+            PreparedStatement pst = connection.prepareStatement("select quantity from product where id = ?");
+            pst.setInt(1, id);
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                if (rs.getInt(1) > quantity) {
                     pst.close();
                     rs.close();
                     return true;
@@ -356,17 +384,25 @@ public class ProductDAO {
 
     //mohamed ali end
     /////////////////////////search
-    public List<Product> search(String searchKey) {
+    public List<Product> search(String searchKey, int categoryID) {
         List<Product> products = new ArrayList();
 
+        ///searchkey & category
+        //Search key w bs
         try {
             if (searchKey == null) {
                 pst = connection.prepareStatement("SELECT * FROM product");
 
-            } else {
+            } else if (categoryID == 0 && !searchKey.isEmpty()) {
                 pst = connection.prepareStatement("SELECT * FROM product where name like ? UNION SELECT * FROM product where author like ?");
                 pst.setString(1, "%" + searchKey + "%");
                 pst.setString(2, "%" + searchKey + "%");
+            } else {
+                pst = connection.prepareStatement("SELECT * FROM product where name like ? and category=? UNION SELECT * FROM product where author like ? and category=?");
+                pst.setString(1, "%" + searchKey + "%");
+                pst.setInt(2, categoryID);
+                pst.setString(3, "%" + searchKey + "%");
+                pst.setInt(4, categoryID);
 
             }
 
@@ -439,5 +475,30 @@ public class ProductDAO {
         }
     }
 
-    ///////////////////////////////////////////
+    /*///////////////////////////////////////////
+    public List<CategoriesCount> categoryCounter() {
+       CategoriesCount categoriescount = new CategoriesCount();
+        List<CategoriesCount> categoriesCount;
+        try {
+            categoriesCount = new ArrayList<>();
+            PreparedStatement pst = connection.prepareStatement("select count(p.id),c.name,c.id from category c,product p where c.id=p.category group by c.id,c.name,c.id");
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                CategoriesCount categoryCounter = new CategoriesCount();
+                categoryCounter.setCategoryId(rs.getInt(2));
+                categoryCounter.setCategoryName(rs.getString(1));
+                categoryCounter.setCategoryCount(rs.getInt(0));
+                categoriesCount.add(categoryCounter);
+            }
+
+            rs.close();
+            pst.close();
+            return categoriesCount;
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+
+        }
+
+    }*/
 }

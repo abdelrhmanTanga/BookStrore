@@ -19,6 +19,7 @@ import websitemodel.databaseDAO.ProductDAO;
 import websitemodel.databaseDTO.Cart;
 import websitemodel.databaseDTO.Category;
 import websitemodel.databaseDTO.Product;
+//import websiteview.model.CategoriesCount;
 import websiteview.model.HeaderCategories;
 import websiteview.model.ProductModel;
 import websiteview.model.ProductPageDTO;
@@ -124,7 +125,7 @@ public class ProductHandler {
 
             Connection conn = ConnectionPool.getInstance().getConnection();
             ProductDAO productDAO = new ProductDAO(conn);
-            List<Product> products = productDAO.search(search.getSearchKey());
+            List<Product> products = productDAO.search(search.getSearchKey(),search.getCategoryID());
             List<ProductModel> viewProducts = new ArrayList<>();
             for (int i = 0; i < products.size(); i++) {
                 ProductModel productView = new ProductModel();
@@ -189,4 +190,20 @@ public class ProductHandler {
             return 0;
         }
     }
+/*    public List<CategoriesCount> getProductsperCategory()
+    {
+        try {
+            Connection connection=ConnectionPool.getInstance().getConnection();
+            ProductDAO productDAO= new ProductDAO(connection);
+            List<CategoriesCount> categoriesCount=productDAO.categoryCounter();
+            
+            
+            connection.close();
+            return categoriesCount;
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductHandler.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+*/
 }

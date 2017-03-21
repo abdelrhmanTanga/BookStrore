@@ -55,20 +55,24 @@ public class CartViewer extends HttpServlet {
         if (session != null) {
             String email = (String) session.getAttribute("loggedIn");
             //String email = "abdkjsvbsdk";
-            //out.println("first");
-            System.out.println("first");
-            /////////// code to handle logged in clients
-            List<CartDTO> items = cartHandler.getCart(email);
-            System.out.println("second");
-            if (items != null){
-                request.setAttribute("cartlist", items);
-                //out.println("second");
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/navbar.jsp");
-                dispatcher.include(request, response);
-                //out.println("third");
-                dispatcher = request.getRequestDispatcher("/pages/cart.jsp");
-                dispatcher.include(request, response);
+            if (email != null) {
+                //out.println("first");
                 System.out.println("first");
+                /////////// code to handle logged in clients
+                List<CartDTO> items = cartHandler.getCart(email);
+                System.out.println("second");
+                if (items != null) {
+                    request.setAttribute("cartlist", items);
+                    //out.println("second");
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/navbar.jsp");
+                    dispatcher.include(request, response);
+                    //out.println("third");
+                    dispatcher = request.getRequestDispatcher("/pages/cart.jsp");
+                    dispatcher.include(request, response);
+                    System.out.println("first");
+                }
+            } else {
+                ////////////////// offline user
             }
         } else {
             ////////////////// code to handle offline users

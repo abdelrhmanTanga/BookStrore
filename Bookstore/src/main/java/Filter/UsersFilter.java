@@ -67,29 +67,34 @@ public class UsersFilter implements Filter {
                     rd.forward(req, res);
                     break;
                 case "ViewUserOrderHistory.jsp" :
-                rd = req.getRequestDispatcher("ViewOrdersHistory");
-                rd.forward(req, res);
-                break;
+                    rd = req.getRequestDispatcher("ViewOrdersHistory");
+                    rd.forward(req, res);
+                    break;
                 case "ViewUsers.jsp" :
-                rd = req.getRequestDispatcher("ViewUsersController");
-                rd.forward(req, res);
-                break;
+                    rd = req.getRequestDispatcher("ViewUsersController");
+                    rd.forward(req, res);
+                    break;
                 case "ProductPage.jsp" :
-                rd = req.getRequestDispatcher("ProductPage");
-                rd.forward(req, res);
-                break;
+                    rd = req.getRequestDispatcher("ProductPage");
+                    rd.forward(req, res);
+                    break;
                 case "cart.jsp" :
-                rd = req.getRequestDispatcher("CartViewer");
-                rd.forward(req, res);
-                break;
+                    rd = req.getRequestDispatcher("CartViewer");
+                    rd.forward(req, res);
+                    break;
                 case "checkout.jsp" :
-                rd = req.getRequestDispatcher("CartViewer");
-                rd.forward(req, res);
-                break;
+                    rd = req.getRequestDispatcher("CartViewer");
+                    rd.forward(req, res);
+                    break;
                 case "viewproducts.jsp" :
-                rd = req.getRequestDispatcher("ProductViewer");
-                rd.forward(req, res);
-                break;            
+                    rd = req.getRequestDispatcher("ProductViewer");
+                    rd.forward(req, res);
+                    break;
+                case "viewProfile.jsp" :
+                    rd = req.getRequestDispatcher("ProfileViewer");
+                    rd.forward(req, res);
+                    break;
+                    
                 /*
                     the rest of the pages here
                 */  
@@ -103,12 +108,5 @@ public class UsersFilter implements Filter {
     public void destroy() {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
-
-
-
-   
-    
-   
     
 }

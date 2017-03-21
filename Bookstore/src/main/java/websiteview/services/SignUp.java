@@ -101,7 +101,7 @@ public class SignUp extends HttpServlet {
         String job = request.getParameter("job");
         String favorites = request.getParameter("favorites");
         if (username != null && password != null && address != null && phone != 0 && country != null
-                && email != null && credit != 0 && birthday != null && gender != null && job != null && favorites != null) {
+                && email != null && credit != 0 && birthday != null && gender != null && job != null ) {
             signupDTO.setUserName(username);
             signupDTO.setPassword(password);
             signupDTO.setAddress(address);
@@ -114,16 +114,16 @@ public class SignUp extends HttpServlet {
             signupDTO.setJob(job);
             signupDTO.setFavouriteCategory(favorites);
             if (session.signUp(signupDTO)) {
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/pages/signinpage.jsp");
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/pages/temp.jsp");
                 requestDispatcher.forward(request, response);
 
             } else {
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/pages/signuppage.jsp");
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/pages/temp.jsp#toregister");
                 requestDispatcher.forward(request, response);
             }
         } else {
             PrintWriter out = response.getWriter();
-            response.sendRedirect("/BookStore/pages/signuppage.jsp");
+            response.sendRedirect("/BookStore/pages/temp.jsp#toregister");
         }
     }
 

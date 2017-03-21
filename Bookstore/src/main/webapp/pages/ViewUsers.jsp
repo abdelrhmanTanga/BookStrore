@@ -6,12 +6,12 @@
         <meta name="description" content="Admin Website Online Book Store" />
         <meta name="author" content="ForthTeam" />
         <meta name="keyword" content="Creative, Dashboard, Admin,Book, Theme, Bootstrap, Responsive,Store " />
-        <link rel="shortcut icon" href="img/favicon.png" />
+        <link rel="shortcut icon" href="${pageContext.request.contextPath}/pages/img/favicon.png" />
 
         <title> Admin Panel </title>
 
         <!-- Bootstrap CSS -->    
-        <link href="${pageContext.request.contextPath}/pages/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="${pageContext.request.contextPath}/pages/css/bootstrap.min1.css" rel="stylesheet" />
         <!-- bootstrap theme -->
         <link href="${pageContext.request.contextPath}/pages/css/bootstrap-theme.css" rel="stylesheet" />
         <!--external css-->
@@ -66,14 +66,7 @@
                                     <img alt="" width='40' height='40' src="${(pageContext.request.contextPath).concat('/pages/img/admin1.png')}">
                                 </span>
                                 <span class="username">Admin</span>
-                                <b class="caret"></b>
                             </a>
-                            <ul class="dropdown-menu extended logout">
-                                <div class="log-arrow-up"></div>
-                                <li>
-                                    <a href="login.html"><i class="icon_key_alt"></i> Log Out</a>
-                                </li>
-                            </ul>
                         </li>
                         <!-- user login dropdown end -->
                     </ul>

@@ -60,7 +60,7 @@ public class Checkout extends HttpServlet {
 
                 request.setAttribute("orderInfo", orderInfo);
                 
-                RequestDispatcher dispatcher = request.getRequestDispatcher("pages/checkout.jsp");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/Bookstore/pages/checkout.jsp");
                 dispatcher.forward(request, response);
 
             } else {

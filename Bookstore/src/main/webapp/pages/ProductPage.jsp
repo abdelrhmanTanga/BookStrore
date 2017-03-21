@@ -4,6 +4,7 @@
     Author     : abdelrhman galal
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -110,10 +111,18 @@
                                 <span>US $${productInfo.price}</span>
                                 <label>Quantity:</label>
                                 <input type="text" value="${productInfo.quantity}" readonly=""/>
-                                <button type="button" class="btn btn-fefault cart" onclick="addToCart(${productInfo.id}, this)">
-                                    <i class="fa fa-shopping-cart"></i>
-                                    Add to cart
-                                </button>
+                                <c:if test="${!productInfo.purchased}">
+                                    <button type="button" class="btn btn-fefault cart" onclick="addToCart(${productInfo.id}, this)">
+                                        <i class="fa fa-shopping-cart"></i>
+                                        Add to cart
+                                    </button>
+                                </c:if>
+                                <c:if test="${productInfo.purchased}">
+                                    <button type="button" class="btn btn-fefault cart" onclick="removeFromCart(${productInfo.id}, this)">
+                                        <i class="fa fa-shopping-cart"></i>
+                                        Remove Item
+                                    </button>
+                                </c:if>
                             </span>
                             <p><b>Availability:</b> In Stock</p>
                             <p><b>Author:</b> ${productInfo.author}</p>
@@ -151,7 +160,7 @@
             xhttp.open("GET", "/BookStore/addtocart?productid=" + clicked_id, true);
             xhttp.send();
         }
-        
+
         function removeFromCart(clicked_id, element) {
             $.ajax({
                 url: '/BookStore/removeitem',

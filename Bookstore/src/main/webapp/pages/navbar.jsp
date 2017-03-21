@@ -58,7 +58,7 @@
                         <div class="row">
                             <div class="col-sm-3">
                                 <div class="logo pull-left">
-                                    <a href="/BookStore/productviewer"><img src="${pageContext.request.contextPath}/pages/images/logo.png" alt="" /></a>
+                                    <a href="/BookStore/productviewer"><img src="${pageContext.request.contextPath}/pages/images/logo9.png" alt="logo" style="width: 90px;height: 70px;"  /></a>
                                 </div>
 
                             </div>
@@ -81,9 +81,9 @@
                                         <!-- <li><a href="#"><i class="fa fa-user"></i> Account</a></li> -->
 
                                         <li><a href="/BookStore/productviewer"><i class="fa fa-lock"></i> home</a></li>
-                                        <!--<li><a href="/BookStore/cart" class="notif"><i class="fa fa-shopping-cart"><span class="num">2</span></i> Cart</a></li>--> 
-                                        <li><a href="${pageContext.request.contextPath}/pages/signinpage.jsp"><i class="fa fa-lock"></i> Login</a></li>
-                                        <li><a href="${pageContext.request.contextPath}/pages/signuppage.jsp"><i class="fa fa-lock"></i> Signup</a></li>
+                                        <li><a href="/BookStore/cart"><i class="fa fa-shopping-cart"><span class="num" id="loggedCart">${loggedCart}</span></i> Cart</a></li>
+                                        <li><a href="${pageContext.request.contextPath}/pages/temp.jsp"><i class="fa fa-lock"></i> Login</a></li>
+                                        <!--<li><a href="${pageContext.request.contextPath}/pages/temp.jsp"><i class="fa fa-lock"></i> Signup</a></li>-->
                                     </ul>
                                 </div>
                             </div>
@@ -102,7 +102,7 @@
                         <div class="row">
                             <div class="col-sm-3">
                                 <div class="logo pull-left">
-                                    <a href="/BookStore/productviewer"><img src="${pageContext.request.contextPath}/pages/images/logo.png" alt="" /></a>
+                                    <a href="/BookStore/productviewer"><img src="${pageContext.request.contextPath}/pages/images/logo9.png" alt="logo" style="width: 90px;height: 70px;" /></a>
                                 </div>
 
                             </div>
@@ -110,10 +110,9 @@
                                 <div class="search_box pull-right">
                                     <form action="/BookStore/Search" method="post">
                                         <div class="input-group">
-                                            <input type="text" placeholder="Search"/>
-                                            <div class="input-group-btn">
-                                                <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
-                                            </div>
+                                            <input type="text" placeholder="Search" name="searchkey"/>
+                                            <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+
                                         </div>
                                     </form>
                                 </div>
@@ -122,8 +121,8 @@
                             <div class="col-sm-4">
                                 <div class="shop-menu pull-right">
                                     <ul class="nav navbar-nav">
-
-                                        <li><a href="#"><i class="fa fa-user"></i>${loggedIn}</a></li> 
+                                        <li><a href="/BookStore/productviewer"><i class="fa fa-lock"></i> home</a></li>
+                                        <li><a href="/BookStore/ProfileViewer"><i class="fa fa-user"></i>${loggedIn}</a></li> 
                                         <li><a href="/BookStore/cart"><i class="fa fa-shopping-cart"><span class="num" id="loggedCart">${loggedCart}</span></i> Cart</a></li> 
                                         <li><a href="/BookStore/signout"><i class="fa fa-lock"></i> Logout</a></li>
 
@@ -140,53 +139,7 @@
 
         </c:if>
 
-        <section id="slider"><!--slider-->
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div id="slider-carousel" class="carousel slide" data-ride="carousel">
-                            <ol class="carousel-indicators">
-                                <li data-target="#slider-carousel" data-slide-to="0" class="active"></li>
-                                <li data-target="#slider-carousel" data-slide-to="1"></li>
-                                <li data-target="#slider-carousel" data-slide-to="2"></li>
-                            </ol>
-
-                            <div class="carousel-inner">
-                                <div class="item active">
-
-                                    <div class="col-sm-12">
-                                        <img src="${pageContext.request.contextPath}/pages/images/home/1.jpg" class="girl img-responsive" alt="" />
-
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <div class="col-sm-12">
-                                        <img src="${pageContext.request.contextPath}/pages/images/home/2.jpg" class="girl img-responsive" alt="" />
-
-                                    </div>
-                                </div>
-
-                                <div class="item">
-                                    <div class="col-sm-12">
-                                        <img src="${pageContext.request.contextPath}/pages/images/home/3.jpg" class="girl img-responsive" alt="" />
-
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <a href="#slider-carousel" class="left control-carousel hidden-xs" data-slide="prev">
-                                <i class="fa fa-angle-left"></i>
-                            </a>
-                            <a href="#slider-carousel" class="right control-carousel hidden-xs" data-slide="next">
-                                <i class="fa fa-angle-right"></i>
-                            </a>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </section><!--/slider-->
+     
         <!-- Category Part --
         <div class="col-sm-3">
             <div class="left-sidebar">

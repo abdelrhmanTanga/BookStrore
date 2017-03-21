@@ -59,7 +59,7 @@
                                             <button  onclick="viewProduct(${product.id})" class="btn btn-default add-to-cart"><i class="glyphicon glyphicon-search"></i>View product</button>
                                         </c:if>
                                         <c:if test="${product.purchased}">
-                                            <button onclick="removeFromCart(${product.id}, this)" class="btn btn-default add-to-cart"><i class='fa fa-shopping-cart'></i>Remove Item</button>
+                                            <button id="${product.id}" onclick="removeFromCart(${product.id}, this)" class="btn btn-default add-to-cart"><i class='fa fa-shopping-cart'></i>Remove Item</button>
                                             <button onclick="viewProduct(${product.id})" class="btn btn-default add-to-cart"><i class="glyphicon glyphicon-search"></i>View product</button>
                                         </c:if>
                                     </div>
@@ -68,10 +68,10 @@
                                             <h2>${product.price}</h2>
                                             <p>${product.name}</p>
                                             <c:if test="${!product.purchased}">
-                                                <button id="${product.id}" onclick="addToCart(${product.id}, this)" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
+                                                <button onclick="addToCart(${product.id}, this)" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
                                             </c:if>
                                             <c:if test="${product.purchased}">
-                                                <button onclick="addToCart(${product.id}, this)" class="btn btn-default add-to-cart"><i class='fa fa-shopping-cart'></i>Remove Item</button>
+                                                <button onclick="removeFromCart(${product.id}, this)" class="btn btn-default add-to-cart"><i class='fa fa-shopping-cart'></i>Remove Item</button>
                                             </c:if>
                                             <button onclick="viewProduct(${product.id})" class="btn btn-default add-to-cart"><i class="glyphicon glyphicon-search"></i>View product</button>
                                         </div>
@@ -115,7 +115,7 @@
                             //$(clicked_id).html("Remove Item");
                             var element2 = document.getElementById(clicked_id);
                             element2.innerHTML = "<i class='fa fa-shopping-cart'></i>Remove Item";
-                            element2.setAttribute("onclick", "removeFromCart(" + clicked_id + ", this)")
+                            element2.setAttribute("onclick", "removeFromCart(" + clicked_id + ", this)");
                             var loggedCart = document.getElementById("loggedCart");
                             loggedCart.innerHTML = parseInt(loggedCart.innerHTML) + 1;
                             console.log(clicked_id);
@@ -125,7 +125,7 @@
                             element.setAttribute("onclick", "removeFromCart(" + clicked_id + " , this)");
                             var element2 = document.getElementById(clicked_id);
                             element2.innerHTML = "<i class='fa fa-shopping-cart'></i>Remove Item";
-                            element2.setAttribute("onclick", "removeFromCart(" + clicked_id + ", this)")
+                            element2.setAttribute("onclick", "removeFromCart(" + clicked_id + ", this)");
                             console.log(this.responseText);
                             //$(clicked_id).html("Remove Item");
                         }
@@ -147,8 +147,8 @@
                             element.innerHTML = "<i class='fa fa-shopping-cart'></i>Add to cart";
                             element.setAttribute("onclick", "addToCart(this.id, this)");
                             var element2 = document.getElementById(clicked_id);
-                            element2.innerHTML = "<i class='fa fa-shopping-cart'></i>Remove Item";
-                            element2.setAttribute("onclick", "removeFromCart(" + clicked_id + ", this)")
+                            element2.innerHTML = "<i class='fa fa-shopping-cart'></i>Add to cart";
+                            element2.setAttribute("onclick", "addToCart(" + clicked_id + ", this)");
                             var loggedCart = document.getElementById("loggedCart");
                             loggedCart.innerHTML = parseInt(loggedCart.innerHTML) - 1;
                         } else {

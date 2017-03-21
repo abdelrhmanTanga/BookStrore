@@ -8,6 +8,7 @@ package websiteview.services;
 import Facade.CartHandler;
 import Facade.ProductHandler;
 import java.io.IOException;
+import java.util.List;
 import java.util.Vector;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+//import websiteview.model.CategoriesCount;
 import websiteview.model.HeaderCategories;
 import websiteview.model.ProductModel;
 
@@ -50,25 +52,30 @@ public class ProductViewer extends HttpServlet {
         //////////////header loader
         System.out.println("before product handler get categories");
         Vector<HeaderCategories> categories = productHandler.getCategories();
+//        List<CategoriesCount> categoriesCount=productHandler.getProductsperCategory();
         Integer cartSize = 0;
         String email = null;
         HttpSession session = request.getSession(true);
 
         if (session != null) {
+            session.setAttribute("selectedCategory", "0");
             email = (String) session.getAttribute("loggedIn");
             if (email != null && !email.equals("")) {
                 System.out.println("before get cart items");
                 cartSize = cartHandler.getCartItems(email);
 
             } else {
-                cartSize = offlineUser(request);
+                cartSize = offlineUser(request, response) - 1;
             }
         } else {
-            cartSize = offlineUser(request);
+            cartSize = offlineUser(request, response) - 1;
         }
         session.setAttribute("loggedCart", cartSize);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/navbar.jsp");
         dispatcher.include(request, response);
+        RequestDispatcher sliderDispatcher = request.getRequestDispatcher("/pages/Slider.jsp");
+        sliderDispatcher.include(request, response);
+        
         if (categories != null) {
             request.setAttribute("categories", categories);
             RequestDispatcher dispatcher2 = request.getRequestDispatcher("/pages/categoryBar.jsp");
@@ -95,7 +102,7 @@ public class ProductViewer extends HttpServlet {
             cartHandler.checkAdded(email, products);
         } else {
             /////////// logic for offline users
-            checkAdded(products);
+            checkAdded(products, request);
         }
         //ProductModel[] products = (ProductModel[]) products2.toArray();
         request.setAttribute("products", products);
@@ -144,26 +151,61 @@ public class ProductViewer extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    private int offlineUser(HttpServletRequest request) {
+    private int offlineUser(HttpServletRequest request, HttpServletResponse response) {
         Cookie[] cookies = null;
         Cookie cookie = null;
 
         cookies = request.getCookies();
         if (cookies != null) {
-            cookie = cookies[0];
-            String products = cookie.getValue();
-            String[] productIds = products.split(",");
-            return productIds.length;
+            for (Cookie cookieName : cookies) {
+                if (cookieName.getName().equals("products")) {
+                    cookie = cookieName;
+                }
+            }
+            if (cookie != null) {
+                String products = cookie.getValue();
+                String[] productIds = products.split(",");
+                return productIds.length;
+            } else {
+                cookie = new Cookie("products", "0,");
+                cookie.setMaxAge(Integer.MAX_VALUE);
+                response.addCookie(cookie);
+                return 1;
+            }
         } else {
-            cookie = new Cookie("products", "null");
-            return 0;
+            cookie = new Cookie("products", "0,");
+            cookie.setMaxAge(Integer.MAX_VALUE);
+            response.addCookie(cookie);
+            return 1;
         }
     }
 
-    private void checkAdded(Vector<ProductModel> products) {
+    private void checkAdded(Vector<ProductModel> products, HttpServletRequest request) {
         Cookie cookie = null;
-        Cookie cookies = null;
-        
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookieName : cookies) {
+            if (cookieName.getName().equals("products")) {
+                cookie = cookieName;
+            }
+        }
+        if (cookie != null) {
+            String[] productIds = cookie.getValue().split(",");
+            for (ProductModel productCheck : products) {
+                for (String str : productIds) {
+                    System.out.println(str);
+                    if (!str.equals("0")) {
+                        int productId = Integer.parseInt(str);
+                        if (productId == productCheck.getId()) {
+                            System.out.println(str);
+                            productCheck.setPurchased(true);
+                        }
+                    }
+                }
+            }
+        } else {
+
+        }
+
     }
 
 }

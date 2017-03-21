@@ -159,7 +159,7 @@ public class ClientDAO {
 
     }
 
-    boolean updateClient(Client client) {
+    public boolean updateClient(Client client) {
         PreparedStatement pps = null;
         try {
             pps = connection.prepareStatement("update client set name=?,credit=?,password=?,phone=?,address=?,country=?,gender=?,dob=?,job=? where email=?");
@@ -352,4 +352,123 @@ public class ClientDAO {
             Logger.getLogger(ClientDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+///////////////////////////////////////////////////////
+    public boolean updateClientName(String name, String email) {
+        try {
+            PreparedStatement pst = connection.prepareStatement("update client set name = ? where email = ?");
+            pst.setString(1, name);
+            pst.setString(2, email);
+            pst.executeUpdate();
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
+
+    public boolean updateClientPassword(String password, String email) {
+        try {
+            PreparedStatement pst = connection.prepareStatement("update client set password = ? where email = ?");
+            pst.setString(1, password);
+            pst.setString(2, email);
+            pst.executeUpdate();
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
+
+    public boolean updateClientCredit(long newCredit, String email) {
+        try {
+            PreparedStatement pst = connection.prepareStatement("update client set credit = ? where email = ?");
+            pst.setLong(1, newCredit);
+            pst.setString(2, email);
+            pst.executeUpdate();
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
+
+    public boolean updateClientPhone(long phone, String email) {
+        try {
+            PreparedStatement pst = connection.prepareStatement("update client set phone = ? where email = ?");
+            pst.setLong(1, phone);
+            pst.setString(2, email);
+            pst.executeUpdate();
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
+
+    public boolean updateClientAddress(String address, String email) {
+       try {
+            PreparedStatement pst = connection.prepareStatement("update client set address = ? where email = ?");
+            pst.setString(1, address);
+            pst.setString(2, email);
+            pst.executeUpdate();
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
+
+    public boolean updateClientCountry(String country, String email) {
+         try {
+            PreparedStatement pst = connection.prepareStatement("update client set country = ? where email = ?");
+            pst.setString(1, country);
+            pst.setString(2, email);
+            pst.executeUpdate();
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
+
+    public boolean updateClientGender(String gender, String email) {
+         try {
+            PreparedStatement pst = connection.prepareStatement("update client set gender = ? where email = ?");
+            pst.setString(1, gender);
+            pst.setString(2, email);
+            pst.executeUpdate();
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
+
+    public boolean updateClientjob(String job, String email) {
+         try {
+            PreparedStatement pst = connection.prepareStatement("update client set job = ? where email = ?");
+            pst.setString(1, job);
+            pst.setString(2, email);
+            pst.executeUpdate();
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
+
+    public boolean updateClientBirthDay(String birthday, String email) {
+         try {
+            PreparedStatement pst = connection.prepareStatement("update client set dob = ? where email = ?");
+            pst.setString(1, birthday);
+            pst.setString(2, email);
+            pst.executeUpdate();
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
+/////////////////////////////////////////////////////
 }

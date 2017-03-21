@@ -5,7 +5,6 @@ function deleteProduct(id)
 	id = id.replace("delete","");
 	id = parseInt(id);
 	deleteFinalName[0].setAttribute('id',id);
-	alert(id);
 }
 
 
@@ -21,7 +20,7 @@ function deleteFinal(id)
 	xhttp.onreadystatechange = function() {
 	if (this.readyState == 4 && this.status == 200) {
 		//document.getElementById("demo").innerHTML = this.responseText;
-		console.log(this.responseText);  //the message which is written in the our.println
+		//console.log(this.responseText);  //the message which is written in the our.println
 		document.getElementById("productCount1").innerHTML = document.getElementById("productCount1").innerHTML-1;
 		document.getElementById("productCount2").innerHTML = document.getElementById("productCount2").innerHTML-1;
 		var row = document.getElementById(id);
@@ -71,7 +70,7 @@ function deleteSelectedProducts()
 	{
 		var xhttp = new XMLHttpRequest();
 		x = ids[j];
-		console.log(x +" hh "+ ids[j] )
+		//console.log(x +" hh "+ ids[j] )
 		xhttp.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
 			//document.getElementById("demo").innerHTML = this.responseText;
@@ -84,8 +83,8 @@ function deleteSelectedProducts()
 		xhttp.send();
 		var row = document.getElementById(x);
 		row.parentNode.removeChild(row);
-	}
-	
+        }
+    
 	
 }
 

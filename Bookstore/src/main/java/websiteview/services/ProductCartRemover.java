@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -51,7 +52,7 @@ public class ProductCartRemover extends HttpServlet {
                     int product = Integer.parseInt(productId);
                     if (cartHandler.removeFromCart(product, email)) {
                         Integer cartSize = (Integer) session.getAttribute("loggedCart") - 1;
-                        System.out.println(cartSize);
+                        System.out.println("cartSize : " + cartSize);
                         session.setAttribute("loggedCart", cartSize);
                         out.print("true");
                         out.close();
@@ -66,9 +67,26 @@ public class ProductCartRemover extends HttpServlet {
                 }
             } else {
                 /////////////////////not logged in
+                if (removeFromCart(request, response)) {
+                    Integer cartSize = (Integer) session.getAttribute("loggedCart") - 1;
+                    System.out.println("cart size :" + cartSize);
+                    session.setAttribute("loggedCart", cartSize);
+                    out.print("true");
+                    out.close();
+                } else {
+                    out.print("false");
+                    out.close();
+                }
             }
         } else {
             ////////////////// have no session
+            if (removeFromCart(request, response)) {
+                out.print("true");
+                out.close();
+            } else {
+                out.print("false");
+                out.close();
+            }
         }
     }
 
@@ -80,6 +98,44 @@ public class ProductCartRemover extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         processRequest(req, resp); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private boolean removeFromCart(HttpServletRequest request, HttpServletResponse response) {
+        String product = request.getParameter("productid");
+        if (product != null) {
+            int productid = Integer.parseInt(product);
+            Cookie[] cookies = request.getCookies();
+            if (cookies != null) {
+                Cookie cookie = null;
+                for (Cookie testCookie : cookies) {
+                    if (testCookie.getName().equals("products")) {
+                        cookie = testCookie;
+                    }
+                }
+                if (cookie != null) {
+                    String productStr = cookie.getValue();
+                    String[] products = productStr.split(",");
+                    productStr = "";
+                    boolean flag = false;
+                    for (String temp : products) {
+                        if (Integer.parseInt(temp) == productid) {
+                            flag = true;
+                        } else {
+                            productStr = productStr.concat(temp + ",");
+                        }
+                    }
+                    cookie.setValue(productStr);
+                    response.addCookie(cookie);
+                    return flag;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
