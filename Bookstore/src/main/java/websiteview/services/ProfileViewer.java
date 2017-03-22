@@ -51,14 +51,17 @@ public class ProfileViewer extends HttpServlet {
             String email = (String) httpSession.getAttribute("loggedIn");
             if (email != null && !email.equals("")) {
                 clientdto = session.getProfileData(email);
-                if (clientdto != null)
-                {
-                    request.setAttribute("clientData",clientdto);
-                    RequestDispatcher requestDispatcher= request.getRequestDispatcher("/pages/viewProfile.jsp");
+                if (clientdto != null) {
+                    request.setAttribute("clientData", clientdto);
+                    RequestDispatcher requestDispatcher = request.getRequestDispatcher("/pages/viewProfile.jsp");
                     requestDispatcher.include(request, response);
                 }
+            } else {
+                response.sendRedirect("/BookStore/pages/temp.jsp");
             }
 
+        } else {
+            response.sendRedirect("/BookStore/pages/temp.jsp");
         }
     }
 

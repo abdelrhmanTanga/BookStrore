@@ -9,6 +9,7 @@ import Facade.CartHandler;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -16,6 +17,7 @@ import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -73,10 +75,48 @@ public class CartViewer extends HttpServlet {
                 }
             } else {
                 ////////////////// offline user
+                List<CartDTO> items = getCart(request, response);
+                if (items != null) {
+                    request.setAttribute("cartlist", items);
+                    //out.println("second");
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/navbar.jsp");
+                    dispatcher.include(request, response);
+                    //out.println("third");
+                    dispatcher = request.getRequestDispatcher("/pages/cart.jsp");
+                    dispatcher.include(request, response);
+                    System.out.println("first");
+                }
+                else{
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/navbar.jsp");
+                    dispatcher.include(request, response);
+                    //out.println("third");
+                    dispatcher = request.getRequestDispatcher("/pages/cart.jsp");
+                    dispatcher.include(request, response);
+                    System.out.println("errorrrrrrrrrrr");
+                }
             }
         } else {
             ////////////////// code to handle offline users
             //out.println("fourth");
+            List<CartDTO> items = getCart(request, response);
+                if (items != null) {
+                    request.setAttribute("cartlist", items);
+                    //out.println("second");
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/navbar.jsp");
+                    dispatcher.include(request, response);
+                    //out.println("third");
+                    dispatcher = request.getRequestDispatcher("/pages/cart.jsp");
+                    dispatcher.include(request, response);
+                    System.out.println("first");
+                }
+                else{
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/navbar.jsp");
+                    dispatcher.include(request, response);
+                    //out.println("third");
+                    dispatcher = request.getRequestDispatcher("/pages/cart.jsp");
+                    dispatcher.include(request, response);
+                    System.out.println("errorrrrrrrrrrr2");
+                }
             System.out.println("first");
         }
         /*String email;
@@ -133,5 +173,34 @@ public class CartViewer extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    private List<CartDTO> getCart(HttpServletRequest request, HttpServletResponse response) {
+        Cookie[] cookies = request.getCookies();
+        List<CartDTO> cartItems = null;
+        if (cookies != null) {
+            Cookie cookie = null;
+            for (Cookie temp : cookies) {
+                if (temp.getName().equals("products")) {
+                    cookie = temp;
+                }
+            }
+            if (cookie != null) {
+                cartItems =  new ArrayList<>();
+                String productsStr = cookie.getValue();
+                String[] productIds = productsStr.split(",");
+                for (String temp : productIds) {
+                    if (!temp.equals("") && Integer.parseInt(temp) != 0) {
+                        CartDTO cartDTO = cartHandler.getProductInfo(Integer.parseInt(temp));
+                        if (cartDTO != null) {
+                            cartItems.add(cartDTO);
+                        }
+                    }
+                }
+            }
+            return cartItems;
+        } else {
+            return cartItems;
+        }
+    }
 
 }

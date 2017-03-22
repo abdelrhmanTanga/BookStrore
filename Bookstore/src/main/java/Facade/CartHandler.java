@@ -402,4 +402,24 @@ public class CartHandler {
         }
 
     }
+
+    public CartDTO getProductInfo(int parseInt) {
+        try {
+            Connection connection = ConnectionPool.getInstance().getConnection();
+            ProductDAO productDAO = new ProductDAO(connection);
+            Product product = productDAO.getProductInfo(parseInt);
+            CartDTO cartDTO = new CartDTO();
+            cartDTO.setISBN(product.getISBN());
+            cartDTO.setId(product.getId());
+            cartDTO.setImage(product.getImage());
+            cartDTO.setItemQuantity(1);
+            cartDTO.setName(product.getName());
+            cartDTO.setPrice(product.getPrice());
+            connection.close();
+            return cartDTO;
+        } catch (SQLException ex) {
+            Logger.getLogger(CartHandler.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
 }

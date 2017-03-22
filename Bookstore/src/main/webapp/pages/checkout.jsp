@@ -78,7 +78,7 @@
                         <td class="text-center"><strong>Total ${total}</strong></td>  
                     </tr>
                     <tr>
-                        <td><a href="#" class="btn btn-warning"><i class="fa fa-angle-left"></i> Back To Home Page</a></td>
+                        <td><a href="/BookStore/productviewer" class="btn btn-warning"><i class="fa fa-angle-left"></i> Back To Home Page</a></td>
                         <td colspan="2" class="hidden-xs"></td>
                         <td class="hidden-xs text-center"><strong>Total $ ${total}</strong></td>
 

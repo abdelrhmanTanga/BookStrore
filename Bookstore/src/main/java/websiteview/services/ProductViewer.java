@@ -75,7 +75,7 @@ public class ProductViewer extends HttpServlet {
         dispatcher.include(request, response);
         RequestDispatcher sliderDispatcher = request.getRequestDispatcher("/pages/Slider.jsp");
         sliderDispatcher.include(request, response);
-        
+
         if (categories != null) {
             request.setAttribute("categories", categories);
             RequestDispatcher dispatcher2 = request.getRequestDispatcher("/pages/categoryBar.jsp");
@@ -181,31 +181,33 @@ public class ProductViewer extends HttpServlet {
     }
 
     private void checkAdded(Vector<ProductModel> products, HttpServletRequest request) {
-        Cookie cookie = null;
-        Cookie[] cookies = request.getCookies();
-        for (Cookie cookieName : cookies) {
-            if (cookieName.getName().equals("products")) {
-                cookie = cookieName;
+        if (products != null) {
+            Cookie cookie = null;
+            Cookie[] cookies = request.getCookies();
+            for (Cookie cookieName : cookies) {
+                if (cookieName.getName().equals("products")) {
+                    cookie = cookieName;
+                }
             }
-        }
-        if (cookie != null) {
-            String[] productIds = cookie.getValue().split(",");
-            for (ProductModel productCheck : products) {
-                for (String str : productIds) {
-                    System.out.println(str);
-                    if (!str.equals("0")) {
-                        int productId = Integer.parseInt(str);
-                        if (productId == productCheck.getId()) {
-                            System.out.println(str);
-                            productCheck.setPurchased(true);
+            if (cookie != null) {
+                String[] productIds = cookie.getValue().split(",");
+                for (ProductModel productCheck : products) {
+                    for (String str : productIds) {
+                        System.out.println(str);
+                        if (!str.equals("0")) {
+                            int productId = Integer.parseInt(str);
+                            if (productId == productCheck.getId()) {
+                                System.out.println(str);
+                                productCheck.setPurchased(true);
+                            }
                         }
                     }
                 }
+            } else {
+
             }
-        } else {
 
         }
-
     }
-
+    
 }

@@ -50,26 +50,31 @@ public class Checkout extends HttpServlet {
             System.out.println("checking out");
             String email = (String) session.getAttribute("loggedIn");
             System.out.println("email is : " + email);
-            CheckoutDTO orderInfo = cartHandler.doCheckout(email);
-            if (orderInfo != null) {
-                Integer cartSize = (Integer) session.getAttribute("loggedCart");
-                cartSize = 0;
-                session.setAttribute("loggedCart", cartSize);
-                System.out.println("checkout done");
-                System.out.println("orderInfo :" + orderInfo.getProducts().elementAt(0).getAuthor());
+            if (email != null) {
+                CheckoutDTO orderInfo = cartHandler.doCheckout(email);
+                if (orderInfo != null) {
+                    Integer cartSize = (Integer) session.getAttribute("loggedCart");
+                    cartSize = 0;
+                    session.setAttribute("loggedCart", cartSize);
+                    System.out.println("checkout done");
+                    System.out.println("orderInfo :" + orderInfo.getProducts().elementAt(0).getAuthor());
 
-                request.setAttribute("orderInfo", orderInfo);
-                
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/Bookstore/pages/checkout.jsp");
-                dispatcher.forward(request, response);
+                    request.setAttribute("orderInfo", orderInfo);
 
+                    RequestDispatcher dispatch = request.getRequestDispatcher("pages/navbar.jsp");
+                    dispatch.include(request, response);
+
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("pages/checkout.jsp");
+                    dispatcher.forward(request, response);
+
+                } else {
+                    response.sendRedirect("/BookStore/productviewer");
+                    ///////////////// logic for not signed in
+                }
             } else {
-                out.print("false");
-                ///////////////// logic for not signed in
+                response.sendRedirect("/BookStore/productviewer");
+                ////////////////////// logic for not signed in (redirect to sign in page)
             }
-        } else {
-            out.print("false");
-            ////////////////////// logic for not signed in (redirect to sign in page)
         }
     }
 

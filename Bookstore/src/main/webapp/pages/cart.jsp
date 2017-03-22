@@ -74,7 +74,9 @@
                                     <td class="cart_quantity">
                                         <div class="cart_quantity_button">
                                             <input class="cart_quantity_input" style="width: 10%" id="${cartItem.id}text" type="number" name="quantity" readonly="" value="${cartItem.itemQuantity}" autocomplete="off" size="2">
-                                            <button class="btn btn-default" style="margin-left: 10%; width: 15%" onclick="updateEnable(${cartItem.id}, this)">edit</button>
+                                            <c:if test="${loggedIn != null}">
+                                                <button class="btn btn-default" style="margin-left: 10%; width: 15%" onclick="updateEnable(${cartItem.id}, this)">edit</button>
+                                            </c:if>
                                         </div>
                                     </td>
                                     <td class="cart_total">
@@ -96,7 +98,7 @@
                     <div id="error" class="col-sm-10"></div>
                 </c:if>
                 <c:if test="${loggedIn == null}">
-                    <a class="btn btn-primary" href="/BookStore/pages/signinpage.jsp">Check out</a>
+                    <a class="btn btn-primary" href="/BookStore/pages/temp.jsp">Check out</a>
                     <div id="error" class="col-sm-10"></div>
                 </c:if>
             </div>
